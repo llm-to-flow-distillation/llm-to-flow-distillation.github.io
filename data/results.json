@@ -1,0 +1,468 @@
+[
+  {
+    "id": "anticancer",
+    "name": "Anticancer activity",
+    "table": 1,
+    "metricShort": "AntiCP2-alt. ↑",
+    "unit": "%",
+    "metrics": [
+      {
+        "label": "AntiCP2-alt. (%)",
+        "direction": "up"
+      },
+      {
+        "label": "HemoPI2 (%)",
+        "direction": "down"
+      },
+      {
+        "label": "Distance from prior",
+        "direction": "up"
+      }
+    ],
+    "rows": [
+      {
+        "method": "Pre-trained",
+        "values": [
+          [
+            26.43,
+            2.91
+          ],
+          [
+            40.85,
+            1.89
+          ],
+          [
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "method": "DPO",
+        "values": [
+          [
+            25.29,
+            3.19
+          ],
+          [
+            42.77,
+            1.81
+          ],
+          [
+            0.08,
+            0.04
+          ]
+        ]
+      },
+      {
+        "method": "DiffusionNFT",
+        "values": [
+          [
+            33.26,
+            2.76
+          ],
+          [
+            45.61,
+            2.39
+          ],
+          [
+            0.16,
+            0.03
+          ]
+        ]
+      },
+      {
+        "method": "Guidance",
+        "values": [
+          [
+            35.94,
+            2.33
+          ],
+          [
+            47.25,
+            1.81
+          ],
+          [
+            0.29,
+            0.03
+          ]
+        ]
+      },
+      {
+        "method": "LFD",
+        "values": [
+          [
+            53.54,
+            3.32
+          ],
+          [
+            42.48,
+            2.04
+          ],
+          [
+            0.31,
+            0.03
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cpp",
+    "name": "Cell penetration",
+    "table": 1,
+    "metricShort": "pLM4CPPs ↑",
+    "unit": "%",
+    "metrics": [
+      {
+        "label": "pLM4CPPs (%)",
+        "direction": "up"
+      },
+      {
+        "label": "HemoPI2 (%)",
+        "direction": "down"
+      },
+      {
+        "label": "Distance from prior",
+        "direction": "up"
+      }
+    ],
+    "rows": [
+      {
+        "method": "Pre-trained",
+        "values": [
+          [
+            8.81,
+            3.2
+          ],
+          [
+            40.84,
+            1.96
+          ],
+          [
+            0.06,
+            0.04
+          ]
+        ]
+      },
+      {
+        "method": "DPO",
+        "values": [
+          [
+            10.39,
+            3.19
+          ],
+          [
+            40.49,
+            1.92
+          ],
+          [
+            0.07,
+            0.04
+          ]
+        ]
+      },
+      {
+        "method": "DiffusionNFT",
+        "values": [
+          [
+            57.04,
+            6.22
+          ],
+          [
+            38.87,
+            1.62
+          ],
+          [
+            0.29,
+            0.03
+          ]
+        ]
+      },
+      {
+        "method": "Guidance",
+        "values": [
+          [
+            8.49,
+            3.3
+          ],
+          [
+            43.45,
+            1.85
+          ],
+          [
+            0.06,
+            0.04
+          ]
+        ]
+      },
+      {
+        "method": "LFD",
+        "values": [
+          [
+            69.06,
+            6.36
+          ],
+          [
+            37.02,
+            1.69
+          ],
+          [
+            0.34,
+            0.03
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "d2",
+    "name": "Dopamine D2",
+    "table": 2,
+    "metricShort": "GNINA CNNaffinity ↑",
+    "unit": "pK",
+    "metrics": [
+      {
+        "label": "GNINA (pK)",
+        "direction": "up"
+      },
+      {
+        "label": "Vina (kcal/mol)",
+        "direction": "down"
+      },
+      {
+        "label": "rDock",
+        "direction": "down"
+      }
+    ],
+    "rows": [
+      {
+        "method": "Pre-trained",
+        "values": [
+          [
+            6.11,
+            0.33
+          ],
+          [
+            -7.52,
+            0.39
+          ],
+          [
+            -7.64,
+            1.33
+          ]
+        ]
+      },
+      {
+        "method": "DPO",
+        "values": [
+          [
+            5.6,
+            0.05
+          ],
+          [
+            -6.81,
+            0.08
+          ],
+          [
+            -8.11,
+            0.36
+          ]
+        ]
+      },
+      {
+        "method": "Flow-GRPO",
+        "values": [
+          [
+            6.32,
+            0.06
+          ],
+          [
+            -7.83,
+            0.09
+          ],
+          [
+            -8.15,
+            0.27
+          ]
+        ]
+      },
+      {
+        "method": "DiffusionNFT",
+        "values": [
+          [
+            6.23,
+            0.07
+          ],
+          [
+            -7.9,
+            0.23
+          ],
+          [
+            -9.39,
+            0.26
+          ]
+        ]
+      },
+      {
+        "method": "Guidance",
+        "values": [
+          [
+            6.29,
+            0.07
+          ],
+          [
+            -7.65,
+            0.21
+          ],
+          [
+            -7.92,
+            0.25
+          ]
+        ]
+      },
+      {
+        "method": "LFD",
+        "values": [
+          [
+            6.54,
+            0.09
+          ],
+          [
+            -8.48,
+            0.16
+          ],
+          [
+            -9.89,
+            0.38
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "gsk3b",
+    "name": "GSK3β binding",
+    "table": 2,
+    "metricShort": "GNINA CNNaffinity ↑",
+    "unit": "pK",
+    "metrics": [
+      {
+        "label": "GNINA (pK)",
+        "direction": "up"
+      },
+      {
+        "label": "Vina (kcal/mol)",
+        "direction": "down"
+      },
+      {
+        "label": "rDock",
+        "direction": "down"
+      }
+    ],
+    "rows": [
+      {
+        "method": "Pre-trained",
+        "values": [
+          [
+            5.8,
+            0.17
+          ],
+          [
+            -7.32,
+            0.19
+          ],
+          [
+            -8.51,
+            0.55
+          ]
+        ]
+      },
+      {
+        "method": "DPO",
+        "values": [
+          [
+            6.29,
+            0.17
+          ],
+          [
+            -7.6,
+            0.2
+          ],
+          [
+            -8.77,
+            0.74
+          ]
+        ]
+      },
+      {
+        "method": "Flow-GRPO",
+        "values": [
+          [
+            6.41,
+            0.18
+          ],
+          [
+            -8.06,
+            0.25
+          ],
+          [
+            -9.31,
+            0.6
+          ]
+        ]
+      },
+      {
+        "method": "DiffusionNFT",
+        "values": [
+          [
+            6.53,
+            0.16
+          ],
+          [
+            -8.68,
+            0.22
+          ],
+          [
+            -11.71,
+            0.5
+          ]
+        ]
+      },
+      {
+        "method": "Guidance",
+        "values": [
+          [
+            5.76,
+            0.17
+          ],
+          [
+            -7.12,
+            0.22
+          ],
+          [
+            -8.03,
+            0.6
+          ]
+        ]
+      },
+      {
+        "method": "LFD",
+        "values": [
+          [
+            6.77,
+            0.11
+          ],
+          [
+            -8.84,
+            0.16
+          ],
+          [
+            -12.87,
+            0.57
+          ]
+        ]
+      }
+    ]
+  }
+]

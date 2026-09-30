@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "stages": 23,
+  "traces": 36,
+  "reported_value_pairs": 66,
+  "viewports": [
+    360,
+    390,
+    768,
+    1440
+  ],
+  "browser_errors": [],
+  "failed_http_requests": [],
+  "date": "2026-09-30",
+  "scientific_review": "All 66 mean/uncertainty pairs independently checked against the supplied PDF Tables 1\u20132; no mismatches.",
+  "accessibility": {
+    "checker": "axe-core 4.13.0",
+    "tags": [
+      "wcag2a",
+      "wcag2aa",
+      "wcag21aa"
+    ],
+    "views": [
+      "1440px overview",
+      "1440px traces",
+      "390px evidence"
+    ],
+    "violations": 0
+  },
+  "deployment": "Prepared locally. No remote repository or GitHub Pages deployment has been created."
+}

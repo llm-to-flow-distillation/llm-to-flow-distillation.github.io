@@ -1,0 +1,48 @@
+{
+  "paper": {
+    "title": "LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators",
+    "file": "assets/paper.pdf",
+    "source_filename": "_ArXiv__LLM_to_Flow_Distillation (3).pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4",
+    "pages": 43,
+    "retrieved": "2026-09-30"
+  },
+  "results": "Transcribed from Tables 1 and 2 of the supplied preprint; uncertainty values preserved as printed.",
+  "curricula": "Reported curricula from Appendix D; summaries explicitly marked where paraphrased.",
+  "evidence_note": "LLM judgments and computational evaluation do not establish experimental activity or clinical efficacy.",
+  "figures": [
+    {
+      "file": "assets/molecular-results.png",
+      "source": "paper Figure 7",
+      "page": 9,
+      "pdf_crop_points": [
+        106,
+        79,
+        506,
+        176
+      ]
+    },
+    {
+      "file": "assets/d2-docking.png",
+      "source": "paper Figure 6, image panel",
+      "page": 8,
+      "pdf_crop_points": [
+        312,
+        385,
+        505,
+        491
+      ]
+    },
+    {
+      "file": "assets/gsk3b-docking.png",
+      "source": "paper Figure 8, image panel",
+      "page": 9,
+      "pdf_crop_points": [
+        312,
+        279,
+        506,
+        378
+      ]
+    }
+  ]
+}

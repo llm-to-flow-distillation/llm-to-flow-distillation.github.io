@@ -1,0 +1,262 @@
+[
+  {
+    "task": "anticancer",
+    "source": "paper.pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G01.json",
+    "sha256": "179428ecb15cd0ddf9a719387494e764fe2412d7075b870ac328bd047a982515"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-0.json",
+    "sha256": "0768621cd70e136bdc0183ea51357b877e57c9b0d004819db745154ab188001b"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-1.json",
+    "sha256": "f6aaf47b2721b0fb1fc576b92a61fffbb37e03374892ad8eba9432495839a1b0"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G02.json",
+    "sha256": "f48603349b6cdd55ff7cdb78b5f7c09dc7c7fc6f4e0f2e647cf1fc2f081d576b"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-0.json",
+    "sha256": "c7f03138cc8773c2c0ad5c78a67169abb80616ce4fdf353f126b7547b571ff95"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-1.json",
+    "sha256": "209459b232ba1e3870ae4bd3bdbc4b32cb068d0439366a5d8a04f5cf9747d2cf"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G03.json",
+    "sha256": "24c4e2dd167bcba4b6b9996807a98880c3b7dcef9c1013df1b2c670effb46153"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-0.json",
+    "sha256": "c2a272106a67b6c9624a0363db03de72753900df3fb681d2bfd33e396e90ce49"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-1.json",
+    "sha256": "684d7d535ad55a3a71f590cede21e43d3531c11d8edd4f5971da376b39184617"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G04.json",
+    "sha256": "d8d2ca3547da16f3c9df204f1eb12bcc6349c565b8a127236a7a2acc214296b6"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-0.json",
+    "sha256": "0f810cf52c4263f4c144934e6c83984d43888253c3431504edcf9d382433f6d8"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-1.json",
+    "sha256": "22c5797f9385614d6ea7830428d659a778c755908ae5ba996c04a495639027f8"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G05.json",
+    "sha256": "17b7ce885424dde2e221ee0d3c972441ebedcdf1ebeae4821d53cfbea64f6e55"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-0.json",
+    "sha256": "47735f33bd278df06d5300299effe94aca70c4a0fb288b45e42b8acdbb31f9bb"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-1.json",
+    "sha256": "6c567c58b9c39ec9ee01a93f7c95e71a1b14a8765b4f940d9542a0750f4cf3ed"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G06.json",
+    "sha256": "f18e1e6b66b169222955f640dbca484b583bada7f8be693a28646271f7e2454a"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-0.json",
+    "sha256": "6e357639468312b295f767559f1e7f5319db1573a9943478b9018ee9af80b773"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-1.json",
+    "sha256": "6347379a4f54a9ed248aab0ad21e9d6e0edadbe1f81e8e5b9678000a27b380c7"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/G07.json",
+    "sha256": "648f4727eda5de752dc0319662335c509c2e56c1e8dc5493e066f296df6fce62"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-0.json",
+    "sha256": "11c5348dc870f6bd9a761f8052444c3a0c451894c231fabca7371353b371fb16"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-1.json",
+    "sha256": "0a76aa565b615ce844df3d40685b598f332a2a7bec3105cb8dc3525de5e52828"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/goals/F.json",
+    "sha256": "accc9b03dd51fdeb4ca4cdcdcab900fb647b7579f832322d992e55e576c14f50"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-0.json",
+    "sha256": "52ac2172c8c05bac51209a6dd52cd86e785ddaeb6a55f5167740babfe8532709"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-1.json",
+    "sha256": "c6b46d1d67388da77d61b55f9bfb2643e4f393545478ef822ce5b465e7448ad6"
+  },
+  {
+    "task": "anticancer",
+    "source": "EXP-0244/gate50_F30/11001/campaign/state/snapshot-005.json",
+    "sha256": "9f79fd21022c018a4c5fcf49d32f1cc52d824604ea02c9a0b8455716c615463b"
+  },
+  {
+    "task": "anticancer",
+    "source": "research/experiments/EXP-0244/proposal.md",
+    "sha256": "8a8645550c5ca9a9a9c6c7bd628e74342104aa6351082bc2fd446bc954a33139"
+  },
+  {
+    "task": "cpp",
+    "source": "paper.pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/goals/G01.json",
+    "sha256": "c3822d41ca36aba6a0bd5e01a4a6b4dc53e0cbb0719a3e008b6baccd555ff4ad"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-0.json",
+    "sha256": "22c998d3a142610c670f0d00a9b785fc3c0177c4ad98cfb0e23df98f081bb3ce"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-1.json",
+    "sha256": "a9a5c56c166bdcbf2f95d09c78c9d2c48ee0357b8ebbca92e75f2a720ccd70c2"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/goals/G02.json",
+    "sha256": "42b5af7c1d97d4ea2d0cb7bbe1103fddb2268054a642f8cae32e95e09696a0e6"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-0.json",
+    "sha256": "26b1264512c72b0d4be917e0fa53995be7a78d28e0a31851d2013b7e68fb081c"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-1.json",
+    "sha256": "68bf628de7c711cd4f2a4f5e31656ea37a16b73eda6b0f155ee214e45db10d12"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0194/campaign/goals/F.json",
+    "sha256": "9468e986972a0f5060059d098cfd0160f629651bfeec01a4256624db966f563a"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-0.json",
+    "sha256": "bf112a9680b4626f85b0510f84abb40ba939fc881cb9e38e5ca712422aaf87e1"
+  },
+  {
+    "task": "cpp",
+    "source": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-1.json",
+    "sha256": "88124c9d928291e8c858055aabee08e78ebd21b338750ad26e4e2268145f15ed"
+  },
+  {
+    "task": "cpp",
+    "source": "research/experiments/EXP-0194/selected_checkpoint.json",
+    "sha256": "d108f2bda67ce9322d2e458bd69ce1000043c7085bd4dd63c6b0235ac2a8e34e"
+  },
+  {
+    "task": "d2",
+    "source": "paper.pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+  },
+  {
+    "task": "gsk3b",
+    "source": "paper.pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",
+    "sha256": "b974fa8b7046714dfc18369da706416a97ad837c91776b840521fc1aed216c31"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G01-p1/repeat-2.json",
+    "sha256": "795d10d6f05f3af70cd562cb020c0538f574c891d6bf76b32705530836f8f20a"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G02-p2/repeat-1.json",
+    "sha256": "4267a89c26d1ef121452a15557adf7a0ab776e010af02600e379da2d8fb32069"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G02-p2/repeat-2.json",
+    "sha256": "c98977cd0e3fb30cda636a5e53720ca223a63970959ffa1e47d5a056ce759161"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G03-p5/repeat-1.json",
+    "sha256": "49c2473a98e09252303ce7190db54097e03d69b4185c2ebf60411fe34fc14d76"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0131/campaign/judgments/G03-p5/repeat-2.json",
+    "sha256": "f725d2573b1b4b2e14918ff831b270c0976a1b39d4978894c2a041e63107a9a6"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-1.json",
+    "sha256": "0a2621e77cc2d8a6213b2980e20b50122fbeb541ea4869cdc72886046bead53f"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-2.json",
+    "sha256": "57b2b572a6f9a820d6e444f9fa9a46cfd7100e89227af933b415ac754f328e9f"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0165/campaign/judgments/F-direct-p2/repeat-1.json",
+    "sha256": "3f5c86e40b82699f6f8bd008bbdd67900f4add02918f44d0f89b24d8e6059521"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0165/campaign/judgments/F-direct-p2/repeat-2.json",
+    "sha256": "3de6df3849fb4a174ec2f4b80636ac4ed109fd28223b44ecbe8cc008599298a4"
+  },
+  {
+    "task": "gsk3b",
+    "source": "EXP-0165/campaign/source_snapshot.json",
+    "sha256": "2aa38cc4cf89b2464041fbb368269236c3cebed77f3d98bf10544a62b59d0ad9"
+  },
+  {
+    "task": "ood",
+    "source": "paper.pdf",
+    "sha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+  }
+]
