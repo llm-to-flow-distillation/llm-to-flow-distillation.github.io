@@ -136,31 +136,6 @@
     $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design, paper Figure 9. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">Pre-trained</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">LFD · ours</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
     $('#results-table-note').textContent = evidence.caveat;
   }
-  function renderOOD(task) {
-    const points=[];
-    let round=0;
-    task.stages.filter(stage=>stage.rounds>0).forEach((stage,index)=>{
-      for (let i=0;i<stage.rounds;i++) points.push({round:++round,index,title:stage.title,summary:stage.exactGoal});
-    });
-    const traces=[{
-      type:'scatter',name:'Curriculum subgoal',x:points.map(point=>point.round),y:points.map(point=>point.index),mode:'lines+markers',
-      marker:{color:style('LFD').color,symbol:'circle',size:10},line:{color:style('LFD').color,width:2.5,shape:'hv'},
-      customdata:points.map(point=>[point.title]),hovertemplate:'<b>Round %{x}</b><br>%{customdata[0]}<extra></extra>'
-    },{
-      type:'scatter',name:'Final-goal assessment',x:[6],y:[3],mode:'markers',marker:{color:'#c54b59',symbol:'square',size:13},
-      hovertemplate:'<b>Full-goal assessment · round 6</b><br>Reported hit in a 512-sample batch<br>No additional training update<extra></extra>'
-    }];
-    return draw('#curriculum-chart',traces,layout({
-      xaxis:{fixedrange:true,title:{text:'Curriculum round',standoff:18},dtick:1,range:[.5,6.5],gridcolor:'#eceef2',zeroline:false,automargin:true},
-      yaxis:{fixedrange:true,tickvals:[0,1,2,3],ticktext:['g<sub>0</sub>','g<sub>1</sub>','g<sub>2</sub>','Final goal'],range:[-.4,3.4],gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),point=>{
-      if (point.curveNumber===1) $('#curriculum-readout').innerHTML='<strong>Round 6 · final goal</strong> · Reported full-goal hit in a 512-sample batch. This is an assessment, with no additional training update.';
-      else {
-        const row=points[point.pointIndex];
-        $('#curriculum-readout').innerHTML=`<strong>Round ${row.round} · ${esc(row.title)}</strong> · ${esc(row.summary)}`;
-      }
-    });
-  }
   function init(results) {
     const data=window.LFD_DATA;
     const goals=data.resultPanels.tasks;
@@ -202,7 +177,7 @@
         $('#task-results-evidence').innerHTML='';
         renderTable(result);
       } else if (id==='ood') {
-        $('#task-results-plots').innerHTML='<figure class="task-scatter"><h4>From intermediate subgoals to the full goal</h4><div class="plot-key" aria-label="Curriculum markers"><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#8732ad" aria-hidden="true"><circle cx="8" cy="8" r="5"/></svg>Curriculum subgoal</span><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#c54b59" aria-hidden="true"><rect x="3" y="3" width="10" height="10"/></svg>Final-goal assessment</span></div><div id="curriculum-chart" class="interactive-chart" role="region" aria-label="Interactive constrained-design curriculum"></div><p id="curriculum-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a round to inspect the active subgoal.</p><figcaption>Six recorded training rounds; the full-goal assessment at round 6 uses no additional training update.</figcaption></figure>';
+        $('#task-results-plots').innerHTML='';
         $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#explorer?task=ood&stage=g&tab=traces">Inspect the recorded discovery example ↗</a></div>';
         renderOODTable();
       } else {
@@ -212,7 +187,7 @@
       }
       fonts.then(()=>{
         if (current!==generation) return;
-        const work=result && result.table===2 ? renderDockingBars(result) : id==='ood' ? renderOOD(task) : renderScatter(result);
+        const work=id==='ood' ? null : result.table===2 ? renderDockingBars(result) : renderScatter(result);
         return Promise.resolve(work).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
       });
     }

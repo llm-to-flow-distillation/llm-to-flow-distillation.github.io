@@ -147,8 +147,11 @@ def main():
             for metric_index,metric in enumerate(result['metrics']):
                 expect(page.locator('#comparison-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][metric_index][0]:.2f}')
         select('ood')
-        assert page.locator('#task-results-plots .js-plotly-plot').count()==1
-        assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart,#docking-chart').count()==0
+        assert page.locator('#task-results-plots .js-plotly-plot').count()==0
+        assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart,#docking-chart,#curriculum-chart,#curriculum-readout').count()==0
+        assert page.locator('#task-results-plots').inner_html()==''
+        expect(page.locator('#task-results-plots')).to_be_hidden()
+        assert 'From intermediate subgoals to the full goal' not in page.locator('#task-results-panel').inner_text()
         expect(page.locator('.discovery-zero')).to_have_text('0 / 38,500')
         expect(page.locator('.discovery-hit')).to_contain_text('Round 6')
         expect(page.locator('.discovery-hit')).to_contain_text('512-sample batch')
@@ -159,10 +162,6 @@ def main():
         assert '38,500' in page.locator('#results-table').inner_text()
         assert '512-sample batch' in page.locator('#results-table').inner_text()
         assert 'Reported full-goal hit' in page.locator('#results-table').inner_text()
-        curriculum=page.locator('#curriculum-chart').evaluate('(plot)=>plot.data.map(trace=>({x:trace.x,y:trace.y}))')
-        assert curriculum == [{'x':[1,2,3,4,5,6],'y':[0,1,2,2,2,2]},{'x':[6],'y':[3]}]
-        page.locator('#curriculum-chart .scatterlayer .trace').last.locator('.point').hover(force=True)
-        expect(page.locator('#curriculum-readout')).to_contain_text('no additional training update')
         # Tab semantics and standard arrow/Home/End navigation retain focus on the card.
         select('anticancer')
         page.locator('[data-result-task="anticancer"]').focus()
@@ -220,15 +219,18 @@ def main():
                     delta=abs(result['rows'][-1]['values'][index][0])-abs(baseline['values'][index][0])
                     expect(touch.locator('#docking-readout')).to_contain_text(f'{delta:+.2f}')
             else:
-                touch.locator('#curriculum-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
-                expect(touch.locator('#curriculum-readout')).to_contain_text('512')
+                assert touch.locator('#task-results-plots .js-plotly-plot').count()==0
+                expect(touch.locator('#task-results-plots')).to_be_hidden()
+                touch.locator('[data-curriculum-stage="g"]').tap()
+                expect(touch.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
+                expect(touch.locator('#result-curriculum-preview .curriculum-preview-heading > span')).to_have_text('Assessment only')
         page.goto((root/'index.html').as_uri(),wait_until='load')
         page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask === "anticancer"')
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

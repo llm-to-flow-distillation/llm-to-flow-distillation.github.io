@@ -431,6 +431,8 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .result-panel-labels .tiny-label { color: var(--goal-strong); font-weight: 600; }
 .chart-context { margin: 0 -28px 26px; padding: 0 28px 24px; border-bottom: 1px solid var(--goal-border); background: var(--goal-surface); font-size: 14px; color: #565c66; }
 #task-results-plots { padding: 26px 0 0; }
+#task-results-plots:empty { display: none; }
+#task-results-plots:empty + .results-values { border-top: 0; }
 .interactive-chart { width: 100%; min-width: 0; height: 370px; }
 .chart-readout { min-height: 45px; margin: 0 0 16px; padding: 10px 13px; border-radius: 6px; background: #f6f7f9; color: #4b515c; font-size: 12px; line-height: 1.7; }
 .chart-readout strong { color: var(--ink); font-weight: 600; }
