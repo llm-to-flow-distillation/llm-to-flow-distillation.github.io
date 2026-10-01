@@ -34,7 +34,7 @@
   "contents_navigation": "passed",
   "method": {
     "source": "Author-provided arXiv Method introduction, algorithm, and DPO description",
-    "layout": "Mathematical introduction beside eight numbered pseudocode lines in a rounded pale-blue box with paper-style serif typography; stacked below 901px. Sampling and observables share step 3. A divider separates the opening figure from Method.",
+    "layout": "Mathematical introduction beside compact eight-line numbered pseudocode in a rounded pale-blue box; stacked below 901px. Algorithm dimensions at 1440px: approximately 518 \u00d7 402px. The KL interpretation follows across the reading column.",
     "interactive_functions": [
       "Sample",
       "Observables",
@@ -64,6 +64,8 @@
       "failed_requests": []
     },
     "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts.",
-    "presentation": "No inline comment lines or equation references. Removed the opening figure caption, Method paper-link helper, interaction hint, popup footer, and citation-status helper. Preserved function explanations and evidence provenance."
+    "presentation": "No inline comment lines or equation references. Removed the opening figure caption, Method paper-link helper, interaction hint, popup footer, and citation-status helper. Preserved function explanations and evidence provenance.",
+    "implicit_target": "Author-provided Bradley\u2013Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
+    "implicit_target_checks": "Both formulas render without KaTeX errors or horizontal overflow at 360/390/768/1024/1280/1440px. Desktop/mobile visual review and axe checks passed."
   }
 }

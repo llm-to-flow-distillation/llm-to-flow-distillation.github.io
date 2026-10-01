@@ -74,6 +74,12 @@
           </ol>
         </div>
       </div>
+      <div class="method-interpretation" aria-labelledby="interpretation-title">
+        <h3 id="interpretation-title">Each round is a KL-regularized step.</h3>
+        <p>Assume the teacher’s preferences follow a Bradley–Terry model with an unobserved utility <span class="math math-inline" data-tex="f_{g_t}:\mathcal X\to\mathbb R">f<sub>gₜ</sub>: X → ℝ</span>. The standard DPO derivation gives two equivalent forms of the implicit target:</p>
+        <div class="math math-display implicit-target-equation" data-tex="\begin{aligned}p_t^\star &amp;\propto p_{\theta_t}\,e^{f_{g_t}/\beta},\\[.65em]p_t^\star &amp;=\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.\end{aligned}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β), equivalently p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
+        <p>Each subgoal thus induces an implicit reward and a target that balances higher utility against departure from the current generator, with <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controlling regularization. Across rounds, these targets define local steps along the curriculum toward <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span>.</p>
+      </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
         <div class="function-popover-heading"><h3 id="function-detail-title">Function details</h3><button id="close-function-details" type="button" aria-label="Close function details">×</button></div>
         <div data-function-panel="sample" hidden>
