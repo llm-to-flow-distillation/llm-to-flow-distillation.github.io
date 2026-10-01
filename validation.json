@@ -35,10 +35,11 @@
   "design": "Compact paper title with a smaller subtitle; uniform author names and affiliations; smaller arxiv and GitHub resource buttons; main_ltf.png opening figure; clickable left contents rail with automatic current-section tracking and a collapsible menu on smaller screens.",
   "contents_navigation": "passed",
   "method": {
-    "source": "Author-provided arXiv Method LaTeX",
-    "content": "Adaptive subgoal selection, ordinal labels and induced preferences, current-reference DPO objective, denoising-loss surrogate, and conditional Bradley\u2013Terry/KL interpretation.",
+    "source": "Author-provided arXiv Method introduction and algorithm pseudocode",
+    "content": "Goal-region curriculum followed by Sample, SetGoal, LLM-Judge and Minimize; concise prose in the page\u2019s standard text style.",
     "renderer": "Self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks",
-    "rendered_expressions": 19,
+    "display_blocks": 2,
+    "algorithm_operations": 4,
     "equation_overflow": 0,
     "tested_widths": [
       360,
@@ -47,6 +48,7 @@
       1280,
       1440
     ],
-    "browser_report": "Existing browser suite passed, including local-file operation, all 23 stages, 36 traces and 66 result pairs."
+    "typography": "Body text uses Inter at 16px and the standard ink color; math inherits the same color. Function names stay together.",
+    "checks": "Responsive equation layout, typography consistency, section navigation, trace smoke check, local-file operation and no-JavaScript fallbacks passed."
   }
 }

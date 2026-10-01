@@ -4,7 +4,7 @@ An interactive research website for **LLM-to-Flow Distillation: Teaching Natural
 
 The site includes the authors’ main method figure and a scroll-aware contents menu, all five discovery tasks, 23 curriculum/assessment stages, 36 illustrative recorded judgments, searchable/filterable traces, shareable task/subgoal URLs, JSON downloads, the full paper, and every value from the paper’s two main result tables. It works without a JavaScript framework, runtime CDN, API key, or paid service.
 
-The page uses a white background, self-hosted Inter fonts, and a compact centered paper title/author block. The left contents rail tracks the current section; on smaller screens it becomes an expandable contents button. The Method section uses the authors’ LaTeX notation for adaptive goals, induced preferences, and online DPO; its conditional KL interpretation is expandable. Equations use self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks. Font, icon, and renderer credits are in `assets/ATTRIBUTIONS.txt`.
+The page uses a white background, self-hosted Inter fonts, and a compact centered paper title/author block. The left contents rail tracks the current section; on smaller screens it becomes an expandable contents button. The Method section follows the authors’ introduction and algorithm: a sequence of goal regions followed by the sample, SetGoal, LLM-Judge, and Minimize operations. Continuous prose and equations use the page’s existing font scale and text color. Equations use self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks. Font, icon, and renderer credits are in `assets/ATTRIBUTIONS.txt`.
 
 ## Preview
 
