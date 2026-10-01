@@ -109,19 +109,28 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .intro-copy p:last-child { margin-bottom: 0; }
 .text-link { display: inline-flex; gap: 17px; font-size: 13px; border-bottom: 1px solid #b5b7bd; padding-bottom: 2px; margin-top: 6px; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
-.method-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; margin-top: 35px; }
-.method-cards article { padding: 25px 0; border-top: 1px solid var(--line); }
-.step-number { display: block; font-size: 25px; font-weight: 500; color: #6b7078; margin-bottom: 20px; line-height: 1; }
-.method-cards h3 { font-size: 17px; margin-bottom: 12px; }
-.method-cards p { color: var(--muted); font-size: 14px; min-height: 98px; line-height: 1.8; }
-.mini-equation, .label-row { border-top: 1px solid var(--line); padding-top: 17px; }
-.mini-equation { font-size: 16px; }
-.label-row { display: flex; gap: 8px; }
-.label-row span { border-radius: 4px; padding: 3px 9px; font-size: 11px; }
-.label-positive { color: #275b3d; background: #eaf4ec; }
-.label-negative { color: #914042; background: #fbeded; }
-.label-abstain { color: #545861; background: #eeeef0; }
-.figure-details { border-bottom: 1px solid var(--line); margin-top: 15px; }
+/* A short formal account of each round, with accessible typeset equations. */
+.method-steps, .method-interpretation, .method-source { max-width: 850px; margin-inline: auto; }
+.method-step { display: grid; grid-template-columns: 38px minmax(0, 1fr); gap: 22px; padding: 28px 0; border-top: 1px solid var(--line); }
+.step-number { display: block; padding-top: 3px; font-size: 15px; font-weight: 500; color: #686d77; line-height: 1.5; }
+.method-step h3 { margin-bottom: 10px; font-size: 18px; }
+.method-step p { color: #565c66; font-size: 14px; line-height: 1.85; margin-bottom: 12px; }
+.method-step p:last-child { margin-bottom: 0; }
+.method-step strong { font-weight: 500; color: #353b44; }
+.math-inline { white-space: nowrap; }
+.math-inline .katex { font-size: 1.1em; }
+.math-display { max-width: 100%; padding: 2px 4px; overflow-x: auto; overflow-y: hidden; font-size: 16px; }
+.math-display .katex-display { margin: 12px 0 16px; }
+.math-display .katex { font-size: 1.13em; }
+.preference-equations { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 52px; }
+.preference-equations > .math-display { flex: 0 0 auto; }
+.dpo-equation { margin-block: 15px 9px; padding: 12px 18px; border-radius: 7px; background: #f7f7f8; }
+.method-step .method-notation { text-align: center; font-size: 12px; margin-bottom: 18px; color: var(--muted); }
+.method-interpretation { border-block: 1px solid var(--line); }
+.method-interpretation > div { padding: 0 0 22px 60px; }
+.method-interpretation p { color: #5e6570; font-size: 13px; line-height: 1.8; }
+.method-interpretation p:last-child { margin: 12px 0 0; }
+.method-source { padding-top: 18px; text-align: center; }
 summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; list-style: none; padding: 18px 0; font-size: 14px; }
 summary::-webkit-details-marker { display: none; }
 summary > span { color: #70747c; font-size: 21px; line-height: 1; }
@@ -265,6 +274,11 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .ood-stats { padding-left: 30px; }
 }
 @media (max-width: 760px) {
+  .method-step { grid-template-columns: 25px minmax(0, 1fr); gap: 14px; padding-block: 25px; }
+  .method-interpretation > div { padding-left: 0; }
+  .math-display { font-size: 15px; }
+  .preference-equations { gap: 0 25px; }
+  .dpo-equation { padding-inline: 10px; }
   .wrap { width: calc(100% - 36px); }
   .hero { padding-top: 44px; }
   .paper-title { font-size: 32px; letter-spacing: -1px; margin-bottom: 24px; }
@@ -280,12 +294,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   h2 { font-size: 28px; }
   .section-intro { margin-bottom: 27px; }
   .intro-copy { font-size: 15px; margin-top: 18px; }
-  .method-cards { gap: 20px; }
-  .method-cards h3 { font-size: 15px; }
-  .method-cards p { font-size: 13px; min-height: 145px; }
-  .mini-equation { font-size: 13px; }
-  .label-row { flex-wrap: wrap; }
-  .label-row span { font-size: 10px; }
   .explorer-shell { grid-template-columns: 1fr; }
   .task-sidebar { padding: 18px; border-right: 0; border-bottom: 1px solid var(--line); }
   .task-sidebar > .tiny-label { margin: 0 0 12px; }
@@ -309,6 +317,13 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .citation pre { font-size: 11px; }
 }
 @media (max-width: 430px) {
+  .method-step { grid-template-columns: minmax(0, 1fr); gap: 7px; }
+  .step-number { padding: 0; }
+  .method-step h3 { font-size: 17px; }
+  .preference-equations { gap: 0 18px; }
+  .math-display { font-size: 14px; }
+  .dpo-equation { padding-inline: 6px; }
+  .method-interpretation .math-display { font-size: 13px; }
   .hero { padding-top: 35px; }
   .paper-title { font-size: 27px; line-height: 1.25; letter-spacing: -.9px; }
   .title-subtitle { font-size: .85em; margin-top: 10px; }
@@ -321,10 +336,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .resource-icon { width: 19px; height: 19px; }
   .hero-figure figcaption { font-size: 11px; }
   .contents-nav { left: 14px; bottom: max(14px, env(safe-area-inset-bottom)); }
-  .method-cards { grid-template-columns: 1fr; gap: 8px; }
-  .method-cards h3 { font-size: 17px; }
-  .method-cards p { min-height: 0; font-size: 14px; }
-  .mini-equation { font-size: 16px; }
   .explorer-main { padding: 20px 17px; }
   .task-header-line { gap: 9px; }
   .task-header-line h3 { font-size: 21px; }

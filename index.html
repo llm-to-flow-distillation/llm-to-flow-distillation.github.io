@@ -14,7 +14,9 @@
   <title>LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/katex/katex.min.css">
   <link rel="stylesheet" href="site.css">
+  <script src="assets/katex/katex.min.js" defer></script>
   <script src="data/site-data.js" defer></script>
   <script src="site.js" defer></script>
 </head>
@@ -50,9 +52,30 @@
     </section>
 
     <section id="method" class="method-section wrap section-space" aria-labelledby="method-title">
-      <div class="section-intro"><div><h2 id="method-title">Method</h2></div><div class="intro-copy"><p>LLMs carry broad scientific knowledge. Domain-specific flow and diffusion models know how to generate structured designs. LFD connects these complementary capabilities through an adaptive curriculum.</p><p>A frozen LLM teacher chooses an attainable subgoal and judges the student’s samples. Those judgments become preferences for Direct Preference Optimization. As the generator improves, the teacher moves the goal closer to the original discovery objective.</p><a class="text-link" href="assets/paper.pdf#page=4" target="_blank" rel="noopener">Method in the paper <span aria-hidden="true">↗</span></a></div></div>
-      <div class="method-cards"><article><span class="step-number">01</span><h3>Make the goal reachable</h3><p>Start with an intermediate objective that distinguishes among what the current generator can produce.</p><div class="mini-equation">g → g<sub>0</sub> → g<sub>1</sub> → … → g</div></article><article><span class="step-number">02</span><h3>Learn from preferences</h3><p>Positive and negative judgments form preference pairs. Abstentions leave uncertain candidates out of the update.</p><div class="label-row"><span class="label-positive">Positive</span><span class="label-negative">Negative</span><span class="label-abstain">Abstain</span></div></article><article><span class="step-number">03</span><h3>Update the generator</h3><p>DPO transfers the teacher’s feedback into the flow student. New samples inform the next curriculum step.</p><div class="mini-equation">Sample → Judge → Distill ↻</div></article></div>
-      <details class="figure-details"><summary>View the paper’s method overview <span aria-hidden="true">+</span></summary><figure><img src="assets/overview.png" width="4546" height="1285" alt="Paper overview: an LLM teacher builds intermediate goals and judges samples to adapt the flow student toward the discovery region" loading="lazy"><figcaption>Method overview from the authors’ research repository.</figcaption></figure></details>
+      <div class="section-intro"><h2 id="method-title">Method</h2><div class="intro-copy"><p>LFD adapts a pretrained flow <span class="math math-inline " data-tex="v_{\theta_0}">v<sub>θ₀</sub></span> to a natural-language goal <span class="math math-inline " data-tex="g">g</span> through an online curriculum. Teacher-induced preferences update the generator, while subgoals progressively tighten toward the original goal.</p></div></div>
+      <div class="method-steps">
+        <article class="method-step">
+          <span class="step-number" aria-hidden="true">01</span>
+          <div><h3>Choose an attainable subgoal</h3><p>Sample <span class="math math-inline " data-tex="X_t\sim p_{\theta_t}">X<sub>t</sub> ∼ p<sub>θₜ</sub></span> and expose its observables <span class="math math-inline " data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> to the teacher. Starting with <span class="math math-inline " data-tex="g_{-1}=g">g<sub>−1</sub> = g</span>, select</p>
+            <div class="math math-display " data-tex="g_t\gets\operatorname{SetGoal}\!\left(g,g_{t-1},\mathcal O(X_t)\right)">g<sub>t</sub> ← SetGoal(g, g<sub>t−1</sub>, O(X<sub>t</sub>))</div>
+            <p>Accept a subgoal only when the teacher identifies enough positive and negative candidates to provide a learning signal.</p>
+          </div>
+        </article>
+        <article class="method-step">
+          <span class="step-number" aria-hidden="true">02</span>
+          <div><h3>Turn judgments into preferences</h3><div class="preference-equations"><div class="math math-display " data-tex="\ell_t(x)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x) ∈ {+, −, ∅}</div><div class="math math-display " data-tex="\mathcal D_t=\mathcal P_t\times\mathcal N_t">D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub></div></div><p>The positive and negative sets <span class="math math-inline " data-tex="\mathcal P_t">P<sub>t</sub></span> and <span class="math math-inline " data-tex="\mathcal N_t">N<sub>t</sub></span> induce ordered preference pairs. Abstained candidates are excluded.</p></div>
+        </article>
+        <article class="method-step">
+          <span class="step-number" aria-hidden="true">03</span>
+          <div><h3>Distill with an online DPO update</h3><p>Starting from <span class="math math-inline " data-tex="\theta_t">θ<sub>t</sub></span>, minimize the preference objective with the current generator <span class="math math-inline " data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as the reference:</p>
+            <div class="math math-display dpo-equation" data-tex="\begin{gathered}\mathcal L_t(\theta,\mathcal D_t)=-\mathbb E_{(x^+,x^-)\sim\mathcal D_t}\\[0.25em]\log\sigma\!\left(\beta\left[\log\frac{p_\theta(x^+)}{p_{\theta_t}(x^+)}-\log\frac{p_\theta(x^-)}{p_{\theta_t}(x^-)}\right]\right).\end{gathered}">L<sub>t</sub>(θ, D<sub>t</sub>) = −E<sub>(x⁺, x⁻)∼Dₜ</sub> log σ(β[log(p<sub>θ</sub>(x⁺)/p<sub>θₜ</sub>(x⁺)) − log(p<sub>θ</sub>(x⁻)/p<sub>θₜ</sub>(x⁻))]).</div>
+            <p class="method-notation"><span class="math math-inline " data-tex="\sigma">σ</span> is the logistic function; <span class="math math-inline " data-tex="\beta&gt;0">β &gt; 0</span> controls regularization.</p>
+            <p>Terminal log-densities are intractable, so we optimize the corresponding <strong>denoising-loss surrogate</strong>. This yields <span class="math math-inline " data-tex="\theta_{t+1}">θ<sub>t+1</sub></span>; resampling then starts the next round.</p>
+          </div>
+        </article>
+      </div>
+      <details class="method-interpretation"><summary>A KL-regularized interpretation <span aria-hidden="true">+</span></summary><div><p>If teacher preferences follow a Bradley–Terry model with latent utility <span class="math math-inline " data-tex="f_{g_t}">f<sub>gₜ</sub></span>, the implicit target is</p><div class="math math-display " data-tex="p_t^\star\propto p_{\theta_t}\exp\!\left(f_{g_t}/\beta\right)">p*<sub>t</sub> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β)</div><div class="math math-display " data-tex="p_t^\star=\underset{q}{\arg\max}\;\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\operatorname{KL}(q\,\|\,p_{\theta_t})\bigr\}">p*<sub>t</sub> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ∥ p<sub>θₜ</sub>)}</div><p>Each subgoal defines a local, regularized target relative to the current generator. This is an idealized interpretation under the stated preference model.</p></div></details>
+      <div class="method-source"><a class="text-link" href="assets/paper.pdf#page=4" target="_blank" rel="noopener">Full method and derivation in the paper <span aria-hidden="true">↗</span></a></div>
     </section>
 
     <section id="explorer" class="explorer-section section-space" aria-labelledby="explorer-title">

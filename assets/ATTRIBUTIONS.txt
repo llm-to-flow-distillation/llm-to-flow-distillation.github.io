@@ -11,3 +11,10 @@ arXiv mark — Simple Icons, CC0-1.0.
 Source: https://github.com/simple-icons/simple-icons/blob/develop/icons/arxiv.svg
 https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md
 Brand marks identify the linked resources; no affiliation is implied.
+
+KaTeX 0.18.10 — Khan Academy and other contributors, MIT license.
+Source: https://katex.org/ and https://github.com/KaTeX/KaTeX
+License: katex/LICENSE
+Self-hosted browser renderer, stylesheet and original font files.
+Archive: https://registry.npmjs.org/katex/-/katex-0.18.10.tgz
+Archive SHA-256: ab056aae3031254cdffc64e7b886cdc43c91114b219bd7b1b68e097b8b3da6c2

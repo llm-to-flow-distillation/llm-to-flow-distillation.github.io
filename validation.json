@@ -23,14 +23,30 @@
       "wcag21aa"
     ],
     "views": [
-      "1440px overview",
-      "1440px method with contents rail",
-      "390px overview",
-      "390px method with expanded contents menu"
+      "360px method",
+      "390px method",
+      "768px method",
+      "1280px method",
+      "1440px method"
     ],
     "violations": 0
   },
   "deployment": "GitHub Pages destination: https://llm-to-flow-distillation.github.io/; publication tracked by the repository Actions history.",
   "design": "Compact paper title with a smaller subtitle; uniform author names and affiliations; smaller arxiv and GitHub resource buttons; main_ltf.png opening figure; clickable left contents rail with automatic current-section tracking and a collapsible menu on smaller screens.",
-  "contents_navigation": "passed"
+  "contents_navigation": "passed",
+  "method": {
+    "source": "Author-provided arXiv Method LaTeX",
+    "content": "Adaptive subgoal selection, ordinal labels and induced preferences, current-reference DPO objective, denoising-loss surrogate, and conditional Bradley\u2013Terry/KL interpretation.",
+    "renderer": "Self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks",
+    "rendered_expressions": 19,
+    "equation_overflow": 0,
+    "tested_widths": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browser_report": "Existing browser suite passed, including local-file operation, all 23 stages, 36 traces and 66 result pairs."
+  }
 }

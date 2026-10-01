@@ -4,6 +4,13 @@
   const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
   const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // Render only author-provided method equations; the plain text remains a fallback.
+  if (window.katex) {
+    $$('[data-tex]').forEach(element => window.katex.render(element.dataset.tex, element, {
+      displayMode: element.classList.contains('math-display'),
+      output: 'htmlAndMathml', throwOnError: false, strict: 'error', trust: false
+    }));
+  }
   const tasks = window.LFD_DATA.tasks;
   const results = window.LFD_DATA.results;
   const state = {task: tasks[0].id, stage: 'g0', tab: 'overview'};
