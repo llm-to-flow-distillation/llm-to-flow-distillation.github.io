@@ -1,0 +1,243 @@
+{
+  "target": "GSK3β",
+  "paperFigure": 7,
+  "panels": [
+    "c",
+    "d"
+  ],
+  "trajectory": [
+    {
+      "round": 0,
+      "checkpointMean": 5.799644906524001,
+      "bestRound": 0,
+      "bestMean": 5.799644906524001,
+      "ciLow": 5.633780861743225,
+      "ciHigh": 5.965508951304778,
+      "goal": "Base",
+      "dockedMolecules": 100,
+      "bestSource": "EXP-0137/summary.json:arms.pretrained.CNNaffinity",
+      "checkpointSource": "EXP-0137/summary.json:arms.pretrained.CNNaffinity"
+    },
+    {
+      "round": 1,
+      "checkpointMean": 5.989866471051516,
+      "bestRound": 1,
+      "bestMean": 5.989866471051516,
+      "ciLow": 5.8268092169306325,
+      "ciHigh": 6.1529237251724,
+      "goal": "G1",
+      "dockedMolecules": 99,
+      "bestSource": "EXP-0137/summary.json:arms.after_G01.CNNaffinity",
+      "checkpointSource": "EXP-0137/summary.json:arms.after_G01.CNNaffinity"
+    },
+    {
+      "round": 2,
+      "checkpointMean": 6.396898670193,
+      "bestRound": 2,
+      "bestMean": 6.396898670193,
+      "ciLow": 6.247015962961327,
+      "ciHigh": 6.546781377424673,
+      "goal": "G2",
+      "dockedMolecules": 100,
+      "bestSource": "EXP-0137/summary.json:arms.after_G02.CNNaffinity",
+      "checkpointSource": "EXP-0137/summary.json:arms.after_G02.CNNaffinity"
+    },
+    {
+      "round": 3,
+      "checkpointMean": 6.666799073216001,
+      "bestRound": 3,
+      "bestMean": 6.666799073216001,
+      "ciLow": 6.529763660782773,
+      "ciHigh": 6.803834485649229,
+      "goal": "G3",
+      "dockedMolecules": 100,
+      "bestSource": "EXP-0167/gnina/summary.json:arms.ltfd_main_p3.CNNaffinity",
+      "checkpointSource": "EXP-0167/gnina/summary.json:arms.ltfd_main_p3.CNNaffinity"
+    },
+    {
+      "round": 4,
+      "checkpointMean": 6.722517121924242,
+      "bestRound": 4,
+      "bestMean": 6.722517121924242,
+      "ciLow": 6.565594005409092,
+      "ciHigh": 6.8794402384393925,
+      "goal": "G3",
+      "dockedMolecules": 99,
+      "bestSource": "EXP-0167/gnina/summary.json:arms.ltfd_main_p4.CNNaffinity",
+      "checkpointSource": "EXP-0167/gnina/summary.json:arms.ltfd_main_p4.CNNaffinity"
+    },
+    {
+      "round": 5,
+      "checkpointMean": 6.8386786127059995,
+      "bestRound": 5,
+      "bestMean": 6.8386786127059995,
+      "ciLow": 6.71002081108005,
+      "ciHigh": 6.967336414331949,
+      "goal": "G3",
+      "dockedMolecules": 100,
+      "bestSource": "EXP-0137/summary.json:arms.after_G03.CNNaffinity",
+      "checkpointSource": "EXP-0137/summary.json:arms.after_G03.CNNaffinity"
+    },
+    {
+      "round": 6,
+      "checkpointMean": 6.726105632203031,
+      "bestRound": 5,
+      "bestMean": 6.8386786127059995,
+      "ciLow": 6.71002081108005,
+      "ciHigh": 6.967336414331949,
+      "goal": "G4",
+      "dockedMolecules": 99,
+      "bestSource": "EXP-0137/summary.json:arms.after_G03.CNNaffinity",
+      "checkpointSource": "EXP-0167/gnina/summary.json:arms.ltfd_g04_p1.CNNaffinity"
+    },
+    {
+      "round": 7,
+      "checkpointMean": 6.497287147044,
+      "bestRound": 5,
+      "bestMean": 6.8386786127059995,
+      "ciLow": 6.71002081108005,
+      "ciHigh": 6.967336414331949,
+      "goal": "G4",
+      "dockedMolecules": 100,
+      "bestSource": "EXP-0137/summary.json:arms.after_G03.CNNaffinity",
+      "checkpointSource": "EXP-0167/gnina/summary.json:arms.ltfd_g04_p2.CNNaffinity"
+    }
+  ],
+  "baselines": [
+    {
+      "method": "DPO",
+      "mean": 6.294741494319388,
+      "ciLow": 6.124437661931889,
+      "ciHigh": 6.45414986574347,
+      "dockedMolecules": 98,
+      "source": "EXP-0152/summary.json:arms.dpo_seed1.CNNaffinity"
+    },
+    {
+      "method": "DiffusionNFT",
+      "mean": 6.529817101928282,
+      "ciLow": 6.372713080797702,
+      "ciHigh": 6.683050832539974,
+      "dockedMolecules": 99,
+      "source": "EXP-0173/followup/gnina/summary.json:arms.diffusion_nft_7_seed1.CNNaffinity"
+    },
+    {
+      "method": "Flow-GRPO",
+      "mean": 6.411016201235053,
+      "ciLow": 6.227000441996829,
+      "ciHigh": 6.591604372212553,
+      "dockedMolecules": 97,
+      "source": "EXP-0171/gnina/summary.json:arms.flowgrpo_style_seed1.CNNaffinity"
+    },
+    {
+      "method": "Guidance",
+      "mean": 5.763440302826137,
+      "ciLow": 5.589429517967244,
+      "ciHigh": 5.9334614103505965,
+      "dockedMolecules": 88,
+      "source": "EXP-0152/summary.json:arms.distilled_guidance_seed1.CNNaffinity"
+    },
+    {
+      "method": "Pre-trained",
+      "mean": 5.799644906524001,
+      "ciLow": 5.633780861743225,
+      "ciHigh": 5.960182962422098,
+      "dockedMolecules": 100,
+      "source": "EXP-0137/summary.json:arms.pretrained.CNNaffinity"
+    }
+  ],
+  "novelty": [
+    {
+      "method": "Pre-trained",
+      "noveltyMean": 52.0,
+      "noveltyCI95": 6.3312689561666415,
+      "negativeRDockMean": 13.397652307692308,
+      "negativeRDockCI95": 0.5116175135790973,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    },
+    {
+      "method": "LFD",
+      "noveltyMean": 89.0,
+      "noveltyCI95": 2.9119601927901586,
+      "negativeRDockMean": 17.373086666666666,
+      "negativeRDockCI95": 0.46348608068822755,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    },
+    {
+      "method": "DPO",
+      "noveltyMean": 59.2,
+      "noveltyCI95": 5.511086176370013,
+      "negativeRDockMean": 14.86110923076923,
+      "negativeRDockCI95": 0.5461098742259671,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    },
+    {
+      "method": "Flow-GRPO",
+      "noveltyMean": 88.6,
+      "noveltyCI95": 4.173912214472125,
+      "negativeRDockMean": 15.26834,
+      "negativeRDockCI95": 0.8966742123244326,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    },
+    {
+      "method": "DiffusionNFT",
+      "noveltyMean": 90.2,
+      "noveltyCI95": 1.8416853329919851,
+      "negativeRDockMean": 16.963072307692308,
+      "negativeRDockCI95": 0.6169933883611908,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    },
+    {
+      "method": "Guidance",
+      "noveltyMean": 42.2,
+      "noveltyCI95": 5.511086176370013,
+      "negativeRDockMean": 13.586020641025641,
+      "negativeRDockCI95": 0.6479208953666652,
+      "samplingSeeds": 5,
+      "proposalsPerSeed": 256,
+      "referencePolicy": "consistency_filtered",
+      "referenceEntries": 231321
+    }
+  ],
+  "sources": [
+    {
+      "file": "research/analyses/2026-09-22-flowmol-gnina-cumulative/gnina_best_so_far_icml_rounds0-7.csv",
+      "sha256": "05cea1f163b55abb0124d7e2863a0d40b184e349e38e1b4cf9c1cbc4305fc060",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "research/analyses/2026-09-22-flowmol-gnina-cumulative/gnina_rounds.csv",
+      "sha256": "acbc711c8cbad57130cdd7ae3024313b600affa8c550f560d3e5825f002b2217",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "research/analyses/2026-09-22-flowmol-gnina-cumulative/gnina_baselines_icml.csv",
+      "sha256": "f55abb1612c439e7cb2d27022350e361edcc24d7e5b3c7c26eb0b31be938f5a4",
+      "retrieved": "2026-10-01"
+    },
+    {
+      "file": "research/analyses/2026-09-24-flowmol-filtered-scaffold-novelty/table.csv",
+      "sha256": "150e95a0bc25d96d746080956b2f81fdc792fca72b7ccce68f13deffff189505",
+      "retrieved": "2026-10-01"
+    }
+  ],
+  "uncertainty": {
+    "trajectory": "Descriptive, symmetrized 95% checkpoint intervals carried forward with the running maximum; not selection-adjusted or training-seed uncertainty.",
+    "novelty": "Student-t 95% intervals across five sampling seeds conditional on one frozen checkpoint; consistency-filtered reference.",
+    "paperTables": "Printed ± terms retained without relabeling their uncertainty type."
+  }
+}

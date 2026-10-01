@@ -14,7 +14,7 @@
   "browser_errors": [],
   "failed_http_requests": [],
   "date": "2026-10-01",
-  "scientific_review": "All 66 mean/uncertainty pairs independently checked against the supplied PDF Tables 1\u20132; no mismatches.",
+  "scientific_review": "All 66 mean/uncertainty pairs independently checked against the supplied PDF Tables 1–2; no mismatches.",
   "accessibility": {
     "checker": "axe-core 4.13.0",
     "tags": [
@@ -65,12 +65,12 @@
     },
     "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts.",
     "presentation": "No inline comment lines or equation references. Removed the opening figure caption, Method paper-link helper, interaction hint, popup footer, and citation-status helper. Preserved function explanations and evidence provenance.",
-    "implicit_target": "Author-provided Bradley\u2013Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
+    "implicit_target": "Author-provided Bradley–Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
     "implicit_target_checks": "Both formulas render without KaTeX errors or horizontal overflow at 360/390/768/1024/1280/1440px. Desktop/mobile visual review and axe checks passed.",
     "heading": "Method: LLM-to-Flow Distillation",
     "width_checks": "Measured at 360/390/768/901/1024/1280/1440/1920px: algorithm at most 400px, no more than 38% of the content width on desktop; no clipped equations or horizontal overflow.",
     "menu_label": "Method (LFD)",
-    "interpretation_alignment": "The KL interpretation heading, prose, and equations align with the section\u2019s left edge."
+    "interpretation_alignment": "The KL interpretation heading, prose, and equations align with the section’s left edge."
   },
   "section_order": [
     "overview",
@@ -78,5 +78,292 @@
     "results",
     "explorer",
     "citation"
-  ]
+  ],
+  "responsiveResultsRevision": {
+    "date": "2026-10-01",
+    "baseCommit": "f90f70f3d07ce9b36db01d121fb15a057dd18c9b",
+    "chartChecks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "geometry": [
+        {
+          "width": 360,
+          "menu": {
+            "left": 14,
+            "right": 224,
+            "width": 210
+          },
+          "method": {
+            "left": 18,
+            "right": 342,
+            "width": 324
+          },
+          "algorithm": {
+            "left": 18,
+            "right": 342,
+            "width": 324
+          }
+        },
+        {
+          "width": 390,
+          "menu": {
+            "left": 14,
+            "right": 224,
+            "width": 210
+          },
+          "method": {
+            "left": 18,
+            "right": 372,
+            "width": 354
+          },
+          "algorithm": {
+            "left": 18,
+            "right": 372,
+            "width": 354
+          }
+        },
+        {
+          "width": 768,
+          "menu": {
+            "left": 20,
+            "right": 230,
+            "width": 210
+          },
+          "method": {
+            "left": 24,
+            "right": 744,
+            "width": 720
+          },
+          "algorithm": {
+            "left": 169,
+            "right": 599,
+            "width": 430
+          }
+        },
+        {
+          "width": 901,
+          "menu": {
+            "left": 20,
+            "right": 230,
+            "width": 210
+          },
+          "method": {
+            "left": 24,
+            "right": 877,
+            "width": 853
+          },
+          "algorithm": {
+            "left": 535.8125,
+            "right": 877,
+            "width": 341.1875
+          }
+        },
+        {
+          "width": 1024,
+          "menu": {
+            "left": 20,
+            "right": 230,
+            "width": 210
+          },
+          "method": {
+            "left": 24,
+            "right": 1000,
+            "width": 976
+          },
+          "algorithm": {
+            "left": 609.609375,
+            "right": 1000,
+            "width": 390.390625
+          }
+        },
+        {
+          "width": 1280,
+          "menu": {
+            "left": 32,
+            "right": 216,
+            "width": 184
+          },
+          "method": {
+            "left": 232,
+            "right": 1048,
+            "width": 816
+          },
+          "algorithm": {
+            "left": 721.609375,
+            "right": 1048,
+            "width": 326.390625
+          }
+        },
+        {
+          "width": 1440,
+          "menu": {
+            "left": 32,
+            "right": 216,
+            "width": 184
+          },
+          "method": {
+            "left": 232,
+            "right": 1208,
+            "width": 976
+          },
+          "algorithm": {
+            "left": 817.609375,
+            "right": 1208,
+            "width": 390.390625
+          }
+        },
+        {
+          "width": 1920,
+          "menu": {
+            "left": 176,
+            "right": 360,
+            "width": 184
+          },
+          "method": {
+            "left": 400,
+            "right": 1520,
+            "width": 1120
+          },
+          "algorithm": {
+            "left": 1090,
+            "right": 1520,
+            "width": 430
+          }
+        },
+        {
+          "width": 2227,
+          "menu": {
+            "left": 329.5,
+            "right": 513.5,
+            "width": 184
+          },
+          "method": {
+            "left": 553.5,
+            "right": 1673.5,
+            "width": 1120
+          },
+          "algorithm": {
+            "left": 1243.5,
+            "right": 1673.5,
+            "width": 430
+          }
+        },
+        {
+          "width": 2560,
+          "menu": {
+            "left": 496,
+            "right": 680,
+            "width": 184
+          },
+          "method": {
+            "left": 720,
+            "right": 1840,
+            "width": 1120
+          },
+          "algorithm": {
+            "left": 1410,
+            "right": 1840,
+            "width": 430
+          }
+        }
+      ],
+      "table_metric_pairs": 66,
+      "plot_panels": 3,
+      "mouse_hover": "passed",
+      "touch_inspection": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "browserRegression": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "methodInteractions": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        1024,
+        1280,
+        1440
+      ],
+      "pointer_hover": "passed",
+      "pinning": "passed",
+      "keyboard": "passed",
+      "touch": "passed",
+      "responsive_positioning": "passed",
+      "trace_smoke": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "accessibility": [
+      {
+        "width": 390,
+        "state": "results",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "state": "figure",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "state": "results",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "state": "figure",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      }
+    ],
+    "publication": "Blocked by automatic approval review; explicit publication approval required in this conversation."
+  }
 }

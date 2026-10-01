@@ -18,3 +18,6 @@ License: katex/LICENSE
 Self-hosted browser renderer, stylesheet and original font files.
 Archive: https://registry.npmjs.org/katex/-/katex-0.18.10.tgz
 Archive SHA-256: ab056aae3031254cdffc64e7b886cdc43c91114b219bd7b1b68e097b8b3da6c2
+
+Plotly.js basic v4.1.1 — MIT License. Self-hosted JavaScript for interactive plots.
+https://github.com/plotly/plotly.js — license in assets/plotly/LICENSE.

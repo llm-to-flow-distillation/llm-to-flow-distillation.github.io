@@ -270,20 +270,7 @@
   renderExplorer();
   if (location.hash.startsWith('#explorer?')) requestAnimationFrame(() => $('#explorer').scrollIntoView({behavior:'instant'}));
 
-  // Reported table values; no computed scientific results are introduced here.
-  $('#result-task').innerHTML = results.map(result => `<option value="${esc(result.id)}">${esc(result.name)}</option>`).join('');
-  $('#result-cards').innerHTML = results.map(result => {
-    const ours = result.rows.find(row => row.method === 'LFD').values[0][0];
-    const base = result.rows[0].values[0][0];
-    return `<article class="result-card"><span class="tiny-label">${esc(result.metricShort)}</span><h3>${esc(result.name)}</h3><div class="result-number">${ours.toFixed(2)}<small>${esc(result.unit)}</small></div><div class="result-baseline">${base.toFixed(2)} pretrained → ${ours.toFixed(2)} LFD</div><div class="result-bar" aria-hidden="true"><span style="width:${result.unit === '%' ? ours : ours / 8 * 100}%"></span></div></article>`;
-  }).join('');
-  function renderResults() {
-    const result = results.find(r => r.id === $('#result-task').value);
-    const best = result.metrics.map((metric,i) => (metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row => row.values[i][0])));
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map(m => `<th scope="col">${esc(m.label)} ${m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row => `<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${esc(row.method === 'LFD' ? 'LFD · ours' : row.method)}</th>${row.values.map(([mean,error],i) => `<td class="${mean === best[i] ? 'best' : ''}">${mean.toFixed(2)} ± ${error.toFixed(2)}</td>`).join('')}</tr>`).join('')}</tbody>`;
-  }
-  $('#result-task').addEventListener('change', renderResults);
-  renderResults();
+  window.LFD_RESULTS.init(results);
 
   // Track section geometry so expanding traces and figures keeps the rail accurate.
   const contents = $('#contents');
