@@ -108,7 +108,7 @@ def main():
                 assert page.evaluate('document.documentElement.scrollWidth') <= width, f'{task["id"]} overflow at {width}px'
             if width < 1280:
                 page.locator('#method').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
-                expect(page.locator('.contents-current')).to_have_text('Method')
+                expect(page.locator('.contents-current')).to_have_text('Method (LFD)')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 page.locator('.contents-toggle').click()
                 expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'true')

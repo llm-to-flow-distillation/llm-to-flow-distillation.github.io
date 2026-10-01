@@ -68,7 +68,9 @@
     "implicit_target": "Author-provided Bradley\u2013Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
     "implicit_target_checks": "Both formulas render without KaTeX errors or horizontal overflow at 360/390/768/1024/1280/1440px. Desktop/mobile visual review and axe checks passed.",
     "heading": "Method: LLM-to-Flow Distillation",
-    "width_checks": "Measured at 360/390/768/901/1024/1280/1440/1920px: algorithm at most 400px, no more than 38% of the content width on desktop; no clipped equations or horizontal overflow."
+    "width_checks": "Measured at 360/390/768/901/1024/1280/1440/1920px: algorithm at most 400px, no more than 38% of the content width on desktop; no clipped equations or horizontal overflow.",
+    "menu_label": "Method (LFD)",
+    "interpretation_alignment": "The KL interpretation heading, prose, and equations align with the section\u2019s left edge."
   },
   "section_order": [
     "overview",
