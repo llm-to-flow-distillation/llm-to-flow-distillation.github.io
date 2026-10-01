@@ -11,6 +11,126 @@
       output: 'htmlAndMathml', throwOnError: false, strict: 'error', trust: false
     }));
   }
+  // Rich function explanations: hover/focus to preview; click or tap to pin.
+  function setupFunctionDetails() {
+    const popup = $('#algorithm-details');
+    const buttons = $$('.algorithm-function');
+    const panels = $$('[data-function-panel]', popup);
+    const titles = {sample: 'Sample the current generator', observe: 'Observe the sample batch', setgoal: 'SetGoal', judge: 'LLM-Judge', minimize: 'Minimize · distill the preferences'};
+    const nativePopover = typeof popup.showPopover === 'function';
+    let active = null, pinned = false, closeTimer, positionFrame, skipFocus = null, pointerTrigger = null;
+
+    function positionPopup() {
+      positionFrame = null;
+      if (!active) return;
+      const anchor = active.getBoundingClientRect();
+      if (anchor.bottom < 0 || anchor.top > innerHeight) {closePopup(); return;}
+      const margin = 16, gap = 14;
+      const {width, height} = popup.getBoundingClientRect();
+      let left, top;
+      if (innerWidth <= 700) {
+        left = (innerWidth - width) / 2;
+        top = innerHeight - height - margin;
+      } else {
+        if (anchor.left >= width + gap + margin) left = anchor.left - width - gap;
+        else if (innerWidth - anchor.right >= width + gap + margin) left = anchor.right + gap;
+        else left = (innerWidth - width) / 2;
+        top = anchor.top - Math.min(54, height / 4);
+        // When neither side has room, keep the trigger outside the detail panel.
+        if (left < anchor.right && left + width > anchor.left) {
+          top = anchor.bottom + gap;
+          if (top + height > innerHeight - margin) top = anchor.top - height - gap;
+        }
+      }
+      popup.style.left = Math.max(margin, Math.min(left, innerWidth - width - margin)) + 'px';
+      popup.style.top = Math.max(margin, Math.min(top, innerHeight - height - margin)) + 'px';
+    }
+    function schedulePosition() {
+      if (active && positionFrame == null) positionFrame = requestAnimationFrame(positionPopup);
+    }
+    function openPopup(button, pin = false) {
+      clearTimeout(closeTimer);
+      const changed = active !== button;
+      if (changed) pinned = false;
+      active = button;
+      pinned = pinned || pin;
+      buttons.forEach(item => item.setAttribute('aria-expanded', String(item === active)));
+      panels.forEach(panel => {panel.hidden = panel.dataset.functionPanel !== active.dataset.function;});
+      $('#function-detail-title').textContent = titles[active.dataset.function];
+      $('#function-popover-hint').textContent = pinned ? 'Pinned · close or select another function.' : 'Click the function to keep this open.';
+      popup.dataset.open = 'true';
+      popup.dataset.pinned = String(pinned);
+      if (nativePopover && !popup.matches(':popover-open')) popup.showPopover();
+      if (changed) popup.scrollTop = 0;
+      positionPopup();
+      document.fonts.ready.then(schedulePosition);
+    }
+    function closePopup(restoreFocus = false) {
+      if (!active) return;
+      clearTimeout(closeTimer);
+      const previous = active;
+      active = null;
+      pinned = false;
+      buttons.forEach(item => item.setAttribute('aria-expanded', 'false'));
+      if (nativePopover && popup.matches(':popover-open')) popup.hidePopover();
+      delete popup.dataset.open;
+      delete popup.dataset.pinned;
+      if (restoreFocus && document.activeElement !== previous) {
+        skipFocus = previous;
+        previous.focus({preventScroll: true});
+      }
+    }
+    function scheduleClose() {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        if (!active || pinned) return;
+        if (active.matches(':hover') || popup.matches(':hover')) return;
+        if (document.activeElement === active || popup.contains(document.activeElement)) return;
+        closePopup();
+      }, 180);
+    }
+    for (const button of buttons) {
+      // A touch focus must not open an overlay before the tap's click is delivered.
+      button.addEventListener('pointerdown', () => {pointerTrigger = button;});
+      button.addEventListener('pointercancel', () => {pointerTrigger = null;});
+      button.addEventListener('pointerenter', event => {
+        if (event.pointerType === 'mouse' && (!pinned || active === button)) openPopup(button);
+      });
+      button.addEventListener('pointerleave', scheduleClose);
+      button.addEventListener('focus', () => {
+        if (skipFocus === button) {skipFocus = null; return;}
+        if (pointerTrigger === button) return;
+        openPopup(button);
+      });
+      button.addEventListener('blur', scheduleClose);
+      button.addEventListener('click', event => {
+        pointerTrigger = null;
+        if (active === button && pinned) {closePopup(); return;}
+        openPopup(button, true);
+        if (event.detail === 0) popup.focus({preventScroll: true});
+      });
+    }
+    popup.addEventListener('pointerenter', () => clearTimeout(closeTimer));
+    popup.addEventListener('pointerleave', scheduleClose);
+    popup.addEventListener('focusout', scheduleClose);
+    $('#close-function-details').addEventListener('click', () => closePopup(true));
+    document.addEventListener('keydown', event => {
+      pointerTrigger = null;
+      if (event.key === 'Escape' && active) {
+        event.preventDefault();
+        closePopup(popup.contains(document.activeElement));
+      }
+    });
+    document.addEventListener('pointerdown', event => {
+      if (!buttons.some(button => button.contains(event.target))) pointerTrigger = null;
+      if (active && !popup.contains(event.target) && !buttons.some(button => button.contains(event.target))) closePopup();
+    });
+    window.addEventListener('scroll', schedulePosition, {passive: true});
+    window.addEventListener('resize', schedulePosition);
+    new ResizeObserver(schedulePosition).observe(popup);
+  }
+  setupFunctionDetails();
+
   const tasks = window.LFD_DATA.tasks;
   const results = window.LFD_DATA.results;
   const state = {task: tasks[0].id, stage: 'g0', tab: 'overview'};

@@ -23,32 +23,46 @@
       "wcag21aa"
     ],
     "views": [
-      "360px method",
-      "390px method",
-      "768px method",
-      "1280px method",
-      "1440px method"
+      "390px overview and all five function panels",
+      "1440px overview and all five function panels"
     ],
-    "violations": 0
+    "violations": 0,
+    "view_count": 12
   },
   "deployment": "GitHub Pages destination: https://llm-to-flow-distillation.github.io/; publication tracked by the repository Actions history.",
   "design": "Compact paper title with a smaller subtitle; uniform author names and affiliations; smaller arxiv and GitHub resource buttons; main_ltf.png opening figure; clickable left contents rail with automatic current-section tracking and a collapsible menu on smaller screens.",
   "contents_navigation": "passed",
   "method": {
-    "source": "Author-provided arXiv Method introduction and algorithm pseudocode",
-    "content": "Goal-region curriculum followed by Sample, SetGoal, LLM-Judge and Minimize; concise prose in the page\u2019s standard text style.",
-    "renderer": "Self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks",
-    "display_blocks": 2,
-    "algorithm_operations": 4,
-    "equation_overflow": 0,
-    "tested_widths": [
-      360,
-      390,
-      768,
-      1280,
-      1440
+    "source": "Author-provided arXiv Method introduction, algorithm, and DPO description",
+    "layout": "Mathematical introduction and paper-style pseudocode side by side; stacked below 901px.",
+    "interactive_functions": [
+      "Sample",
+      "Observables",
+      "SetGoal",
+      "LLM-Judge",
+      "Minimize"
     ],
-    "typography": "Body text uses Inter at 16px and the standard ink color; math inherits the same color. Function names stay together.",
-    "checks": "Responsive equation layout, typography consistency, section navigation, trace smoke check, local-file operation and no-JavaScript fallbacks passed."
+    "minimize_details": "Relative log-likelihood margin and equivalent DPO objective; fixed current-model reference; warm-started optimization using the denoising-loss surrogate.",
+    "renderer": "Self-hosted KaTeX 0.18.10 with accessible MathML and readable text fallbacks",
+    "interactions": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        1024,
+        1280,
+        1440
+      ],
+      "pointer_hover": "passed",
+      "pinning": "passed",
+      "keyboard": "passed",
+      "touch": "passed",
+      "responsive_positioning": "passed",
+      "trace_smoke": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts."
   }
 }

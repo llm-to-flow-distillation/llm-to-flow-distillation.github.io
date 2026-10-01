@@ -109,18 +109,58 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .intro-copy p:last-child { margin-bottom: 0; }
 .text-link { display: inline-flex; gap: 17px; font-size: 13px; border-bottom: 1px solid #b5b7bd; padding-bottom: 2px; margin-top: 6px; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
-/* Continuous prose and display math share the page's type scale and ink. */
+/* The mathematical introduction and paper-style algorithm sit side by side. */
 .method-section > h2 { text-align: center; }
-.method-content { max-width: 880px; margin: 28px auto 0; color: inherit; font: inherit; }
+.method-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.03fr); gap: 40px; align-items: start; margin-top: 34px; }
+.method-content { color: inherit; font: inherit; min-width: 0; }
 .method-content p { margin-bottom: 20px; }
 .method-content strong { font-weight: 600; white-space: nowrap; }
 .math-inline { white-space: nowrap; }
-.method-content .katex { font-size: 1.1em; color: inherit; }
+.method-section .katex { font-size: 1.1em; color: inherit; }
 .math-display { max-width: 100%; margin: 26px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
 .math-display .katex-display { margin: 0; }
-.algorithm-equation { margin-block: 28px 32px; }
-.algorithm-equation > span:not(.katex-display) { display: block; text-align: center; }
 .method-content > .text-link { margin-top: 3px; }
+.algorithm-box { min-width: 0; padding: 0 20px; border: 1px solid #d9dadd; border-top: 2px solid var(--ink); border-radius: 0 0 5px 5px; background: #fff; }
+.algorithm-box h3 { font-size: 15px; font-weight: 500; margin: 0; padding: 14px 0; border-bottom: 1px solid var(--line); line-height: 1.6; }
+.algorithm-box h3 > span { font-weight: 600; margin-right: 8px; }
+.algorithm-inputs { margin: 14px 0; font-size: 14px; line-height: 1.8; }
+.algorithm-inputs strong, .algorithm-row strong { font-weight: 600; }
+.algorithm-code { padding: 3px 0 13px; }
+.algorithm-row { display: flex; align-items: baseline; gap: 4px; min-height: 36px; white-space: nowrap; }
+.algorithm-loop { padding-left: 13px; margin-left: 3px; border-left: 1px solid var(--line); }
+.algorithm-observe { margin-top: -5px; margin-bottom: 4px; }
+.algorithm-function { display: inline-block; flex: 0 0 auto; padding: 0 1px; border: 0; border-bottom: 1px dashed #8c8f95; border-radius: 0; background: transparent; color: inherit; line-height: inherit; cursor: pointer; }
+.algorithm-function:hover, .algorithm-function[aria-expanded="true"] { color: var(--red); border-bottom-color: var(--red); }
+.algorithm-hint { border-top: 1px solid var(--line); padding: 13px 0; margin: 0; font-size: 12px; color: var(--muted); line-height: 1.7; }
+.function-popover { display: none; position: fixed; z-index: 100; inset: auto; margin: 0; width: min(560px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; overscroll-behavior: contain; padding: 22px 24px 16px; border: 1px solid #d9dadd; border-radius: 10px; background: #fff; color: var(--ink); font: 15px/1.75 var(--sans); box-shadow: 0 14px 50px #20212421; }
+.function-popover[data-open] { display: block; }
+.function-popover::backdrop { background: transparent; pointer-events: none; }
+.function-popover-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 15px; }
+.function-popover h3 { margin: 0; font-size: 18px; line-height: 1.5; }
+#close-function-details { flex: 0 0 32px; height: 32px; padding: 0; border: 0; border-radius: 50%; background: transparent; font-size: 24px; line-height: 1; }
+#close-function-details:hover { background: var(--surface); }
+.function-popover p { margin-bottom: 14px; }
+.function-popover strong { font-weight: 600; }
+.function-popover .math-display { margin-block: 18px; }
+.function-popover [data-function-panel][hidden] { display: none; }
+.function-popover-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 18px; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.function-popover-footer a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 1100px) {
+  .method-layout { gap: 28px; }
+  .algorithm-box { padding-inline: 16px; }
+}
+@media (max-width: 900px) {
+  .method-layout { grid-template-columns: minmax(0, 1fr); max-width: 680px; margin-inline: auto; gap: 30px; }
+  .algorithm-box { padding-inline: 22px; }
+}
+@media (max-width: 430px) {
+  .algorithm-box { padding-inline: 12px; }
+  .algorithm-code { font-size: 14px; }
+  .algorithm-loop { padding-left: 8px; }
+  .algorithm-box h3 { font-size: 14px; }
+  .function-popover { padding: 18px 16px 14px; }
+  .function-popover .katex { font-size: 1em; }
+}
 summary { display: flex; justify-content: space-between; align-items: center; gap: 12px; list-style: none; padding: 18px 0; font-size: 14px; }
 summary::-webkit-details-marker { display: none; }
 summary > span { color: #70747c; font-size: 21px; line-height: 1; }
@@ -302,7 +342,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .citation pre { font-size: 11px; }
 }
 @media (max-width: 430px) {
-  .method-content { margin-top: 23px; }
   .math-display { padding-inline: 2px; }
   .method-content .math-display .katex { font-size: 1em; }
   .hero { padding-top: 35px; }
