@@ -79,7 +79,7 @@
       <div class="method-interpretation" aria-labelledby="interpretation-title">
         <h3 id="interpretation-title">Each round is a KL-regularized step.</h3>
         <p>Assume the teacher’s preferences follow a Bradley–Terry model with an unobserved utility <span class="math math-inline" data-tex="f_{g_t}:\mathcal X\to\mathbb R">f<sub>gₜ</sub>: X → ℝ</span>. The standard DPO derivation gives two equivalent forms of the implicit target:</p>
-        <div class="math math-display implicit-target-equation" data-tex="\begin{aligned}p_t^\star &amp;\propto p_{\theta_t}\,e^{f_{g_t}/\beta},\\[.65em]p_t^\star &amp;=\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.\end{aligned}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β), equivalently p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
+        <div class="math math-display implicit-target-equation" data-tex="\begin{gathered}p_t^\star \propto p_{\theta_t}\,e^{f_{g_t}/\beta},\\[.65em]p_t^\star =\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.\end{gathered}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β), equivalently p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
         <p>Each subgoal thus induces an implicit reward and a target that balances higher utility against departure from the current generator, with <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controlling regularization. Across rounds, these targets define local steps along the curriculum toward <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span>.</p>
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
@@ -109,7 +109,7 @@
       <div class="generator-legend" aria-label="Starting generators"><span>Starting generators</span><span class="generator-label" data-generator="PepDFM">PepDFM <span>· peptides</span></span><span class="generator-label" data-generator="FlowMol3">FlowMol3 <span>· molecules</span></span></div>
       <div id="result-cards" class="result-cards" role="tablist" aria-label="Discovery goals"></div>
       <div id="task-results-panel" class="results-explorer" role="tabpanel" tabindex="0" aria-labelledby="result-card-anticancer">
-        <div class="results-toolbar"><div><div class="result-panel-labels"><span id="result-source" class="tiny-label"></span><span id="result-generator" class="generator-label"></span></div><h3 id="task-results-title"></h3></div><a id="result-paper-link" class="text-link" href="assets/paper.pdf#page=6" target="_blank" rel="noopener">In the paper <span aria-hidden="true">↗</span></a></div>
+        <div class="results-toolbar"><div><div class="result-panel-labels"><span id="result-source" class="tiny-label"></span><span id="result-generator" class="generator-label"></span></div><h3 id="task-results-title"></h3></div></div>
         <p id="task-result-description" class="chart-context"></p>
         <div id="result-discovery"></div>
         <div id="task-result-context"></div>

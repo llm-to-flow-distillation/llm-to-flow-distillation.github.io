@@ -194,19 +194,18 @@
       renderTaskContext(goal);
       renderCurriculum(task);
       $('#result-source').textContent=`GOAL ${goal.number} · ${result ? 'TABLE '+result.table : 'FIGURE 9'}${id==='gsk3b' ? ' · FIGURE 7' : ''}`;
-      $('#result-paper-link').href=`assets/paper.pdf#page=${goal.paperPage}`;
       $('#task-result-example').innerHTML=molecularExample(task);
       if (id==='gsk3b') {
         $('#task-results-plots').innerHTML=dockingMarkup();
-        $('#task-results-evidence').innerHTML='<details class="figure-evidence"><summary>Plot data and uncertainty</summary><p>The trajectory is a descriptive post-hoc comparison of independently sampled checkpoint cohorts. Shaded 95% intervals belong to the selected checkpoint and are not adjusted for best-so-far selection. Novelty error bars are Student-t 95% intervals across five sampling seeds, conditional on one frozen checkpoint per method and using the filtered scaffold reference.</p><div id="figure-data-tables"></div><div class="chart-data-links"><a href="data/charts.json" download>Download chart data (JSON)</a><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">Figure 7 in the paper ↗</a></div></details>';
+        $('#task-results-evidence').innerHTML='<details class="figure-evidence"><summary>Plot data and uncertainty</summary><p>The trajectory is a descriptive post-hoc comparison of independently sampled checkpoint cohorts. Shaded 95% intervals belong to the selected checkpoint and are not adjusted for best-so-far selection. Novelty error bars are Student-t 95% intervals across five sampling seeds, conditional on one frozen checkpoint per method and using the filtered scaffold reference.</p><div id="figure-data-tables"></div><div class="chart-data-links"><a href="data/charts.json" download>Download chart data (JSON)</a></div></details>';
         renderTable(result);
       } else if (id==='ood') {
         $('#task-results-plots').innerHTML='<figure class="task-scatter"><h4>From intermediate subgoals to the full goal</h4><div class="plot-key" aria-label="Curriculum markers"><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#8732ad" aria-hidden="true"><circle cx="8" cy="8" r="5"/></svg>Curriculum subgoal</span><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#c54b59" aria-hidden="true"><rect x="3" y="3" width="10" height="10"/></svg>Final-goal assessment</span></div><div id="curriculum-chart" class="interactive-chart" role="region" aria-label="Interactive constrained-design curriculum"></div><p id="curriculum-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a round to inspect the active subgoal.</p><figcaption>Six recorded training rounds; the full-goal assessment at round 6 uses no additional training update.</figcaption></figure>';
-        $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#explorer?task=ood&stage=g&tab=traces">Inspect the recorded discovery example ↗</a><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">Figure 9 in the paper ↗</a></div>';
+        $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#explorer?task=ood&stage=g&tab=traces">Inspect the recorded discovery example ↗</a></div>';
         renderOODTable();
       } else {
         $('#task-results-plots').innerHTML=scatterMarkup(result);
-        $('#task-results-evidence').innerHTML=id==='d2' ? '<div class="chart-data-links"><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">D2 trajectory and novelty panels in Figure 7 ↗</a></div>' : '';
+        $('#task-results-evidence').innerHTML='';
         renderTable(result);
       }
       fonts.then(()=>{

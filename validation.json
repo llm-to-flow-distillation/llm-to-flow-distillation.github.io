@@ -860,5 +860,429 @@
       "failed_requests": []
     },
     "evidence": "All original trace records, stage counts and update totals unchanged. All 66 numerical pairs and original chart data preserved. Goal5 hit comparison and supplied figure retained."
+  },
+  "framedTaskResultsRevision": {
+    "date": "2026-10-01",
+    "layout": "All content for the selected task is enclosed in one rounded panel, separated from the goal cards, with a generator-colored top border and heading area. Numerical footers and metric tiles remain removed.",
+    "selected_task": "Stronger background, bold Goal/task labels, three-pixel visual border, and a checked Selected badge.",
+    "math": "All Method display equations centered; the two implicit-target expressions use gathered rows, centered individually. KL prose retains the full section width and left alignment.",
+    "introduction": "Results introduction uses the full content width.",
+    "paper_links": "Repeated In the paper, Figure 7/9 in the paper, and D2 figure-pointer links removed.",
+    "checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "browser": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "method_interactions": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        1024,
+        1280,
+        1440
+      ],
+      "pointer_hover": "passed",
+      "pinning": "passed",
+      "keyboard": "passed",
+      "touch": "passed",
+      "responsive_positioning": "passed",
+      "trace_smoke": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "layout_and_accessibility": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "task": "anticancer",
+          "verbatim_stages": 8,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "cpp",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "d2",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "gsk3b",
+          "verbatim_stages": 5,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "ood",
+          "verbatim_stages": 4,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "anticancer",
+          "verbatim_stages": 8,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "cpp",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "d2",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "gsk3b",
+          "verbatim_stages": 5,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "ood",
+          "verbatim_stages": 4,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        }
+      ],
+      "layout_views": [
+        {
+          "width": 360,
+          "centered_equations": [
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.0078125,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 390,
+          "centered_equations": [
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.0078125,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 768,
+          "centered_equations": [
+            {
+              "offset": 0,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 901,
+          "centered_equations": [
+            {
+              "offset": 0,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 1024,
+          "centered_equations": [
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 1280,
+          "centered_equations": [
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 1440,
+          "centered_equations": [
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 1920,
+          "centered_equations": [
+            {
+              "offset": 0,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 2227,
+          "centered_equations": [
+            {
+              "offset": 0,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        },
+        {
+          "width": 2560,
+          "centered_equations": [
+            {
+              "offset": 0,
+              "overflow": false,
+              "alignment": "center"
+            },
+            {
+              "offset": 0.0078125,
+              "overflow": false,
+              "alignment": "center"
+            }
+          ],
+          "kl_row_center_offsets": [
+            0.015625,
+            0.0078125
+          ],
+          "intro_full_width": true,
+          "separate_results_panel": true,
+          "overflow": "none"
+        }
+      ],
+      "result_and_trace_goal_displays": 23,
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "scientific_data": "Task records, verbatim curriculum goals, numerical results, source metadata, and saved chart data unchanged."
   }
 }

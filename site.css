@@ -116,7 +116,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-content strong { font-weight: 600; white-space: nowrap; }
 .math-inline { white-space: nowrap; }
 .method-section .katex { font-size: 1.1em; color: inherit; }
-.math-display { max-width: 100%; margin: 26px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
+.math-display { text-align: center; max-width: 100%; margin: 26px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
 .math-display .katex-display { margin: 0; }
 .results-section { border-top: 1px solid var(--line); }
 .method-interpretation { width: 100%; max-width: none; margin: 38px 0 0; text-align: left; }
@@ -124,7 +124,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-interpretation p:last-child { margin-bottom: 0; }
 .implicit-target-equation { margin-block: 22px; }
 .method-interpretation .implicit-target-equation { padding-inline: 0; }
-.implicit-target-equation .katex-display, .implicit-target-equation .katex-display > .katex { text-align: left; }
+.implicit-target-equation .katex-display, .implicit-target-equation .katex-display > .katex { text-align: center; }
 .algorithm-box { container-type: inline-size; width: 100%; max-width: 460px; justify-self: end; min-width: 0; padding: 0 14px 12px; border: 1px solid #cddbeb; border-radius: 18px; background: #f4f8fd; color: #202c3d; font-family: KaTeX_Main, 'Times New Roman', serif; box-shadow: 0 4px 18px #24426306; }
 .algorithm-box h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: .15em .6em; margin: 0 -14px; padding: 12px 14px; border-bottom: 1px solid #cddbeb; border-radius: 17px 17px 0 0; background: #e7eff9; font-size: 18px; font-weight: 400; line-height: 1.5; }
 .algorithm-box h3 > span:first-child { font-weight: 700; white-space: nowrap; }
@@ -403,30 +403,33 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .algorithm-box h3, .algorithm-code { font-size: 16px; }
   .algorithm-inputs { font-size: 15px; }
 }
-.results-intro { max-width: 780px; margin-top: 20px; }
-[data-generator="PepDFM"] { --goal-accent: #345d86; --goal-surface: #f1f6fc; --goal-border: #cdddef; --goal-strong: #284b70; }
-[data-generator="FlowMol3"] { --goal-accent: #216d62; --goal-surface: #eef8f4; --goal-border: #c8e3d8; --goal-strong: #1b584f; }
+.results-intro { width: 100%; max-width: none; margin-top: 20px; }
+[data-generator="PepDFM"] { --goal-accent: #345d86; --goal-surface: #f1f6fc; --goal-border: #cdddef; --goal-strong: #284b70; --goal-selected: #e4eefb; }
+[data-generator="FlowMol3"] { --goal-accent: #216d62; --goal-surface: #eef8f4; --goal-border: #c8e3d8; --goal-strong: #1b584f; --goal-selected: #e0f2e9; }
 .generator-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: 22px 0; font-size: 13px; }
 .generator-legend > span:first-child { margin-right: 4px; color: #535964; }
 .generator-label { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border: 1px solid var(--goal-border); border-radius: 20px; background: var(--goal-surface); color: var(--goal-strong); font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
 .generator-label > span { font-weight: 400; }
 .result-cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px; margin: 26px 0 30px; }
-.result-card { grid-column: span 2; display: flex; flex-direction: column; min-width: 0; text-align: left; padding: 22px; border: 1px solid var(--goal-border); border-radius: 16px; background: var(--goal-surface); transition: border-color .18s, box-shadow .18s; }
+.result-card { grid-column: span 2; display: flex; flex-direction: column; min-width: 0; text-align: left; padding: 22px; border: 1px solid var(--goal-border); border-radius: 16px; background: var(--goal-surface); transition: border-color .18s, box-shadow .18s, background-color .18s; }
 .result-card:nth-child(-n+2) { grid-column: span 3; }
 .result-card:hover { border-color: var(--goal-accent); }
-.result-card.is-selected { border-color: var(--goal-accent); box-shadow: inset 0 0 0 1px var(--goal-accent); }
+.result-card.is-selected { border-color: var(--goal-accent); background: var(--goal-selected); box-shadow: inset 0 0 0 2px var(--goal-accent); }
+.result-card.is-selected .goal-number, .result-card.is-selected .result-task-name { font-weight: 700; }
+.result-card.is-selected .goal-card-state { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 20px; background: var(--goal-accent); color: #fff; font-weight: 600; }
+.result-card.is-selected .goal-card-state::before { content: "✓"; }
 .goal-card-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; width: 100%; margin-bottom: 8px; }
 .goal-number { font-size: 24px; font-weight: 600; letter-spacing: -.5px; line-height: 1.25; color: var(--goal-strong); }
 .goal-card-state { color: var(--goal-accent); font-size: 12px; }
 .card-generator { font-size: 12px; color: var(--goal-strong); margin-bottom: 16px; }
 .result-task-name { display: block; font-size: 16px; font-weight: 600; line-height: 1.5; margin-bottom: 9px; }
 .result-goal { display: block; font-size: 13px; line-height: 1.7; color: #4e5662; }
-.results-explorer { margin-top: 38px; padding-top: 30px; border-top: 1px solid var(--line); }
-.results-toolbar { background: transparent; display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 18px; padding: 0 0 18px; }
+.results-explorer { margin-top: 38px; padding: 0 28px 28px; border: 1px solid var(--goal-border); border-top: 4px solid var(--goal-accent); border-radius: 18px; background: #fff; overflow: hidden; box-shadow: 0 8px 28px #26384b08; }
+.results-toolbar { background: var(--goal-surface); display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 18px; margin-inline: -28px; padding: 24px 28px 16px; }
 .result-panel-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
-.results-toolbar h3 { margin: 12px 0 0; font-size: 22px; }
-.results-toolbar .text-link { font-size: 12px; margin: 0 0 3px; }
-.chart-context { margin: 0; padding: 0 0 28px; background: transparent; font-size: 14px; color: #565c66; }
+.results-toolbar h3 { margin: 12px 0 0; font-size: 23px; font-weight: 700; color: var(--goal-strong); }
+.result-panel-labels .tiny-label { color: var(--goal-strong); font-weight: 600; }
+.chart-context { margin: 0 -28px 26px; padding: 0 28px 24px; border-bottom: 1px solid var(--goal-border); background: var(--goal-surface); font-size: 14px; color: #565c66; }
 #task-results-plots { padding: 26px 0 0; }
 .interactive-chart { width: 100%; min-width: 0; height: 370px; }
 .chart-readout { min-height: 45px; margin: 0 0 16px; padding: 10px 13px; border-radius: 6px; background: #f6f7f9; color: #4b515c; font-size: 12px; line-height: 1.7; }
@@ -474,8 +477,10 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 @media (max-width: 600px) {
   .result-cards { grid-template-columns: repeat(5, minmax(270px, 86%)); gap: 12px; overflow-x: auto; padding: 5px 5px 12px; margin: 22px -5px 20px; scroll-padding-inline: 5px; }
   .result-card, .result-card:nth-child(-n+2), .result-card:last-child { grid-column: auto; padding: 18px; }
-  .results-toolbar { padding-bottom: 16px; }
-  .chart-context { padding-inline: 0; font-size: 13px; }
+  .results-explorer { padding: 0 18px 20px; border-radius: 14px; }
+  .results-toolbar { margin-inline: -18px; padding: 20px 18px 14px; }
+  .results-toolbar h3 { font-size: 21px; }
+  .chart-context { margin-inline: -18px; padding: 0 18px 20px; font-size: 13px; }
   #task-results-plots { padding: 22px 0 0; }
   .interactive-chart { height: 340px; }
   .results-values h4, .results-values .table-note { padding-inline: 0; }
@@ -547,7 +552,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .discovery-hit strong { font-size: 25px; }
 }
 
-/* Keep the selected goal open and readable, with color in its labels. */
+/* Keep the task heading and discovery content readable within the results panel. */
 .result-panel-labels .generator-label { padding: 0; border: 0; border-radius: 0; background: transparent; }
 #result-discovery:empty { display: none; }
 @media (max-width: 600px) {

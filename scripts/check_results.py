@@ -31,7 +31,8 @@ def main():
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
         assert 'Compare methods' not in page.locator('body').inner_text()
         assert page.locator('.goal-preview').count() == 0
-        assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])===0)')
+        assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])>0)')
+        assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
         for task in goals:
             assert page.locator(f'#result-goal-{task["id"]}').inner_text() == task['goal']
         def select(task):
@@ -47,6 +48,10 @@ def main():
             select(goal['id'])
             card = page.locator(f'[data-result-task="{goal["id"]}"]')
             expect(card).to_have_attribute('data-generator', task['generator'])
+            assert card.locator('.goal-card-state').evaluate('(el)=>getComputedStyle(el).fontWeight') == '600'
+            assert card.locator('.goal-number').evaluate('(el)=>getComputedStyle(el).fontWeight') == '700'
+            assert card.locator('.goal-card-state').evaluate('(el)=>getComputedStyle(el).backgroundColor') != 'rgba(0, 0, 0, 0)'
+            assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
             assert card.locator('.goal-number').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)') >= 22
             expect(page.locator('#result-generator')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
@@ -183,7 +188,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','open_results_layout':'passed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
