@@ -21,6 +21,7 @@ def main():
     tasks = json.loads((root / 'data/tasks.json').read_text())['tasks']
     widths = [360, 390, 768, 901, 1024, 1280, 1440, 1920, 2227, 2560]
     errors, failures = [], []
+    expected_colors={'LFD':'#8732ad','Pre-trained':'#33373f','DPO':'#d77b00','DiffusionNFT':'#286565','Flow-GRPO':'#719adc','Guidance':'#c54b59'}
     expected_symbols={'LFD':'square','Pre-trained':'x','DPO':'circle','DiffusionNFT':'diamond','Flow-GRPO':'triangle-up','Guidance':'triangle-down'}
     with sync_playwright() as p:
         browser = p.chromium.launch(args=['--no-sandbox'])
@@ -30,6 +31,7 @@ def main():
         page.goto(args.url + '/#results', wait_until='networkidle')
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
         assert 'Compare methods' not in page.locator('body').inner_text()
+        assert 'Plot data and uncertainty' not in page.locator('body').inner_text()
         assert page.locator('.goal-preview').count() == 0
         assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])>0)')
         assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
@@ -56,6 +58,14 @@ def main():
             expect(page.locator('#result-generator')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
             assert page.locator('.proxy-context p').inner_text() == goal['proxy']
+            proxy=page.locator('.proxy-context').bounding_box()
+            obs=page.locator('.observable-context').bounding_box()
+            assert obs['y']>proxy['y']+proxy['height'] and abs(obs['x']-proxy['x'])<1
+            if goal['id'] in ('d2','gsk3b'):
+                figure=page.locator('.task-molecule');expect(figure).to_be_visible()
+                assert figure.bounding_box()['x']>proxy['x']+proxy['width']
+                img=figure.locator('img');img.scroll_into_view_if_needed()
+                page.wait_for_function('document.querySelector(".task-molecule img").complete && document.querySelector(".task-molecule img").naturalWidth>0')
             page.locator('.observable-details summary').click()
             assert page.locator('.observable-details li').all_text_contents() == goal['observables']
             page.locator('.observable-details summary').click()
@@ -90,14 +100,25 @@ def main():
             for index,row in enumerate(result['rows']):
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
-            if result['id']=='gsk3b':
-                assert page.locator('#task-results-plots .js-plotly-plot').count()==2
-                expect(page.locator('#trajectory-chart')).to_be_visible()
-                expect(page.locator('#novelty-chart')).to_be_visible()
-                assert page.locator('#comparison-chart').count()==0
+            if result['table']==2:
+                assert page.locator('#task-results-plots .js-plotly-plot').count()==1
+                expect(page.locator('#docking-chart')).to_be_visible()
+                assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart').count()==0
+                bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0])}))')
+                assert bars == [{'type':'bar','method':r['method'],'x':['GNINA<br>(pK)','|Vina|<br>(kcal/mol)','|rDock|'],'y':[abs(v[0]) for v in r['values']],'error':[v[1] for v in r['values']],'color':expected_colors[r['method']],'errorColor':expected_colors[r['method']],'original':[v[0] for v in r['values']]} for r in result['rows']]
+                legend=page.locator('#task-results-plots [data-legend-method]').evaluate_all('(els)=>els.map(el=>({method:el.dataset.legendMethod,symbol:el.querySelector("svg").dataset.markerSymbol,color:el.querySelector("svg").style.color}))')
+                assert all(row['symbol']=='bar' for row in legend)
+                assert [row['method'] for row in legend]==[r['method'] for r in result['rows']]
+                assert page.locator('.task-docking figcaption').inner_text().startswith('Vina and rDock are shown as absolute values')
+                for index,metric in enumerate(result['metrics']):
+                    bar=page.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
+                    bar.hover(force=True)
+                    expect(page.locator('#docking-readout')).to_contain_text('LFD')
+                    expect(page.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
+                    expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
                 continue
             assert page.locator('#task-results-plots .js-plotly-plot').count()==1
-            assert page.locator('#trajectory-chart,#novelty-chart,#curriculum-chart').count()==0
+            assert page.locator('#trajectory-chart,#novelty-chart,#curriculum-chart,#docking-chart').count()==0
             yindex=1 if result['table']==1 else 2
             points=page.locator('#comparison-chart').evaluate('(plot)=>plot.data.map(trace=>({method:trace.name,x:trace.x[0],y:trace.y[0],dx:trace.error_x.array[0],dy:trace.error_y.array[0],symbol:trace.marker.symbol}))')
             assert points == [{'method':r['method'],'x':r['values'][0][0],'y':r['values'][yindex][0],'dx':r['values'][0][1],'dy':r['values'][yindex][1],'symbol':expected_symbols[r['method']]} for r in result['rows']]
@@ -108,19 +129,9 @@ def main():
             expect(page.locator('#comparison-readout')).to_contain_text('LFD')
             for metric_index,metric in enumerate(result['metrics']):
                 expect(page.locator('#comparison-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][metric_index][0]:.2f}')
-        select('gsk3b')
-        trajectory=page.locator('#trajectory-chart').evaluate('(plot)=>plot.data.find(trace=>trace.name==="LFD best so far").y')
-        assert trajectory == [r['bestMean'] for r in charts['trajectory']]
-        page.locator('#trajectory-chart .scatterlayer .trace').last.locator('.point').nth(6).hover(force=True)
-        expect(page.locator('#trajectory-chart .hoverlayer')).to_contain_text('6.726')
-        expect(page.locator('#trajectory-chart .hoverlayer')).to_contain_text('6.839')
-        novelty=page.locator('#novelty-chart').evaluate('(plot)=>plot.data.map(trace=>({method:trace.name,x:trace.x[0],y:trace.y[0],dx:trace.error_x.array[0],dy:trace.error_y.array[0]}))')
-        assert novelty == [{'method':r['method'],'x':r['noveltyMean'],'y':r['negativeRDockMean'],'dx':r['noveltyCI95'],'dy':r['negativeRDockCI95']} for r in charts['novelty']]
-        page.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').hover(force=True)
-        expect(page.locator('#novelty-readout')).to_contain_text('89.00')
         select('ood')
         assert page.locator('#task-results-plots .js-plotly-plot').count()==1
-        assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart').count()==0
+        assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart,#docking-chart').count()==0
         expect(page.locator('.discovery-zero')).to_have_text('0 / 38,500')
         expect(page.locator('.discovery-hit')).to_contain_text('Round 6')
         expect(page.locator('.discovery-hit')).to_contain_text('512-sample batch')
@@ -149,14 +160,20 @@ def main():
         page.evaluate('''()=>['gsk3b','ood','cpp','gsk3b','anticancer'].forEach(id=>document.querySelector('[data-result-task="'+id+'"]').click())''')
         page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask === "anticancer"')
         assert page.locator('.js-plotly-plot').count()==1
-        assert page.locator('#trajectory-chart,#novelty-chart,#curriculum-chart').count()==0
+        assert page.locator('#trajectory-chart,#novelty-chart,#curriculum-chart,#docking-chart').count()==0
         for width in widths:
             page.set_viewport_size({'width':width,'height':1165})
-            for task in ['anticancer','gsk3b','ood']:
+            for task in ['anticancer','d2','gsk3b','ood']:
                 select(task)
                 page.wait_for_timeout(250)
                 assert page.evaluate('document.documentElement.scrollWidth')<=width,(width,task)
                 assert page.locator('.js-plotly-plot').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'),(width,task)
+                if task in ('d2','gsk3b'):
+                    figure=page.locator('.task-molecule');expect(figure).to_be_visible()
+                    proxy=page.locator('.proxy-context').bounding_box();obs=page.locator('.observable-context').bounding_box()
+                    assert obs['y']>proxy['y']+proxy['height']
+                    if width>900:assert figure.bounding_box()['x']>proxy['x']+proxy['width']
+                    else:assert figure.bounding_box()['y']>obs['y']+obs['height']
                 if width in [390,2227]:
                     page.locator('#task-results-panel').screenshot(path=str(out/f'{task}-{width}.png'))
             if width>=1280:
@@ -167,7 +184,7 @@ def main():
         touch=mobile.new_page()
         touch.on('pageerror',lambda error:errors.append(str(error)))
         touch.goto(args.url+'/#results',wait_until='networkidle')
-        for task in ['cpp','gsk3b','ood']:
+        for task in ['cpp','d2','gsk3b','ood']:
             touch.locator(f'[data-result-task="{task}"]').tap()
             touch.wait_for_function('(id)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===id',arg=task)
             touch.locator('[data-curriculum-stage="g1"]').tap()
@@ -176,9 +193,12 @@ def main():
                 touch.locator('#comparison-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
                 expect(touch.locator('#comparison-readout')).to_contain_text('69.06')
                 expect(touch.locator('#comparison-readout')).to_contain_text('37.02')
-            elif task=='gsk3b':
-                touch.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').tap(force=True)
-                expect(touch.locator('#novelty-readout')).to_contain_text('89.00')
+            elif task in ('d2','gsk3b'):
+                result=next(r for r in results if r['id']==task)
+                for index in range(3):
+                    bar=touch.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
+                    bar.scroll_into_view_if_needed();bar.tap(force=True)
+                    expect(touch.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
             else:
                 touch.locator('#curriculum-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
                 expect(touch.locator('#curriculum-readout')).to_contain_text('512')
@@ -188,7 +208,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_colored_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

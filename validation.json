@@ -1284,5 +1284,183 @@
       "failed_requests": []
     },
     "scientific_data": "Task records, verbatim curriculum goals, numerical results, source metadata, and saved chart data unchanged."
+  },
+  "dockingBarResultsRevision": {
+    "date": "2026-10-01",
+    "context_layout": "What the LLM sees is below Direct proxy baselines for each task. D2 and GSK3beta docking PNGs are always visible to the right on desktop and stack below on mobile.",
+    "charts": "One grouped bar chart per docking task. GNINA, |Vina| and |rDock| appear on the x-axis; each method has three bars. Legend order follows bar order. Bars and uncertainty whiskers use the same method color.",
+    "interaction": "Hover and tap show original signed scores, plotted magnitudes and reported uncertainty. Narrow displays scroll horizontally within the chart.",
+    "uncertainty": "The original Table 2 ± terms are used unchanged. The preprint does not define their confidence level; they are labelled reported uncertainty rather than inferred 95% confidence intervals.",
+    "removed": "The Plot data and uncertainty disclosure and old docking round/scaffold plots are removed from the page. Original archived chart data remain available in the repository.",
+    "checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "docking_grouped_bars": "passed",
+      "docking_absolute_values": "passed",
+      "docking_colored_error_bars": "passed",
+      "docking_signed_hover": "passed",
+      "molecule_context_layout": "passed",
+      "plot_data_disclosure": "removed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "browser": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "layout_and_accessibility": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "task": "anticancer",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "cpp",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "d2",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "gsk3b",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "ood",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "anticancer",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "cpp",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "d2",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "gsk3b",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "ood",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "scientific_data": "Original task records, all 66 numerical pairs, archived chart data, supplied paper and figures are byte-identical to the previous revision; only display metadata added."
   }
 }

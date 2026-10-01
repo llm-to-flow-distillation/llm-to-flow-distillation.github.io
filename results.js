@@ -40,9 +40,6 @@
     });
   }
   function interval(mean, spread, digits = 2) { return `${mean.toFixed(digits)} ± ${spread.toFixed(digits)}`; }
-  function table(title, headings, rows) {
-    return `<div class="table-scroll" tabindex="0" role="region" aria-label="${esc(title)}"><table><caption>${esc(title)}</caption><thead><tr>${headings.map(h=>`<th scope="col">${esc(h)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row[0])}</th>${row.slice(1).map(value=>`<td>${esc(value)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
-  }
   function markerKey(method) {
     const {color,symbol} = style(method);
     const shapes = {
@@ -55,8 +52,9 @@
     };
     return `<svg viewBox="0 0 16 16" width="15" height="15" data-marker-symbol="${symbol}" style="color:${color};fill:currentColor" aria-hidden="true">${shapes[symbol]}</svg>`;
   }
-  function legend(methods) {
-    return `<div class="plot-key" aria-label="Methods and plot markers">${['LFD','DPO','DiffusionNFT','Flow-GRPO','Guidance','Pre-trained'].filter(method=>methods.includes(method)).map(method=>`<span data-legend-method="${esc(method)}">${markerKey(method)}${esc(method)}</span>`).join('')}</div>`;
+  function legend(methods, bars = false) {
+    const ordered = bars ? methods : ['LFD','DPO','DiffusionNFT','Flow-GRPO','Guidance','Pre-trained'].filter(method=>methods.includes(method));
+    return `<div class="plot-key" aria-label="Methods and plot markers">${ordered.map(method=>`<span data-legend-method="${esc(method)}">${bars ? `<svg viewBox="0 0 16 16" width="15" height="15" data-marker-symbol="bar" style="color:${style(method).color};fill:currentColor" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="1"/></svg>` : markerKey(method)}${esc(method)}</span>`).join('')}</div>`;
   }
   function scatterMarkup(result) {
     const peptide = result.table === 1;
@@ -85,16 +83,20 @@
     $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${esc(row.method === 'LFD' ? 'LFD · ours' : row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
     $('#results-table-note').textContent = 'Means and ± terms are preserved from the paper. These are computational evaluations; see the paper for evaluation and checkpoint-selection details.';
   }
-  function dockingMarkup() {
-    return `${legend(Object.keys(palette))}<div class="docking-chart-grid">
-      <figure class="chart-card"><h4>Docking across curriculum rounds</h4><p>GNINA CNNaffinity · higher is better</p><div id="trajectory-chart" class="interactive-chart" role="region" aria-label="GSK3 beta interactive docking trajectory"></div><p id="trajectory-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a round to inspect its checkpoint and best-so-far score.</p><figcaption>The purple line carries forward the best checkpoint mean seen so far. Dashed lines show the baseline evaluations.</figcaption></figure>
-      <figure class="chart-card"><h4>Docking quality and scaffold novelty</h4><p>Moving up and right improves both metrics</p><div id="novelty-chart" class="interactive-chart" role="region" aria-label="GSK3 beta interactive scaffold novelty comparison"></div><p id="novelty-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a method to inspect both metrics and their intervals.</p><figcaption>Novelty counts distinct novel scaffolds among the top 100. The vertical axis shows negative rDock for the top 5%.</figcaption></figure>
-    </div>`;
+  const dockingMetrics = [
+    {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
+    {label:'Vina', tick:'|Vina|<br>(kcal/mol)', unit:' kcal/mol'},
+    {label:'rDock', tick:'|rDock|', unit:''}
+  ];
+  function dockingMarkup(result) {
+    const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
+    return `${legend(result.rows.map(row=>row.method),true)}<figure class="task-docking"><h4>Docking score comparison</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking scores; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking score bars"></div></div><p class="chart-scroll-hint">Scroll horizontally for all three scores.</p><p id="docking-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a bar to inspect its score and uncertainty.</p><figcaption>Vina and rDock are shown as absolute values of their negative scores. Higher bars are better within each score; units differ between scores. ${esc(uncertainty.caption)}</figcaption></figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
     const d2=task.id === 'd2';
-    return `<details class="task-example"><summary>Illustrative docking pose · Figure ${d2 ? '6' : '8'}</summary><figure><img src="assets/${d2 ? 'd2' : 'gsk3b'}-docking.png" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"><figcaption>Computational docking example from the supplied preprint.</figcaption></figure></details>`;
+    const file=`assets/${d2 ? 'd2' : 'gsk3b'}-docking.png`;
+    return `<figure class="task-molecule"><a href="${file}" target="_blank" rel="noopener" aria-label="Open the ${esc(task.name)} docking figure at full resolution"><img src="${file}" width="${d2 ? 772 : 776}" height="${d2 ? 424 : 396}" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"></a><figcaption>Illustrative LFD molecule and computational docking pose.</figcaption></figure>`;
   }
   function renderDiscoverySummary() {
     const evidence=window.LFD_DATA.resultPanels.oodEvidence;
@@ -102,7 +104,8 @@
     $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
-    $('#task-result-context').innerHTML=`<div class="task-context-grid"><div class="proxy-context"><h4>Direct proxy baselines</h4><p>${esc(goal.proxy)}</p></div><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div><div class="context-source"><a href="assets/paper.pdf#page=${goal.appendixPages[0]}" target="_blank" rel="noopener">Task details · Appendix D <span aria-hidden="true">↗</span></a></div>`;
+    const example=molecularExample(goal);
+    $('#task-result-context').innerHTML=`<div class="task-context-grid ${example ? 'context-with-molecule' : ''}"><div class="task-context-copy"><div class="proxy-context"><h4>Direct proxy baselines</h4><p>${esc(goal.proxy)}</p></div><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div>${example}</div><div class="context-source"><a href="assets/paper.pdf#page=${goal.appendixPages[0]}" target="_blank" rel="noopener">Task details · Appendix D <span aria-hidden="true">↗</span></a></div>`;
   }
   function curriculumLabel(stage) {
     return stage.id==='g' ? stage.rounds===0 ? 'Final assessment' : 'Final goal' : 'g'+stage.id.slice(1);
@@ -193,11 +196,10 @@
       if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
       renderCurriculum(task);
-      $('#result-source').textContent=`GOAL ${goal.number} · ${result ? 'TABLE '+result.table : 'FIGURE 9'}${id==='gsk3b' ? ' · FIGURE 7' : ''}`;
-      $('#task-result-example').innerHTML=molecularExample(task);
-      if (id==='gsk3b') {
-        $('#task-results-plots').innerHTML=dockingMarkup();
-        $('#task-results-evidence').innerHTML='<details class="figure-evidence"><summary>Plot data and uncertainty</summary><p>The trajectory is a descriptive post-hoc comparison of independently sampled checkpoint cohorts. Shaded 95% intervals belong to the selected checkpoint and are not adjusted for best-so-far selection. Novelty error bars are Student-t 95% intervals across five sampling seeds, conditional on one frozen checkpoint per method and using the filtered scaffold reference.</p><div id="figure-data-tables"></div><div class="chart-data-links"><a href="data/charts.json" download>Download chart data (JSON)</a></div></details>';
+      $('#result-source').textContent=`GOAL ${goal.number} · ${result ? 'TABLE '+result.table : 'FIGURE 9'}`;
+      if (result && result.table===2) {
+        $('#task-results-plots').innerHTML=dockingMarkup(result);
+        $('#task-results-evidence').innerHTML='';
         renderTable(result);
       } else if (id==='ood') {
         $('#task-results-plots').innerHTML='<figure class="task-scatter"><h4>From intermediate subgoals to the full goal</h4><div class="plot-key" aria-label="Curriculum markers"><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#8732ad" aria-hidden="true"><circle cx="8" cy="8" r="5"/></svg>Curriculum subgoal</span><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#c54b59" aria-hidden="true"><rect x="3" y="3" width="10" height="10"/></svg>Final-goal assessment</span></div><div id="curriculum-chart" class="interactive-chart" role="region" aria-label="Interactive constrained-design curriculum"></div><p id="curriculum-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a round to inspect the active subgoal.</p><figcaption>Six recorded training rounds; the full-goal assessment at round 6 uses no additional training update.</figcaption></figure>';
@@ -210,7 +212,7 @@
       }
       fonts.then(()=>{
         if (current!==generation) return;
-        const work=id==='gsk3b' ? renderDocking() : id==='ood' ? renderOOD(task) : renderScatter(result);
+        const work=result && result.table===2 ? renderDockingBars(result) : id==='ood' ? renderOOD(task) : renderScatter(result);
         return Promise.resolve(work).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
       });
     }
@@ -254,54 +256,25 @@
     });
     render(active);
   }
-  function renderDocking() {
-    const data = window.LFD_DATA.charts;
-    const rounds = data.trajectory.map(row=>row.round);
-    const trajectory = data.trajectory;
-    const traces = [
-      {type:'scatter',x:rounds,y:trajectory.map(row=>row.ciLow),mode:'lines',line:{width:0},hoverinfo:'skip'},
-      {type:'scatter',x:rounds,y:trajectory.map(row=>row.ciHigh),mode:'lines',line:{width:0},fill:'tonexty',fillcolor:'rgba(135,50,173,.14)',hoverinfo:'skip'}
-    ];
-    data.baselines.forEach(row=>{
-      const color = style(row.method).color;
-      const half = Math.max(row.mean-row.ciLow,row.ciHigh-row.mean);
-      traces.push({type:'scatter',x:[0,7],y:[row.mean-half,row.mean-half],mode:'lines',line:{width:0},hoverinfo:'skip'});
-      traces.push({type:'scatter',x:[0,7],y:[row.mean+half,row.mean+half],mode:'lines',line:{width:0},fill:'tonexty',fillcolor:color+'13',hoverinfo:'skip'});
-      traces.push({type:'scatter',name:row.method,x:[0,7],y:[row.mean,row.mean],mode:'lines',line:{color,width:1.8,dash:'dash'},hovertemplate:`<b>${esc(row.method)}</b><br>GNINA: ${row.mean.toFixed(3)} pK<br>95% interval: ${row.ciLow.toFixed(3)}–${row.ciHigh.toFixed(3)}<br>Docked molecules: ${row.dockedMolecules}<extra></extra>`});
-    });
-    traces.push({
-      type:'scatter',name:'LFD best so far',x:rounds,y:trajectory.map(row=>row.bestMean),mode:'lines+markers',
-      line:{color:style('LFD').color,width:3},marker:{color:style('LFD').color,symbol:'square',size:8},
-      customdata:trajectory.map(row=>[row.checkpointMean,row.bestRound,row.ciLow,row.ciHigh,row.dockedMolecules,row.goal]),
-      hovertemplate:'<b>LFD · round %{x}</b><br>Best so far: %{y:.3f} pK (round %{customdata[1]})<br>This checkpoint: %{customdata[0]:.3f} pK<br>Best checkpoint 95% interval: %{customdata[2]:.3f}–%{customdata[3]:.3f}<br>Docked at this round: %{customdata[4]}<extra></extra>'
-    });
-    const trajectoryPlot = draw('#trajectory-chart',traces,layout({
-      xaxis:{fixedrange:true,title:{text:'Curriculum round',standoff:14},dtick:1,range:[-.15,7.15],gridcolor:'#eceef2',zeroline:false,automargin:true},
-      yaxis:{fixedrange:true,title:{text:'GNINA CNNaffinity (pK)',standoff:10},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),point=>{
-      const row = trajectory[point.pointIndex];
-      if (point.data.name === 'LFD best so far') $('#trajectory-readout').innerHTML = `<strong>Round ${row.round}</strong> · This checkpoint: ${row.checkpointMean.toFixed(3)} pK · Best so far: ${row.bestMean.toFixed(3)} pK, from round ${row.bestRound}`;
-      else {
-        const base = data.baselines.find(row=>row.method === point.data.name);
-        if (base) $('#trajectory-readout').innerHTML = `<strong>${esc(base.method)}</strong> · ${base.mean.toFixed(3)} pK · 95% interval: ${base.ciLow.toFixed(3)}–${base.ciHigh.toFixed(3)}`;
-      }
-    });
-    const novelty = data.novelty.map(row=>({
-      type:'scatter',mode:'markers',name:row.method,x:[row.noveltyMean],y:[row.negativeRDockMean],
-      marker:{color:style(row.method).color,symbol:style(row.method).symbol,size:row.method === 'LFD' ? 13 : 11},
-      error_x:{type:'data',array:[row.noveltyCI95],color:style(row.method).color,thickness:1.4,width:4,visible:true},
-      error_y:{type:'data',array:[row.negativeRDockCI95],color:style(row.method).color,thickness:1.4,width:4,visible:true},
-      hovertemplate:`<b>${esc(row.method)}</b><br>Novel scaffolds: ${interval(row.noveltyMean,row.noveltyCI95,2)}<br>Negative rDock (top 5%): ${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}<br>95% intervals · ${row.samplingSeeds} sampling seeds<extra></extra>`
+  function renderDockingBars(result) {
+    const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
+    const traces=result.rows.map(row=>({
+      type:'bar',name:row.method,x:dockingMetrics.map(metric=>metric.tick),y:row.values.map(([mean])=>Math.abs(mean)),
+      marker:{color:style(row.method).color},
+      error_y:{type:'data',array:row.values.map(([,spread])=>spread),visible:true,color:style(row.method).color,thickness:1.6,width:4},
+      customdata:row.values.map(([mean,spread],index)=>[mean,spread,dockingMetrics[index].label,dockingMetrics[index].unit]),
+      hovertemplate:`<b>${esc(row.method)}</b><br>%{customdata[2]}: %{customdata[0]:.2f}%{customdata[3]}<br>Displayed magnitude: %{y:.2f}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
     }));
-    const noveltyPlot = draw('#novelty-chart',novelty,layout({
-      xaxis:{fixedrange:true,title:{text:'Novel scaffolds in top 100',standoff:14},gridcolor:'#eceef2',zeroline:false,automargin:true},
-      yaxis:{fixedrange:true,title:{text:'Negative rDock (top 5%)',standoff:10},gridcolor:'#eceef2',zeroline:false,automargin:true}
+    const max=Math.max(...result.rows.flatMap(row=>row.values.map(([mean,spread])=>Math.abs(mean)+spread)));
+    return draw('#docking-chart',traces,layout({
+      barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
+      xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
+      yaxis:{fixedrange:true,title:{text:'Score (metric-specific units)',standoff:12},range:[0,max*1.1],gridcolor:'#eceef2',zeroline:false,automargin:true}
     }),point=>{
-      const row = data.novelty[point.curveNumber];
-      $('#novelty-readout').innerHTML = `<strong>${esc(row.method)}</strong> · Novel scaffolds: ${interval(row.noveltyMean,row.noveltyCI95)} · Negative rDock: ${interval(row.negativeRDockMean,row.negativeRDockCI95,3)} · 95% intervals`;
+      const row=result.rows[point.curveNumber],index=point.pointIndex;
+      const [mean,spread]=row.values[index],metric=dockingMetrics[index];
+      $('#docking-readout').innerHTML=`<strong>${esc(row.method)} · ${metric.label}</strong> · Original score: ${interval(mean,spread)}${metric.unit} · Plotted magnitude: ${Math.abs(mean).toFixed(2)} · ${esc(uncertainty.label)}`;
     });
-    $('#figure-data-tables').innerHTML = table('GSK3β trajectory', ['Round','Checkpoint mean (pK)','Best so far (pK)','Best round','Best checkpoint 95% interval'], trajectory.map(row=>[row.round,row.checkpointMean.toFixed(3),row.bestMean.toFixed(3),row.bestRound,`${row.ciLow.toFixed(3)}–${row.ciHigh.toFixed(3)}`])) + table('GSK3β baseline evaluations',['Method','GNINA (pK)','95% interval','Docked molecules'],data.baselines.map(row=>[row.method,row.mean.toFixed(3),`${row.ciLow.toFixed(3)}–${row.ciHigh.toFixed(3)}`,row.dockedMolecules])) + table('GSK3β scaffold novelty',['Method','Novel scaffolds ± 95% CI','Negative rDock ± 95% CI','Sampling seeds'], data.novelty.map(row=>[row.method,interval(row.noveltyMean,row.noveltyCI95),interval(row.negativeRDockMean,row.negativeRDockCI95,3),row.samplingSeeds]));
-    return Promise.all([trajectoryPlot, noveltyPlot]);
   }
   window.LFD_RESULTS = {init};
 })();

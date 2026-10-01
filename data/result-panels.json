@@ -199,5 +199,19 @@
       "source": "User-supplied illustration of the reported Goal 5 hit, committed in ab447e3."
     }
   },
-  "contextSource": "Observable lists and baseline descriptions: supplied preprint Appendix D, pages 27/29, 33/34, 36/37, 39/40, and 42/43. Goal 5 binary-reward comparison: page 9."
+  "contextSource": "Observable lists and baseline descriptions: supplied preprint Appendix D, pages 27/29, 33/34, 36/37, 39/40, and 42/43. Goal 5 binary-reward comparison: page 9.",
+  "dockingDisplay": {
+    "metrics": [
+      "GNINA",
+      "Vina",
+      "rDock"
+    ],
+    "negativeScores": "Absolute values of the negative Vina and rDock means; original signed scores remain in the table and hover details.",
+    "label": "Reported uncertainty",
+    "caption": "Error bars reproduce the ± values printed in Table 2.",
+    "confidenceLevel": null,
+    "source": "assets/paper.pdf",
+    "sourcePage": 8,
+    "sourceNote": "Table 2 does not specify the uncertainty type. Original error terms are preserved without inferring a confidence level; matched source confidence intervals for every task and metric were not available."
+  }
 }

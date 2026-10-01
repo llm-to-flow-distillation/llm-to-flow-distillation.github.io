@@ -440,13 +440,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .results-values { border-top: 1px solid var(--line); }
 .results-values h4 { padding: 22px 0 16px; margin: 0; font-size: 16px; }
 .results-values .table-note { padding-inline: 0; }
-.docking-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 26px; }
-.chart-card { min-width: 0; margin: 0; }
-.chart-card h4 { margin: 0 0 7px; font-size: 15px; }
-.chart-card > p { margin: 0; font-size: 12px; color: #565c66; }
-.chart-card .interactive-chart { height: 330px; }
-.chart-card .chart-readout { margin: 0 0 16px; }
-.chart-card figcaption { margin: 0; padding: 0 0 20px; font-size: 12px; line-height: 1.7; }
 .task-results-evidence { padding: 0; }
 .figure-evidence { margin-block: 24px; color: #565c66; font-size: 13px; }
 .figure-evidence > summary { cursor: pointer; min-height: 40px; display: list-item; }
@@ -458,17 +451,9 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .task-scatter .plot-key { margin-top: 16px; }
 .chart-data-links { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-block: 20px; font-size: 13px; }
 .chart-data-links a { text-decoration: underline; text-underline-offset: 3px; }
-.task-example { margin: 0 0 24px; color: #565c66; font-size: 13px; }
-.task-example > summary { min-height: 40px; cursor: pointer; }
-.task-example figure { margin: 10px 0 0; padding: 0; }
-.task-example img { display: block; width: 100%; max-height: 320px; object-fit: contain; }
-.task-example figcaption { margin-top: 16px; font-size: 12px; }
-#task-results-evidence:empty, #task-result-example:empty { display: none; }
+#task-results-evidence:empty { display: none; }
 @media (max-width: 1279px) {
   .contents-list a { min-height: 48px; font-size: 14px; gap: 16px; }
-}
-@media (max-width: 1100px) {
-  .docking-chart-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 900px) {
   .result-card, .result-card:nth-child(-n+2) { grid-column: span 3; }
@@ -485,12 +470,17 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .interactive-chart { height: 340px; }
   .results-values h4, .results-values .table-note { padding-inline: 0; }
   .task-results-evidence { padding-inline: 0; }
-  .task-example { margin-inline: 0; }
 }
 
 /* Results share the generator colors, while chart markers continue to identify methods. */
 .metric-policy { font-size: 12px; font-weight: 500; color: var(--goal-strong); }
-.task-context-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 4px 0 0; }
+.task-context-grid { display: grid; grid-template-columns: 1fr; gap: 32px; padding: 4px 0 0; align-items: start; }
+.task-context-grid.context-with-molecule { grid-template-columns: minmax(0,1.08fr) minmax(0,.92fr); }
+.task-context-copy { display: grid; gap: 24px; min-width: 0; }
+.task-molecule { min-width: 0; margin: 0; align-self: center; }
+.task-molecule a, .task-molecule img { display: block; }
+.task-molecule img { width: 100%; max-height: 300px; object-fit: contain; }
+.task-molecule figcaption { margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
 .task-context-grid h4 { margin: 0 0 8px; font-size: 14px; }
 .task-context-grid p { font-size: 13px; line-height: 1.8; margin: 0; color: #535b67; }
 .observable-details { margin-top: 10px; }
@@ -539,7 +529,8 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .goal5-hit a, .goal5-hit img { display: block; }
 .goal5-hit figcaption { font-size: 11px; text-align: center; color: #566572; }
 @media (max-width: 900px) {
-  .task-context-grid { grid-template-columns: 1fr; gap: 22px; }
+  .task-context-grid, .task-context-grid.context-with-molecule { grid-template-columns: 1fr; gap: 22px; }
+  .task-molecule { width: 100%; max-width: 640px; justify-self: center; }
 }
 @media (max-width: 600px) {
   .goal-number { font-size: 23px; }
@@ -557,4 +548,15 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 #result-discovery:empty { display: none; }
 @media (max-width: 600px) {
   .observable-details ul { grid-template-columns: 1fr; }
+}
+
+/* Grouped docking bars share the existing method colors and reported uncertainties. */
+.task-docking { margin: 0; }
+.task-docking h4 { font-size: 16px; margin: 0 0 8px; }
+.task-docking figcaption { font-size: 12px; line-height: 1.8; margin: 0 0 24px; color: #535b67; }
+.docking-chart-scroll { overflow-x: auto; overflow-y: hidden; }
+.docking-bar-chart { min-width: 640px; height: 385px; }
+.chart-scroll-hint { display: none; }
+@media (max-width: 760px) {
+  .chart-scroll-hint { display: block; margin: 0 0 12px; font-size: 11px; color: #59616d; }
 }

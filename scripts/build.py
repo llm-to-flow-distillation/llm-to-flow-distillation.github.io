@@ -96,6 +96,12 @@ def main():
         assert panel['description'] and panel['proxy'] and panel['observableSummary']
         assert panel['observables'] and len(panel['observables']) == len(set(panel['observables']))
         assert all(1 <= page <= 43 for page in panel['appendixPages'])
+    docking = panels['dockingDisplay']
+    assert docking['metrics'] == ['GNINA', 'Vina', 'rDock']
+    assert docking['source'] == 'assets/paper.pdf' and docking['sourcePage'] == 8
+    assert docking['caption'] and docking['label']
+    assert docking['confidenceLevel'] in (None, 95)
+    assert all(row['values'][index][0] < 0 for result in results if result['table'] == 2 for row in result['rows'] for index in (1, 2))
     hit_figure = panels['oodEvidence']['figure']
     assert hashlib.sha256((ROOT / hit_figure['file']).read_bytes()).hexdigest() == hit_figure['sha256']
     assert panels['oodEvidence']['pretrained'] == {'attempts': 38500, 'fullGoalHits': 0}
