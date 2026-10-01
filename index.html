@@ -47,7 +47,6 @@
       </div>
       <figure class="hero-figure">
         <a href="assets/main_ltf.png" target="_blank" rel="noopener" aria-label="Open the method overview at full resolution"><img src="assets/main_ltf.png" width="4546" height="1285" fetchpriority="high" alt="LLM-to-Flow Distillation overview: a scientist gives a discovery goal to an LLM teacher, which sets subgoals and evaluates a flow student as its distribution moves toward the discovery region."></a>
-        <figcaption>A discovery goal, an adaptive teacher, and a generator that learns from their feedback. <a href="assets/main_ltf.png" target="_blank" rel="noopener">View full size <span aria-hidden="true">↗</span></a></figcaption>
       </figure>
     </section>
 
@@ -59,25 +58,20 @@
           <p>Let <span class="math math-inline" data-tex="\Omega_{g_t}\subseteq\mathcal X">Ω<sub>gₜ</sub> ⊆ X</span> be the region satisfying the current subgoal. As the student improves, the curriculum tightens toward the original discovery goal:</p>
           <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
           <p>The resulting preferences update the flow. New samples inform the next subgoal, so the curriculum adapts to the generator’s capabilities.</p>
-          <a class="text-link" href="assets/paper.pdf#page=4" target="_blank" rel="noopener">Method and algorithm in the paper <span aria-hidden="true">↗</span></a>
         </div>
         <div class="algorithm-box" aria-labelledby="algorithm-title">
-          <h3 id="algorithm-title"><span>Algorithm 1</span> LLM-to-Flow Distillation</h3>
-          <p class="algorithm-inputs"><strong>Given</strong> flow <span class="math math-inline" data-tex="v_{\theta_0}">v<sub>θ₀</sub></span>, goal <span class="math math-inline" data-tex="g">g</span>, LLM teacher, observables <span class="math math-inline" data-tex="\mathcal O">O</span>, <span class="math math-inline" data-tex="T">T</span> rounds, batch size <span class="math math-inline" data-tex="n">n</span>.</p>
-          <div class="algorithm-code">
-            <div class="algorithm-row"><span class="math math-inline" data-tex="g_{-1}\gets g">g<sub>−1</sub> ← g</span></div>
-            <div class="algorithm-row"><strong>for</strong> <span class="math math-inline" data-tex="t=0,\ldots,T-1">t = 0, …, T − 1</span> <strong>do</strong></div>
-            <div class="algorithm-loop">
-              <div class="algorithm-row"><button class="algorithm-function" type="button" data-function="sample" aria-label="Sample details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="X_t=\{x_i\}_{i=1}^{n}\sim p_{\theta_t}">X<sub>t</sub> = {x<sub>i</sub>}<sub>i=1</sub><sup>n</sup> ∼ p<sub>θₜ</sub></span></button></div>
-              <div class="algorithm-row algorithm-observe">observe <button class="algorithm-function" type="button" data-function="observe" aria-label="Observables details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span></button></div>
-              <div class="algorithm-row"><span class="math math-inline" data-tex="g_t\gets">g<sub>t</sub> ←</span><button class="algorithm-function" type="button" data-function="setgoal" aria-label="SetGoal details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="\operatorname{SetGoal}">SetGoal</span></button><span class="math math-inline" data-tex="\bigl(g,g_{t-1},\mathcal O(X_t)\bigr)">(g, g<sub>t−1</sub>, O(X<sub>t</sub>))</span></div>
-              <div class="algorithm-row"><span class="math math-inline" data-tex="\mathcal D_t\gets">D<sub>t</sub> ←</span><button class="algorithm-function" type="button" data-function="judge" aria-label="LLM-Judge details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="\operatorname{LLM\text{-}Judge}">LLM-Judge</span></button><span class="math math-inline" data-tex="(X_t;g_t)">(X<sub>t</sub>; g<sub>t</sub>)</span></div>
-              <div class="algorithm-row"><span class="math math-inline" data-tex="\theta_{t+1}\gets">θ<sub>t+1</sub> ←</span><button class="algorithm-function" type="button" data-function="minimize" aria-label="Minimize details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="\operatorname{Minimize}">Minimize</span></button><span class="math math-inline" data-tex="\bigl(\mathcal L_t(\theta_t,\mathcal D_t)\bigr)">(L<sub>t</sub>(θ<sub>t</sub>, D<sub>t</sub>))</span></div>
-            </div>
-            <div class="algorithm-row"><strong>end for</strong></div>
-            <div class="algorithm-row"><strong>return</strong> <span class="math math-inline" data-tex="v_{\theta_T}">v<sub>θ_T</sub></span></div>
-          </div>
-          <p class="algorithm-hint">Hover or select an underlined function for details.</p>
+          <h3 id="algorithm-title"><span>Algorithm 1</span><span class="algorithm-name">LLM-to-Flow Distillation (LFD)</span></h3>
+          <p class="algorithm-inputs"><strong>Require:</strong> pretrained flow <span class="math math-inline" data-tex="v_{\theta_0}">v<sub>θ₀</sub></span>, natural-language goal <span class="math math-inline" data-tex="g">g</span>, LLM teacher, observables <span class="math math-inline" data-tex="\mathcal O">O</span>, rounds <span class="math math-inline" data-tex="T">T</span>, batch size <span class="math math-inline" data-tex="n">n</span>.</p>
+          <ol class="algorithm-code" role="list">
+            <li class="algorithm-row"><span class="algorithm-line"><span class="math math-inline" data-tex="g_{-1}\gets g">g<sub>−1</sub> ← g</span></span></li>
+            <li class="algorithm-row"><span class="algorithm-line"><strong>for</strong> <span class="math math-inline" data-tex="t=0,\ldots,T-1">t = 0, …, T − 1</span> <strong>do</strong></span></li>
+            <li class="algorithm-row algorithm-loop"><span class="algorithm-line algorithm-sample-line"><span class="algorithm-sampling"><button class="algorithm-function" type="button" data-function="sample" aria-label="Sample details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="X_t=\{x_i\}_{i=1}^{n}\sim p_{\theta_t}">X<sub>t</sub> = {x<sub>i</sub>}<sub>i=1</sub><sup>n</sup> ∼ p<sub>θₜ</sub></span></button>,</span> <span class="algorithm-observe">observe <button class="algorithm-function" type="button" data-function="observe" aria-label="Observables details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span></button></span></span></li>
+            <li class="algorithm-row algorithm-loop"><span class="algorithm-line"><span class="math math-inline" data-tex="g_t\gets">g<sub>t</sub> ←</span><button class="algorithm-function" type="button" data-function="setgoal" aria-label="SetGoal details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="algorithm-function-name">SetGoal</span></button><span class="math math-inline" data-tex="\bigl(g,g_{t-1},\mathcal O(X_t)\bigr)">(g, g<sub>t−1</sub>, O(X<sub>t</sub>))</span></span></li>
+            <li class="algorithm-row algorithm-loop"><span class="algorithm-line"><span class="math math-inline" data-tex="\mathcal D_t\gets">D<sub>t</sub> ←</span><button class="algorithm-function" type="button" data-function="judge" aria-label="LLM-Judge details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="algorithm-function-name">LLM-Judge</span></button><span class="math math-inline" data-tex="(X_t;g_t)">(X<sub>t</sub>; g<sub>t</sub>)</span></span></li>
+            <li class="algorithm-row algorithm-loop"><span class="algorithm-line"><span class="math math-inline" data-tex="\theta_{t+1}\gets">θ<sub>t+1</sub> ←</span><button class="algorithm-function" type="button" data-function="minimize" aria-label="Minimize details" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details"><span class="algorithm-function-name">Minimize</span></button><span class="math math-inline" data-tex="\bigl(\mathcal L_t(\theta_t,\mathcal D_t)\bigr)">(L<sub>t</sub>(θ<sub>t</sub>, D<sub>t</sub>))</span></span></li>
+            <li class="algorithm-row"><span class="algorithm-line"><strong>end for</strong></span></li>
+            <li class="algorithm-row"><span class="algorithm-line"><strong>return</strong> <span class="math math-inline" data-tex="v_{\theta_T}">v<sub>θ_T</sub></span></span></li>
+          </ol>
         </div>
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
@@ -98,7 +92,6 @@
         <div data-function-panel="minimize" hidden>
           <p>For a preference pair <span class="math math-inline" data-tex="(x^+,x^-)\sim\mathcal D_t">(x⁺, x⁻) ∼ D<sub>t</sub></span>, measure how its relative likelihood changes from the current generator:</p><div class="math math-display" data-tex="\Delta_t^\theta=\log\frac{p_\theta(x^+)}{p_{\theta_t}(x^+)}-\log\frac{p_\theta(x^-)}{p_{\theta_t}(x^-)}">Δ<sub>t</sub><sup>θ</sup> = log[p<sub>θ</sub>(x⁺)/p<sub>θₜ</sub>(x⁺)] − log[p<sub>θ</sub>(x⁻)/p<sub>θₜ</sub>(x⁻)]</div><p>Minimize the teacher-induced DPO objective:</p><div class="math math-display" data-tex="\mathcal L_t(\theta,\mathcal D_t)=-\mathbb E_{\mathcal D_t}\log\sigma\bigl(\beta\Delta_t^\theta\bigr)">L<sub>t</sub>(θ, D<sub>t</sub>) = −E<sub>Dₜ</sub> log σ(βΔ<sub>t</sub><sup>θ</sup>)</div><p><span class="math math-inline" data-tex="\sigma">σ</span> is the logistic function; <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controls regularization. Keep the reference <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> fixed during this round.</p><div class="math math-display" data-tex="\theta_t\xrightarrow{\text{optimize }\widetilde{\mathcal L}_t}\theta_{t+1}">θ<sub>t</sub> → optimize the surrogate loss → θ<sub>t+1</sub></div><p>Start from <span class="math math-inline" data-tex="\theta_t">θ<sub>t</sub></span> and take optimizer steps on the <strong>denoising-loss surrogate</strong>, since terminal log-densities are intractable. Return the updated parameters, then resample for the next round.</p>
         </div>
-        <div class="function-popover-footer"><span id="function-popover-hint">Click the function to keep this open.</span><a href="assets/paper.pdf#page=4" target="_blank" rel="noopener">Read the method ↗</a></div>
       </div>
     </section>
 
@@ -120,7 +113,7 @@
   year   = {2026},
   note   = {Preprint},
   url    = {https://llm-to-flow-distillation.github.io/}
-}</pre><p>Preprint citation. No arXiv identifier was included in the supplied PDF.</p></div></section>
+}</pre></div></section>
   </main>
   <footer class="wrap"><span>LLM-to-Flow Distillation · 2026</span><a href="data/provenance.json">Evidence provenance</a></footer>
   <div id="toast" role="status" aria-live="polite"></div>

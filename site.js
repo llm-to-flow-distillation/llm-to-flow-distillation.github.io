@@ -57,7 +57,6 @@
       buttons.forEach(item => item.setAttribute('aria-expanded', String(item === active)));
       panels.forEach(panel => {panel.hidden = panel.dataset.functionPanel !== active.dataset.function;});
       $('#function-detail-title').textContent = titles[active.dataset.function];
-      $('#function-popover-hint').textContent = pinned ? 'Pinned · close or select another function.' : 'Click the function to keep this open.';
       popup.dataset.open = 'true';
       popup.dataset.pinned = String(pinned);
       if (nativePopover && !popup.matches(':popover-open')) popup.showPopover();

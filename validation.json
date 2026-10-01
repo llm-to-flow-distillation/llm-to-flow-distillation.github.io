@@ -34,7 +34,7 @@
   "contents_navigation": "passed",
   "method": {
     "source": "Author-provided arXiv Method introduction, algorithm, and DPO description",
-    "layout": "Mathematical introduction and paper-style pseudocode side by side; stacked below 901px.",
+    "layout": "Mathematical introduction beside eight numbered pseudocode lines in a rounded pale-blue box with paper-style serif typography; stacked below 901px. Sampling and observables share step 3. A divider separates the opening figure from Method.",
     "interactive_functions": [
       "Sample",
       "Observables",
@@ -63,6 +63,7 @@
       "browser_errors": [],
       "failed_requests": []
     },
-    "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts."
+    "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts.",
+    "presentation": "No inline comment lines or equation references. Removed the opening figure caption, Method paper-link helper, interaction hint, popup footer, and citation-status helper. Preserved function explanations and evidence provenance."
   }
 }
