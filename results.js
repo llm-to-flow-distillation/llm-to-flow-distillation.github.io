@@ -264,7 +264,7 @@
     const traces=methods.map(row=>({
       type:'bar',name:row.method,x:dockingMetrics.map(metric=>metric.tick),y:row.values.map(([mean],index)=>delta(mean,index)),
       marker:{color:style(row.method).color},
-      error_y:{type:'data',array:row.values.map(([,spread])=>spread),visible:true,color:style(row.method).color,thickness:1.6,width:4},
+      error_y:{type:'data',array:row.values.map(([,spread])=>spread),visible:true,color:'#000000',thickness:1.6,width:4},
       customdata:row.values.map(([mean,spread],index)=>[mean,spread,dockingMetrics[index].label,dockingMetrics[index].unit,baseline.values[index][0],Math.abs(mean)]),
       hovertemplate:`<b>${esc(row.method)} · %{customdata[2]}</b><br>Δ vs. pretrained: %{y:+.2f}%{customdata[3]}<br>Original score: %{customdata[0]:.2f}%{customdata[3]}<br>Absolute score: %{customdata[5]:.2f}%{customdata[3]}<br>Pretrained score: %{customdata[4]:.2f}%{customdata[3]}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
     }));

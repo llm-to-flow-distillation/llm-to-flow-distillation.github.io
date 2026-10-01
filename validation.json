@@ -1588,5 +1588,52 @@
       "failed_requests": []
     },
     "scientific_data": "Original task records, all 66 numerical pairs, archived chart data, paper and figures unchanged."
+  },
+  "blackDockingIntervalsRevision": {
+    "date": "2026-10-01",
+    "change": "All docking error-bar whiskers and caps use pure black (#000000). Method bar and legend colors, numerical deltas and uncertainty values are unchanged.",
+    "checks": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 1440,
+          "task": "d2",
+          "rendered_black_intervals": 15,
+          "method_bar_colors": "preserved",
+          "deltas_and_uncertainty": "preserved",
+          "hover_or_touch": "passed",
+          "overflow": "none"
+        },
+        {
+          "width": 1440,
+          "task": "gsk3b",
+          "rendered_black_intervals": 15,
+          "method_bar_colors": "preserved",
+          "deltas_and_uncertainty": "preserved",
+          "hover_or_touch": "passed",
+          "overflow": "none"
+        },
+        {
+          "width": 390,
+          "task": "d2",
+          "rendered_black_intervals": 15,
+          "method_bar_colors": "preserved",
+          "deltas_and_uncertainty": "preserved",
+          "hover_or_touch": "passed",
+          "overflow": "none"
+        },
+        {
+          "width": 390,
+          "task": "gsk3b",
+          "rendered_black_intervals": 15,
+          "method_bar_colors": "preserved",
+          "deltas_and_uncertainty": "preserved",
+          "hover_or_touch": "passed",
+          "overflow": "none"
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    }
   }
 }
