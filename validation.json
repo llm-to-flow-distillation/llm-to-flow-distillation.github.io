@@ -677,5 +677,188 @@
         "violations": []
       }
     ]
+  },
+  "openResultsRevision": {
+    "date": "2026-10-01",
+    "layout": "Goal cards retain the numbered goal labels and generator colors, with all numerical footers removed. The selected results use an open layout without score tiles or surrounding frames. Original plots and numerical tables are preserved.",
+    "verbatim_goal_sources": {
+      "status": "passed",
+      "verbatim_goals_matched_to_pdf": 23,
+      "normalization": "PDF line-break dehyphenation, whitespace, and ligature normalization only"
+    },
+    "goal_displays": "All 23 operative goals displayed verbatim in both Results and the trace explorer; final goals labeled separately from LLM intermediate subgoals.",
+    "checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "open_results_layout": "passed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "trace_regression": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "accessibility": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "task": "anticancer",
+          "verbatim_stages": 8,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "cpp",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "d2",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "gsk3b",
+          "verbatim_stages": 5,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "ood",
+          "verbatim_stages": 4,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "anticancer",
+          "verbatim_stages": 8,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "cpp",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "d2",
+          "verbatim_stages": 3,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "gsk3b",
+          "verbatim_stages": 5,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "ood",
+          "verbatim_stages": 4,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        }
+      ],
+      "result_and_trace_goal_displays": 23,
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "evidence": "All original trace records, stage counts and update totals unchanged. All 66 numerical pairs and original chart data preserved. Goal5 hit comparison and supplied figure retained."
   }
 }

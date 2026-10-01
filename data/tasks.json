@@ -40,7 +40,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "0768621cd70e136bdc0183ea51357b877e57c9b0d004819db745154ab188001b"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge and hydrophobic residues, establishing a foundational biophysical capacity to interact with anionic cell membranes.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 27,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g1",
@@ -71,7 +78,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "c7f03138cc8773c2c0ad5c78a67169abb80616ce4fdf353f126b7547b571ff95"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge and hydrophobic residues, and additionally incorporate aromatic residues (such as Trp, Phe, or Tyr) to act as interfacial anchors facilitating insertion into the lipid bilayer.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g2",
@@ -102,7 +116,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "c2a272106a67b6c9624a0363db03de72753900df3fb681d2bfd33e396e90ce49"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge, hydrophobic residues, and aromatic interfacial anchors (such as Trp, Phe, or Tyr), and additionally avoid extended, uninterrupted tracts of highly hydrophobic residues to reduce indiscriminate detergent-like toxicity against healthy human cells.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g3",
@@ -133,7 +154,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "0f810cf52c4263f4c144934e6c83984d43888253c3431504edcf9d382433f6d8"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge, hydrophobic residues, and aromatic interfacial anchors (such as Trp, Phe, or Tyr), and additionally avoid extended, uninterrupted tracts of highly hydrophobic residues, while excluding cysteine residues to prevent uncontrolled disulfide cross-linking, aggregation, and nonspecific toxicity.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g4",
@@ -164,7 +192,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "47735f33bd278df06d5300299effe94aca70c4a0fb288b45e42b8acdbb31f9bb"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge, hydrophobic residues, and aromatic interfacial anchors (such as Trp, Phe, or Tyr), and additionally avoid extended, uninterrupted tracts of highly hydrophobic residues, while excluding cysteine residues to prevent uncontrolled disulfide cross-linking, aggregation, and nonspecific toxicity. Furthermore, avoid sequences with excessive or clustered proline residues, which introduce rigid backbone kinks that severely disrupt the regular amphipathic secondary structures necessary for selective cancer-cell membrane permeabilization.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g5",
@@ -195,7 +230,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "6e357639468312b295f767559f1e7f5319db1573a9943478b9018ee9af80b773"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge, hydrophobic residues, and aromatic interfacial anchors (such as Trp, Phe, or Tyr), and additionally avoid extended, uninterrupted tracts of highly hydrophobic residues, while excluding cysteine residues to prevent uncontrolled disulfide cross-linking, aggregation, and nonspecific toxicity. Furthermore, avoid sequences with excessive or clustered proline residues, which introduce rigid backbone kinks that severely disrupt the regular amphipathic secondary structures necessary for selective cancer-cell membrane permeabilization, and avoid sequences with a severe deficiency in overall hydrophobic residues, as they lack the necessary hydrophobic driving force to partition into and disrupt the lipid bilayer.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g6",
@@ -226,7 +268,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "11c5348dc870f6bd9a761f8052444c3a0c451894c231fabca7371353b371fb16"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that possess a net positive charge, hydrophobic residues, and aromatic interfacial anchors (such as Trp, Phe, or Tyr), and additionally avoid extended, uninterrupted tracts of highly hydrophobic residues, while excluding cysteine residues to prevent uncontrolled disulfide cross-linking, aggregation, and nonspecific toxicity. Furthermore, avoid sequences with excessive or clustered proline residues, which introduce rigid backbone kinks that severely disrupt the regular amphipathic secondary structures necessary for selective cancer-cell membrane permeabilization, and avoid sequences with a severe deficiency in overall hydrophobic residues. Finally, avoid overwhelming, unstructured polycationic tracts (such as highly concentrated runs of basic residues lacking interspersed hydrophobic/amphipathic spacing), as these act as non-selective cell-penetrating or systemic toxins rather than selectively folded direct anticancer therapeutics.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g",
@@ -258,7 +307,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "52ac2172c8c05bac51209a6dd52cd86e785ddaeb6a55f5167740babfe8532709"
             }
-          ]
+          ],
+          "exactGoal": "Prefer peptides that appear more promising as selective direct anticancer therapeutics: plausibly active against cancer cells while minimizing nonspecific toxicity toward healthy human cells.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 28,
+            "verbatim": true,
+            "kind": "original-goal"
+          }
         }
       ],
       "name": "Selective anticancer activity",
@@ -306,7 +362,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "22c998d3a142610c670f0d00a9b785fc3c0177c4ad98cfb0e23df98f081bb3ce"
             }
-          ]
+          ],
+          "exactGoal": "Generate peptides capable of interacting with mammalian cell membranes.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 33,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g1",
@@ -337,7 +400,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "26b1264512c72b0d4be917e0fa53995be7a78d28e0a31851d2013b7e68fb081c"
             }
-          ]
+          ],
+          "exactGoal": "Generate peptides capable of non-disruptive interaction with mammalian cell membranes.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 33,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g",
@@ -368,7 +438,14 @@
               "agreement": "Same label in both recorded judge passes.",
               "sourceSha256": "bf112a9680b4626f85b0510f84abb40ba939fc881cb9e38e5ca712422aaf87e1"
             }
-          ]
+          ],
+          "exactGoal": "Generate peptides with promising mammalian-cell-penetrating activity while minimizing toxicity to mammalian cells.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 33,
+            "verbatim": true,
+            "kind": "original-goal"
+          }
         }
       ],
       "name": "Cell penetration",
@@ -395,7 +472,13 @@
             36
           ],
           "traces": [],
-          "exactGoal": "Generate small molecules containing at least one aromatic ring and an aliphatic nitrogen (e.g., an aliphatic amine), serving as a foundational aminergic scaffold."
+          "exactGoal": "Generate small molecules containing at least one aromatic ring and an aliphatic nitrogen (e.g., an aliphatic amine), serving as a foundational aminergic scaffold.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 36,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g1",
@@ -406,7 +489,13 @@
             36
           ],
           "traces": [],
-          "exactGoal": "Generate small molecules containing at least two aromatic rings and an aliphatic nitrogen, transitioning the foundational scaffold toward the multi-aromatic topology typical of aminergic GPCR ligands."
+          "exactGoal": "Generate small molecules containing at least two aromatic rings and an aliphatic nitrogen, transitioning the foundational scaffold toward the multi-aromatic topology typical of aminergic GPCR ligands.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 36,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g",
@@ -436,7 +525,13 @@
               "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
             }
           ],
-          "exactGoal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures."
+          "exactGoal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 36,
+            "verbatim": true,
+            "kind": "original-goal"
+          }
         }
       ],
       "name": "Dopamine D2 receptor",
@@ -485,7 +580,13 @@
               "sourceSha256": "b974fa8b7046714dfc18369da706416a97ad837c91776b840521fc1aed216c31"
             }
           ],
-          "exactGoal": "Generate chemically plausible small molecules containing an aromatic ring and a hydrogen bond donor."
+          "exactGoal": "Generate chemically plausible small molecules containing an aromatic ring and a hydrogen bond donor.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 39,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g1",
@@ -517,7 +618,13 @@
               "sourceSha256": "4267a89c26d1ef121452a15557adf7a0ab776e010af02600e379da2d8fb32069"
             }
           ],
-          "exactGoal": "Generate chemically plausible small molecules containing at least one heteroaromatic ring and a hydrogen bond donor."
+          "exactGoal": "Generate chemically plausible small molecules containing at least one heteroaromatic ring and a hydrogen bond donor.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 39,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g2",
@@ -549,7 +656,13 @@
               "sourceSha256": "49c2473a98e09252303ce7190db54097e03d69b4185c2ebf60411fe34fc14d76"
             }
           ],
-          "exactGoal": "Generate chemically stable, drug-like small molecules containing at least one heteroaromatic ring and a hydrogen bond donor, avoiding highly reactive or hydrolytically unstable structural alerts (such as thiocarbonyls, acylhydrazones, and Michael acceptors)."
+          "exactGoal": "Generate chemically stable, drug-like small molecules containing at least one heteroaromatic ring and a hydrogen bond donor, avoiding highly reactive or hydrolytically unstable structural alerts (such as thiocarbonyls, acylhydrazones, and Michael acceptors).",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 39,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g3",
@@ -581,7 +694,13 @@
               "sourceSha256": "0a2621e77cc2d8a6213b2980e20b50122fbeb541ea4869cdc72886046bead53f"
             }
           ],
-          "exactGoal": "Generate chemically stable, drug-like small molecules containing at least one heteroaromatic ring and a hydrogen bond donor, maintaining reasonable aqueous solubility by avoiding highly extended or excessively fused polyaromatic systems, while continuing to avoid highly reactive or hydrolytically unstable structural alerts (such as thiocarbonyls, acylhydrazones, and Michael acceptors)."
+          "exactGoal": "Generate chemically stable, drug-like small molecules containing at least one heteroaromatic ring and a hydrogen bond donor, maintaining reasonable aqueous solubility by avoiding highly extended or excessively fused polyaromatic systems, while continuing to avoid highly reactive or hydrolytically unstable structural alerts (such as thiocarbonyls, acylhydrazones, and Michael acceptors).",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 39,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g",
@@ -614,7 +733,13 @@
               "sourceSha256": "3f5c86e40b82699f6f8bd008bbdd67900f4add02918f44d0f89b24d8e6059521"
             }
           ],
-          "exactGoal": "Generate promising drug-like small molecules for binding the ATP pocket of glycogen synthase kinase-3 beta (GSK3β), while maintaining reasonable aqueous solubility and chemically plausible structures."
+          "exactGoal": "Generate promising drug-like small molecules for binding the ATP pocket of glycogen synthase kinase-3 beta (GSK3β), while maintaining reasonable aqueous solubility and chemically plausible structures.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 39,
+            "verbatim": true,
+            "kind": "original-goal"
+          }
         }
       ],
       "name": "GSK3β binding",
@@ -643,7 +768,13 @@
             42
           ],
           "traces": [],
-          "exactGoal": "Generate neutral, connected small molecules that contain at least one aromatic heterocycle."
+          "exactGoal": "Generate neutral, connected small molecules that contain at least one aromatic heterocycle.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 42,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g1",
@@ -654,7 +785,13 @@
             42
           ],
           "traces": [],
-          "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring."
+          "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 42,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g2",
@@ -665,7 +802,13 @@
             42
           ],
           "traces": [],
-          "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring and at least one free primary or secondary amine."
+          "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring and at least one free primary or secondary amine.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 42,
+            "verbatim": true,
+            "kind": "llm-subgoal"
+          }
         },
         {
           "id": "g",
@@ -673,6 +816,7 @@
           "rounds": 0,
           "summary": "Evaluate round-6 candidates against the complete constrained molecular specification. This assessment is distinct from the active generation subgoal.",
           "paperPages": [
+            40,
             42,
             43
           ],
@@ -698,7 +842,13 @@
               "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
             }
           ],
-          "exactGoal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign that contain a six-membered aza-aromatic ring bearing a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen, and a distinct fully saturated ring containing a free secondary amine. The saturated amine-containing ring need not be carbon-linked to the aza-aromatic ring."
+          "exactGoal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign that contain a six-membered aza-aromatic ring bearing a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen, and a distinct fully saturated ring containing a free secondary amine. The saturated amine-containing ring need not be carbon-linked to the aza-aromatic ring.",
+          "goalTextSource": {
+            "file": "assets/paper.pdf",
+            "page": 40,
+            "verbatim": true,
+            "kind": "original-goal"
+          }
         }
       ],
       "name": "Constrained molecular design",

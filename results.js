@@ -96,29 +96,10 @@
     const d2=task.id === 'd2';
     return `<details class="task-example"><summary>Illustrative docking pose · Figure ${d2 ? '6' : '8'}</summary><figure><img src="assets/${d2 ? 'd2' : 'gsk3b'}-docking.png" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"><figcaption>Computational docking example from the supplied preprint.</figcaption></figure></details>`;
   }
-  function unitFor(metric) {
-    return metric.label.includes('(%)') ? '%' : metric.label.includes('(pK)') ? 'pK' : metric.label.includes('(kcal/mol)') ? 'kcal/mol' : '';
-  }
-  function cardOutcome(goal, result) {
-    if (!result) return '<span class="goal-preview"><span>Pretrained FlowMol3</span><strong>0 <small>/ 38,500</small></strong><span>LFD: a reported full-goal hit</span></span>';
-    const mean=result.rows.find(row=>row.method==='LFD').values[0][0];
-    const base=result.rows.find(row=>row.method==='Pre-trained').values[0][0];
-    return `<span class="goal-preview"><span>LFD · ${esc(result.metricShort.replace(' ↑',''))}</span><strong>${mean.toFixed(2)}<small>${esc(result.unit)}</small></strong><span>${base.toFixed(2)}${result.unit==='%' ? '%' : ' '+esc(result.unit)} pretrained</span></span>`;
-  }
-  function renderScoreSummary(result) {
-    const ours=result.rows.find(row=>row.method==='LFD');
-    const prior=result.rows.find(row=>row.method==='Pre-trained');
-    $('#result-score-summary').innerHTML=`<div class="metric-summary" aria-label="LFD and pretrained numerical results">${result.metrics.map((metric,index)=>{
-      const [mean,spread]=ours.values[index];
-      const unit=unitFor(metric);
-      const descriptive=result.table===1 && index===2;
-      return `<article class="metric-tile"><div class="metric-tile-heading"><h4>${esc(metric.label)}</h4><span>${descriptive ? 'Descriptive' : metric.direction==='up' ? '↑ Higher' : '↓ Lower'}</span></div><span class="metric-policy">LFD</span><div class="metric-value"><strong>${mean.toFixed(2)}</strong><span class="metric-unit">${esc(unit)}</span><span class="metric-uncertainty">± ${spread.toFixed(2)}</span></div><div class="metric-prior"><span>Pretrained</span><span>${interval(...prior.values[index])}${unit ? ' '+esc(unit) : ''}</span></div></article>`;
-    }).join('')}</div>`;
-  }
   function renderDiscoverySummary() {
     const evidence=window.LFD_DATA.resultPanels.oodEvidence;
     const figure=evidence.figure;
-    $('#result-score-summary').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
+    $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
     $('#task-result-context').innerHTML=`<div class="task-context-grid"><div class="proxy-context"><h4>Direct proxy baselines</h4><p>${esc(goal.proxy)}</p></div><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div><div class="context-source"><a href="assets/paper.pdf#page=${goal.appendixPages[0]}" target="_blank" rel="noopener">Task details · Appendix D <span aria-hidden="true">↗</span></a></div>`;
@@ -138,7 +119,7 @@
     const preview=$('#result-curriculum-preview');
     preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
     const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
-    preview.innerHTML=`<div class="curriculum-preview-heading"><h5>${esc(stage.title)}</h5><span>${esc(rounds)}</span></div><p>${esc(stage.exactGoal || stage.summary)}</p><div class="curriculum-preview-links"><span>${stage.exactGoal ? 'Paper subgoal' : 'Recorded subgoal summary'}</span><a href="#explorer?task=${encodeURIComponent(task.id)}&stage=${encodeURIComponent(id)}&tab=traces">Inspect judge traces <span aria-hidden="true">↗</span></a></div>`;
+    preview.innerHTML=`<div class="curriculum-preview-heading"><h5>${esc(stage.title)}</h5><span>${esc(rounds)}</span></div><p>${esc(stage.exactGoal)}</p><div class="curriculum-preview-links"><span>${stage.id==='g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'}</span><a href="#explorer?task=${encodeURIComponent(task.id)}&stage=${encodeURIComponent(id)}&tab=traces">Inspect judge traces <span aria-hidden="true">↗</span></a></div>`;
   }
   function renderCurriculum(task) {
     const target=$('#task-result-curriculum');
@@ -156,7 +137,7 @@
     const points=[];
     let round=0;
     task.stages.filter(stage=>stage.rounds>0).forEach((stage,index)=>{
-      for (let i=0;i<stage.rounds;i++) points.push({round:++round,index,title:stage.title,summary:stage.summary});
+      for (let i=0;i<stage.rounds;i++) points.push({round:++round,index,title:stage.title,summary:stage.exactGoal});
     });
     const traces=[{
       type:'scatter',name:'Curriculum subgoal',x:points.map(point=>point.round),y:points.map(point=>point.index),mode:'lines+markers',
@@ -184,7 +165,7 @@
     const panel=$('#task-results-panel');
     let active=goals[0].id;
     let generation=0;
-    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="result-goal-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-card-heading"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><span class="card-generator">${esc(goal.generator)} · ${esc(goal.domain.toLowerCase())}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span id="result-goal-${esc(goal.id)}" class="result-goal">${esc(goal.goal)}</span>${cardOutcome(goal,results.find(result=>result.id===goal.id))}</button>`).join('');
+    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="result-goal-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-card-heading"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><span class="card-generator">${esc(goal.generator)} · ${esc(goal.domain.toLowerCase())}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span id="result-goal-${esc(goal.id)}" class="result-goal">${esc(goal.goal)}</span></button>`).join('');
     function render(id) {
       active=id;
       const current=++generation;
@@ -208,7 +189,8 @@
       $('#result-generator').dataset.generator=goal.generator;
       $('#result-generator').textContent=goal.generator+' · '+goal.domain.toLowerCase();
       $('#task-result-description').textContent=goal.description;
-      if (result) renderScoreSummary(result); else renderDiscoverySummary();
+      $('#result-discovery').innerHTML='';
+      if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
       renderCurriculum(task);
       $('#result-source').textContent=`GOAL ${goal.number} · ${result ? 'TABLE '+result.table : 'FIGURE 9'}${id==='gsk3b' ? ' · FIGURE 7' : ''}`;

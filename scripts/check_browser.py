@@ -54,6 +54,8 @@ def main():
             for stage in task['stages']:
                 page.locator(f'[data-stage="{stage["id"]}"]').click()
                 assert page.locator('#stage-detail h4').inner_text() == stage['title']
+                assert page.locator('#stage-detail .stage-summary').inner_text() == stage['exactGoal']
+                assert 'verbatim from Appendix D' in page.locator('#stage-detail .summary-label').inner_text()
                 page.locator('#tab-traces').click()
                 assert page.locator('.trace-card').count() == len(stage['traces'])
                 if stage['traces']:

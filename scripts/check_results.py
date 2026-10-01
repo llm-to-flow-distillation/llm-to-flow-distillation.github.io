@@ -30,6 +30,8 @@ def main():
         page.goto(args.url + '/#results', wait_until='networkidle')
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
         assert 'Compare methods' not in page.locator('body').inner_text()
+        assert page.locator('.goal-preview').count() == 0
+        assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])===0)')
         for task in goals:
             assert page.locator(f'#result-goal-{task["id"]}').inner_text() == task['goal']
         def select(task):
@@ -56,7 +58,7 @@ def main():
             for stage in task['stages']:
                 page.locator(f'[data-curriculum-stage="{stage["id"]}"]').click()
                 expect(page.locator('#task-result-curriculum')).to_have_attribute('data-selected-stage', stage['id'])
-                assert page.locator('#result-curriculum-preview p').inner_text() == stage.get('exactGoal', stage['summary'])
+                assert page.locator('#result-curriculum-preview p').inner_text() == stage['exactGoal']
                 link = page.locator('.curriculum-preview-links a')
                 assert link.get_attribute('href') == f'#explorer?task={task["id"]}&stage={stage["id"]}&tab=traces'
                 inspected_stages += 1
@@ -78,8 +80,8 @@ def main():
         expect(page.locator('[data-curriculum-stage="g0"]')).to_be_focused()
         for result in results:
             select(result['id'])
-            expected_values=[f'{mean:.2f}' for mean,error in next(row for row in result['rows'] if row['method']=='LFD')['values']]
-            assert page.locator('.metric-value strong').all_text_contents() == expected_values
+            assert page.locator('.metric-summary,.metric-tile,.goal-preview').count() == 0
+            assert page.locator('#result-discovery').inner_html() == ''
             for index,row in enumerate(result['rows']):
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
@@ -181,7 +183,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','numerical_summaries':'passed','rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','open_results_layout':'passed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

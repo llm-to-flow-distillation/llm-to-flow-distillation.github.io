@@ -26,6 +26,10 @@ def validate():
         assert len({s['id'] for s in task['stages']}) == len(task['stages'])
         for stage in task['stages']:
             assert stage['summary'] and stage['title'] and stage['paperPages']
+            assert stage['exactGoal'] and stage['goalTextSource']['verbatim'] is True
+            assert stage['goalTextSource']['file'] == 'assets/paper.pdf'
+            assert stage['goalTextSource']['page'] in stage['paperPages']
+            assert stage['goalTextSource']['kind'] == ('original-goal' if stage['id'] == 'g' else 'llm-subgoal')
             assert all(1 <= page <= 43 for page in stage['paperPages'])
             for trace in stage['traces']:
                 assert trace['label'] in {'POSITIVE', 'NEGATIVE', 'ABSTAIN'}
