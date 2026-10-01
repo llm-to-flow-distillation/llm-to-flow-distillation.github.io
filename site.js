@@ -159,52 +159,76 @@
   $('#result-task').addEventListener('change', renderResults);
   renderResults();
 
-  // Seeded, explicitly conceptual illustration. Positions are not experiment data.
-  const canvas = $('#flow-canvas');
-  const ctx = canvas.getContext('2d');
-  const slider = $('#flow-progress');
-  let randomSeed = 81;
-  function random() {randomSeed = (randomSeed * 1664525 + 1013904223) >>> 0;return randomSeed / 4294967296;}
-  function normal() {return Math.sqrt(-2 * Math.log(Math.max(random(),.001))) * Math.cos(2 * Math.PI * random());}
-  const particles = Array.from({length:200}, () => ({sx:normal()*.10+.22,sy:normal()*.17+.48,tx:normal()*.065+.80,ty:normal()*.12+.48,phase:random()*Math.PI*2,size:.9+random()*1.2}));
-  let playing = false, frame, previousTime;
-  function draw() {
-    if (!ctx) return;
-    const w = canvas.clientWidth, h = canvas.clientHeight;
-    const ratio = Math.min(window.devicePixelRatio || 1,2);
-    if (canvas.width !== w*ratio || canvas.height !== h*ratio) {canvas.width = w*ratio;canvas.height = h*ratio;}
-    ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,w,h);
-    const t = Number(slider.value)/100;
-    ctx.fillStyle = 'rgba(30,30,30,.025)';ctx.strokeStyle = '#a3a3a3';ctx.lineWidth = 1;
-    ctx.setLineDash([3,4]);ctx.beginPath();ctx.ellipse(w*.8,h*.48,w*.145,h*.35,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);
-    for (let line=-2;line<=2;line++) {
-      ctx.beginPath();ctx.moveTo(w*.29,h*(.48+line*.045));ctx.bezierCurveTo(w*.43,h*(.13+line*.05),w*.56,h*(.83+line*.035),w*.77,h*(.48+line*.045));
-      ctx.strokeStyle = 'rgba(70,70,70,.12)';ctx.lineWidth=.8;ctx.stroke();
+  // Track section geometry so expanding traces and figures keeps the rail accurate.
+  const contents = $('#contents');
+  const contentsToggle = $('.contents-toggle', contents);
+  const contentsLinks = $$('.contents-list a', contents);
+  const sections = contentsLinks.map(link => $(link.getAttribute('href')));
+  const compactContents = matchMedia('(max-width: 1279px)');
+  let contentsFrame;
+
+  function closeContents() {
+    contents.classList.remove('is-open');
+    contentsToggle.setAttribute('aria-expanded', 'false');
+  }
+  function updateContents() {
+    contentsFrame = null;
+    const visible = scrollY > 120;
+    contents.classList.toggle('is-visible', visible);
+    contents.inert = !visible;
+    if (!visible) closeContents();
+    const readingLine = Math.min(innerHeight * .28, 220);
+    let active = sections[0];
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= readingLine) active = section;
     }
-    particles.forEach(p => {
-      const x = p.sx*(1-t)+p.tx*t;
-      const y = p.sy*(1-t)+p.ty*t+Math.sin(t*Math.PI)*Math.sin(p.phase)*.12;
-      ctx.beginPath();ctx.arc(w*x,h*y,p.size,0,Math.PI*2);ctx.fillStyle=t>.7 ? 'rgba(160,15,27,.65)' : 'rgba(60,65,75,.60)';ctx.fill();
-    });
-    $('#flow-value').textContent = `${slider.value}%`;
-    $$('.teacher-step').forEach((step,i) => step.classList.toggle('active', i === Math.min(3,Math.floor(t*4))));
+    // A short final section still becomes current when the reader reaches the end.
+    if (scrollY + innerHeight >= document.documentElement.scrollHeight - 4) active = sections.at(-1);
+    for (const link of contentsLinks) {
+      if (link.hash === '#' + active.id) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    }
+    $('.contents-current', contents).textContent = contentsLinks[sections.indexOf(active)].textContent;
   }
-  function stopAnimation() {playing=false;cancelAnimationFrame(frame);previousTime=undefined;$('#flow-play').textContent='▶';$('#flow-play').setAttribute('aria-label','Play conceptual animation');}
-  function animate(time) {
-    if (!playing) return;
-    // Derive progress from elapsed time because range controls round integer steps.
-    const elapsed = time - (animate.start || time);
-    slider.value = String(Math.round((animate.initial + elapsed*.012)%101));
-    previousTime=time;draw();frame=requestAnimationFrame(animate);
+  function scheduleContents() {
+    if (contentsFrame == null) contentsFrame = requestAnimationFrame(updateContents);
   }
-  $('#flow-play').addEventListener('click', () => {
-    if (playing) {stopAnimation();return;}
-    playing=true;animate.start=performance.now();animate.initial=Number(slider.value);
-    $('#flow-play').textContent='Ⅱ';$('#flow-play').setAttribute('aria-label','Pause conceptual animation');frame=requestAnimationFrame(animate);
+  contentsToggle.addEventListener('click', () => {
+    const open = contents.classList.toggle('is-open');
+    contentsToggle.setAttribute('aria-expanded', String(open));
   });
-  slider.addEventListener('input', () => {stopAnimation();draw();});
-  new ResizeObserver(draw).observe(canvas);
-  document.addEventListener('visibilitychange', () => {if (document.hidden) stopAnimation();});
-  new IntersectionObserver(entries => {if (!entries[0].isIntersecting) stopAnimation();},{threshold:.05}).observe(canvas);
-  draw();
+  for (const link of contentsLinks) {
+    link.addEventListener('click', event => {
+      // Preserve normal new-tab and modified-click behavior on these real anchors.
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      const section = $(link.hash);
+      history.pushState(null, '', link.hash);
+      closeContents();
+      const heading = section.querySelector('h1, h2');
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({preventScroll: true});
+      section.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
+      scheduleContents();
+    });
+  }
+  document.addEventListener('click', event => {
+    if (!contents.contains(event.target)) closeContents();
+  });
+  contents.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && contents.classList.contains('is-open')) {
+      closeContents();
+      contentsToggle.focus();
+    }
+  });
+  contents.addEventListener('focusout', event => {
+    if (!contents.contains(event.relatedTarget)) closeContents();
+  });
+  compactContents.addEventListener('change', () => {closeContents(); scheduleContents();});
+  window.addEventListener('scroll', scheduleContents, {passive: true});
+  window.addEventListener('resize', scheduleContents);
+  window.addEventListener('hashchange', scheduleContents);
+  window.addEventListener('pageshow', scheduleContents);
+  new ResizeObserver(scheduleContents).observe($('#main'));
+  updateContents();
 })();

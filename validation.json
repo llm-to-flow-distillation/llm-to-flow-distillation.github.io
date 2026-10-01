@@ -7,6 +7,8 @@
     360,
     390,
     768,
+    1200,
+    1280,
     1440
   ],
   "browser_errors": [],
@@ -22,12 +24,13 @@
     ],
     "views": [
       "1440px overview",
+      "1440px method with contents rail",
       "390px overview",
-      "1440px traces",
-      "390px evidence"
+      "390px method with expanded contents menu"
     ],
     "violations": 0
   },
   "deployment": "GitHub Pages destination: https://llm-to-flow-distillation.github.io/; publication tracked by the repository Actions history.",
-  "design": "Single page without navigation header; exact full paper title; uniform author names, corresponding affiliations, arXiv and GitHub resource buttons; locally hosted Inter fonts and neutral palette."
+  "design": "Compact paper title with a smaller subtitle; uniform author names and affiliations; smaller arxiv and GitHub resource buttons; main_ltf.png opening figure; clickable left contents rail with automatic current-section tracking and a collapsible menu on smaller screens.",
+  "contents_navigation": "passed"
 }

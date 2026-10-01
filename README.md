@@ -2,9 +2,9 @@
 
 An interactive research website for **LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators**.
 
-The site includes a conceptual curriculum animation, all five discovery tasks, 23 curriculum/assessment stages, 36 illustrative recorded judgments, searchable/filterable traces, shareable task/subgoal URLs, JSON downloads, the full paper, and every value from the paper’s two main result tables. It works without a JavaScript framework, runtime CDN, API key, or paid service.
+The site includes the authors’ main method figure and a scroll-aware contents menu, all five discovery tasks, 23 curriculum/assessment stages, 36 illustrative recorded judgments, searchable/filterable traces, shareable task/subgoal URLs, JSON downloads, the full paper, and every value from the paper’s two main result tables. It works without a JavaScript framework, runtime CDN, API key, or paid service.
 
-The page uses a white background, self-hosted Inter fonts, and a single centered paper title/author block. Font and icon credits are in `assets/ATTRIBUTIONS.txt`.
+The page uses a white background, self-hosted Inter fonts, and a compact centered paper title/author block. The left contents rail tracks the current section; on smaller screens it becomes an expandable contents button. Font and icon credits are in `assets/ATTRIBUTIONS.txt`.
 
 ## Preview
 

@@ -3,7 +3,7 @@
 import argparse
 import json
 from pathlib import Path
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, expect
 
 
 def main():
@@ -27,13 +27,27 @@ def main():
         page.goto(args.url, wait_until='networkidle')
         assert ' '.join(page.locator('h1').inner_text().split()) == 'LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators'
         assert page.locator('.task-button').count() == 5
-        assert page.get_by_label('Play conceptual animation').count() == 1
-        page.locator('#flow-progress').fill('75')
-        assert page.locator('#flow-value').inner_text() == '75%'
-        assert page.locator('.teacher-step.active').inner_text().startswith('04')
-        page.locator('#flow-play').click()
-        assert page.get_by_label('Pause conceptual animation').count() == 1
-        page.locator('#flow-play').click()
+        assert page.locator('.paper-button span').inner_text() == 'arxiv'
+        assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 4546')
+        assert page.locator('.title-subtitle').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)') < page.locator('.title-main').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
+        assert len(set(page.locator('.author-row > span').evaluate_all('(els) => els.map(el => getComputedStyle(el).fontSize)'))) == 1
+        expect(page.locator('#contents')).not_to_be_visible()
+        assert page.locator('#contents').evaluate('(el) => el.inert')
+        page.evaluate('window.scrollTo({top: 300, behavior: "instant"})')
+        expect(page.locator('#contents')).to_be_visible()
+        expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#overview')
+        for section in ['method', 'explorer', 'results', 'citation']:
+            page.locator(f'.contents-list a[href="#{section}"]').click()
+            expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
+            assert page.evaluate('location.hash') == '#' + section
+            assert page.evaluate('document.activeElement.closest("section").id') == section
+        # Scroll independently from the menu; tracking must work in both directions.
+        for section in ['results', 'explorer', 'method']:
+            page.locator('#' + section).evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
+            expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
+        page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
+        expect(page.locator('#contents')).not_to_be_visible()
+        print('Compact hero, uploaded figure, clickable contents, section tracking and focus passed.')
         for task in data['tasks']:
             page.locator(f'[data-task="{task["id"]}"]').click()
             assert page.locator('#task-header h3').inner_text() == task['name']
@@ -85,13 +99,27 @@ def main():
         page.locator('#copy-citation').click()
         assert '@misc{desanti2026llmtoflow' in page.evaluate('navigator.clipboard.readText()')
         print('Deep links, reload, invalid-link recovery, keyboard tabs, clipboard, download and 66 result cells passed.')
-        for width in [360,390,768,1440]:
+        for width in [360,390,768,1200,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
             page.goto(args.url,wait_until='networkidle')
             assert page.evaluate('document.documentElement.scrollWidth') <= width, f'Overflow at {width}px'
             for task in data['tasks']:
                 page.locator(f'[data-task="{task["id"]}"]').click()
                 assert page.evaluate('document.documentElement.scrollWidth') <= width, f'{task["id"]} overflow at {width}px'
+            if width < 1280:
+                page.locator('#method').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
+                expect(page.locator('.contents-current')).to_have_text('Method')
+                expect(page.locator('.contents-list')).not_to_be_visible()
+                page.locator('.contents-toggle').click()
+                expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'true')
+                page.keyboard.press('Escape')
+                expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'false')
+                expect(page.locator('.contents-toggle')).to_be_focused()
+                page.locator('.contents-toggle').click()
+                page.locator('.contents-list a[href="#results"]').click()
+                expect(page.locator('.contents-current')).to_have_text('Results')
+                expect(page.locator('.contents-list')).not_to_be_visible()
+                assert page.evaluate('document.documentElement.scrollWidth') <= width
             if width in [390,1440]:
                 page.goto(args.url,wait_until='networkidle')
                 page.evaluate("document.querySelectorAll('img').forEach(img => img.loading = 'eager')")
@@ -105,8 +133,8 @@ def main():
         assert not errors, errors
         assert not failed_requests, failed_requests
         browser.close()
-    print('Responsive widths 360/390/768/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
-    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'traces':36,'reported_value_pairs':66,'viewports':[360,390,768,1440],'browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
+    print('Responsive widths 360/390/768/1200/1280/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
+    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'traces':36,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
 
 
 if __name__ == '__main__':
