@@ -101,21 +101,38 @@ def main():
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
             if result['table']==2:
+                baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
+                methods=[row for row in result['rows'] if row is not baseline]
                 assert page.locator('#task-results-plots .js-plotly-plot').count()==1
                 expect(page.locator('#docking-chart')).to_be_visible()
                 assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart').count()==0
-                bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0])}))')
-                assert bars == [{'type':'bar','method':r['method'],'x':['GNINA<br>(pK)','|Vina|<br>(kcal/mol)','|rDock|'],'y':[abs(v[0]) for v in r['values']],'error':[v[1] for v in r['values']],'color':expected_colors[r['method']],'errorColor':expected_colors[r['method']],'original':[v[0] for v in r['values']]} for r in result['rows']]
+                bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0]),baseline:t.customdata.map(v=>v[4])}))')
+                assert bars == [{'type':'bar','method':r['method'],'x':['GNINA<br>(pK)','|Vina|<br>(kcal/mol)','|rDock|'],'y':[abs(v[0])-abs(baseline['values'][i][0]) for i,v in enumerate(r['values'])],'error':[v[1] for v in r['values']],'color':expected_colors[r['method']],'errorColor':expected_colors[r['method']],'original':[v[0] for v in r['values']],'baseline':[v[0] for v in baseline['values']]} for r in methods]
+                reference_deltas={'d2':{'DPO':[-.51,-.71,.47],'LFD':[.43,.96,2.25]},'gsk3b':{'Guidance':[-.04,-.20,-.48],'LFD':[.97,1.52,4.36]}}
+                for method,expected in reference_deltas[result['id']].items():
+                    assert [round(value,2) for value in next(bar for bar in bars if bar['method']==method)['y']]==expected
+                axis=page.locator('#docking-chart').evaluate('(plot)=>plot.layout.yaxis')
+                assert axis['zeroline'] and axis['range'][0]<0
+                assert all(axis['range'][0]<value-spread and axis['range'][1]>value+spread for bar in bars for value,spread in zip(bar['y'],bar['error']))
                 legend=page.locator('#task-results-plots [data-legend-method]').evaluate_all('(els)=>els.map(el=>({method:el.dataset.legendMethod,symbol:el.querySelector("svg").dataset.markerSymbol,color:el.querySelector("svg").style.color}))')
                 assert all(row['symbol']=='bar' for row in legend)
-                assert [row['method'] for row in legend]==[r['method'] for r in result['rows']]
-                assert page.locator('.task-docking figcaption').inner_text().startswith('Vina and rDock are shown as absolute values')
+                assert [row['method'] for row in legend]==[r['method'] for r in methods]
+                expect(page.locator('.task-docking figcaption')).to_contain_text('|method score| − |pretrained score|')
+                expect(page.locator('.task-docking figcaption')).to_contain_text('fixed reference')
                 for index,metric in enumerate(result['metrics']):
                     bar=page.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
                     bar.hover(force=True)
                     expect(page.locator('#docking-readout')).to_contain_text('LFD')
                     expect(page.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
                     expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
+                    expect(page.locator('#docking-readout')).to_contain_text(f'{bars[-1]["y"][index]:+.2f}')
+                    expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{baseline["values"][index][0]:.2f}')
+                # A worse score must remain below zero rather than becoming an absolute delta.
+                method,index=('DPO',0) if result['id']=='d2' else ('Guidance',2)
+                curve=next(i for i,row in enumerate(methods) if row['method']==method)
+                page.locator('#docking-chart .barlayer .trace').nth(curve).locator('.point path').nth(index).hover(force=True)
+                expect(page.locator('#docking-readout')).to_contain_text(f'{bars[curve]["y"][index]:.2f}')
+                assert bars[curve]['y'][index]<0
                 continue
             assert page.locator('#task-results-plots .js-plotly-plot').count()==1
             assert page.locator('#trajectory-chart,#novelty-chart,#curriculum-chart,#docking-chart').count()==0
@@ -199,6 +216,9 @@ def main():
                     bar=touch.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
                     bar.scroll_into_view_if_needed();bar.tap(force=True)
                     expect(touch.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
+                    baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
+                    delta=abs(result['rows'][-1]['values'][index][0])-abs(baseline['values'][index][0])
+                    expect(touch.locator('#docking-readout')).to_contain_text(f'{delta:+.2f}')
             else:
                 touch.locator('#curriculum-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
                 expect(touch.locator('#curriculum-readout')).to_contain_text('512')
@@ -208,7 +228,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_colored_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_colored_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

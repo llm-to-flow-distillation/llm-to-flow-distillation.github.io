@@ -1462,5 +1462,131 @@
       "failed_requests": []
     },
     "scientific_data": "Original task records, all 66 numerical pairs, archived chart data, supplied paper and figures are byte-identical to the previous revision; only display metadata added."
+  },
+  "dockingDeltaRevision": {
+    "date": "2026-10-01",
+    "formula": "abs(method mean) - abs(pretrained mean)",
+    "baseline": "Pretrained FlowMol3 is the zero reference, represented by a visible zero line; the five adapted methods each have one bar per metric.",
+    "sign": "Positive deltas indicate improved metric values; negative deltas remain negative rather than being converted to magnitudes.",
+    "uncertainty": "Each method’s original ± terms are shifted using the reported pretrained mean as a fixed reference. No joint confidence interval or covariance is inferred. This interpretation is explicit in the caption.",
+    "hover": "Original signed score, original magnitude, pretrained score and signed delta are inspectable with mouse and touch.",
+    "checked_examples": {
+      "D2 LFD": [
+        0.43,
+        0.96,
+        2.25
+      ],
+      "D2 DPO": [
+        -0.51,
+        -0.71,
+        0.47
+      ],
+      "GSK3beta LFD": [
+        0.97,
+        1.52,
+        4.36
+      ],
+      "GSK3beta Guidance": [
+        -0.04,
+        -0.2,
+        -0.48
+      ]
+    },
+    "checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "docking_grouped_bars": "passed",
+      "docking_absolute_values": "passed",
+      "docking_colored_error_bars": "passed",
+      "docking_signed_hover": "passed",
+      "molecule_context_layout": "passed",
+      "plot_data_disclosure": "removed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": [],
+      "docking_baseline_deltas": "passed",
+      "docking_negative_improvements": "passed",
+      "docking_zero_reference": "passed"
+    },
+    "layout_and_accessibility": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "task": "d2",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 390,
+          "task": "gsk3b",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "d2",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "task": "gsk3b",
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "scientific_data": "Original task records, all 66 numerical pairs, archived chart data, paper and figures unchanged."
   }
 }

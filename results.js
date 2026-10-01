@@ -90,7 +90,7 @@
   ];
   function dockingMarkup(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    return `${legend(result.rows.map(row=>row.method),true)}<figure class="task-docking"><h4>Docking score comparison</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking scores; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking score bars"></div></div><p class="chart-scroll-hint">Scroll horizontally for all three scores.</p><p id="docking-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a bar to inspect its score and uncertainty.</p><figcaption>Vina and rDock are shown as absolute values of their negative scores. Higher bars are better within each score; units differ between scores. ${esc(uncertainty.caption)}</figcaption></figure>`;
+    return `${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}<figure class="task-docking"><h4>Docking improvement over pretrained</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvement bars"></div></div><p class="chart-scroll-hint">Scroll horizontally for all three scores.</p><p id="docking-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a bar to inspect its improvement and original score.</p><figcaption>Bars show |method score| − |pretrained score|; the zero line is the pretrained baseline. Positive values are better, negative values are worse. Units differ between metrics. ${esc(uncertainty.caption)}</figcaption></figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -258,22 +258,28 @@
   }
   function renderDockingBars(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    const traces=result.rows.map(row=>({
-      type:'bar',name:row.method,x:dockingMetrics.map(metric=>metric.tick),y:row.values.map(([mean])=>Math.abs(mean)),
+    const baseline=result.rows.find(row=>row.method===uncertainty.baseline);
+    const methods=result.rows.filter(row=>row!==baseline);
+    const delta=(mean,index)=>Math.abs(mean)-Math.abs(baseline.values[index][0]);
+    const traces=methods.map(row=>({
+      type:'bar',name:row.method,x:dockingMetrics.map(metric=>metric.tick),y:row.values.map(([mean],index)=>delta(mean,index)),
       marker:{color:style(row.method).color},
       error_y:{type:'data',array:row.values.map(([,spread])=>spread),visible:true,color:style(row.method).color,thickness:1.6,width:4},
-      customdata:row.values.map(([mean,spread],index)=>[mean,spread,dockingMetrics[index].label,dockingMetrics[index].unit]),
-      hovertemplate:`<b>${esc(row.method)}</b><br>%{customdata[2]}: %{customdata[0]:.2f}%{customdata[3]}<br>Displayed magnitude: %{y:.2f}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
+      customdata:row.values.map(([mean,spread],index)=>[mean,spread,dockingMetrics[index].label,dockingMetrics[index].unit,baseline.values[index][0],Math.abs(mean)]),
+      hovertemplate:`<b>${esc(row.method)} · %{customdata[2]}</b><br>Δ vs. pretrained: %{y:+.2f}%{customdata[3]}<br>Original score: %{customdata[0]:.2f}%{customdata[3]}<br>Absolute score: %{customdata[5]:.2f}%{customdata[3]}<br>Pretrained score: %{customdata[4]:.2f}%{customdata[3]}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
     }));
-    const max=Math.max(...result.rows.flatMap(row=>row.values.map(([mean,spread])=>Math.abs(mean)+spread)));
+    const lower=Math.min(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)-spread)));
+    const upper=Math.max(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)+spread)));
+    const padding=(upper-lower)*.1;
     return draw('#docking-chart',traces,layout({
       barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
       xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
-      yaxis:{fixedrange:true,title:{text:'Score (metric-specific units)',standoff:12},range:[0,max*1.1],gridcolor:'#eceef2',zeroline:false,automargin:true}
+      yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
     }),point=>{
-      const row=result.rows[point.curveNumber],index=point.pointIndex;
+      const row=methods[point.curveNumber],index=point.pointIndex;
       const [mean,spread]=row.values[index],metric=dockingMetrics[index];
-      $('#docking-readout').innerHTML=`<strong>${esc(row.method)} · ${metric.label}</strong> · Original score: ${interval(mean,spread)}${metric.unit} · Plotted magnitude: ${Math.abs(mean).toFixed(2)} · ${esc(uncertainty.label)}`;
+      const improvement=delta(mean,index);
+      $('#docking-readout').innerHTML=`<strong>${esc(row.method)} · ${metric.label}</strong> · Δ vs. pretrained: ${improvement>=0 ? '+' : ''}${improvement.toFixed(2)}${metric.unit} · Original score: ${interval(mean,spread)}${metric.unit} · Pretrained score: ${baseline.values[index][0].toFixed(2)}${metric.unit} · ${esc(uncertainty.label)}`;
     });
   }
   window.LFD_RESULTS = {init};

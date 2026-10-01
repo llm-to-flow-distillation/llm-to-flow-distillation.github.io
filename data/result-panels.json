@@ -206,12 +206,15 @@
       "Vina",
       "rDock"
     ],
-    "negativeScores": "Absolute values of the negative Vina and rDock means; original signed scores remain in the table and hover details.",
+    "negativeScores": "Vina and rDock are converted to absolute values before subtracting the pretrained magnitude. The resulting delta retains its sign; original signed scores remain in the table and hover details.",
     "label": "Reported uncertainty",
-    "caption": "Error bars reproduce the ± values printed in Table 2.",
+    "caption": "Error bars retain each method’s printed ± term, with the pretrained mean treated as a fixed reference.",
     "confidenceLevel": null,
     "source": "assets/paper.pdf",
     "sourcePage": 8,
-    "sourceNote": "Table 2 does not specify the uncertainty type. Original error terms are preserved without inferring a confidence level; matched source confidence intervals for every task and metric were not available."
+    "sourceNote": "Table 2 does not specify the uncertainty type. Original method error terms are translated by subtracting the reported pretrained magnitude, treated as fixed; these are not intervals jointly estimating uncertainty in both means. No confidence level or covariance is inferred.",
+    "baseline": "Pre-trained",
+    "baselineReference": "fixed_mean",
+    "transformation": "abs(method_mean) - abs(pretrained_mean)"
   }
 }

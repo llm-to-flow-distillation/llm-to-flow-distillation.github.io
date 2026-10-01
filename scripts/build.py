@@ -101,6 +101,8 @@ def main():
     assert docking['source'] == 'assets/paper.pdf' and docking['sourcePage'] == 8
     assert docking['caption'] and docking['label']
     assert docking['confidenceLevel'] in (None, 95)
+    assert docking['baseline'] == 'Pre-trained' and docking['baselineReference'] == 'fixed_mean'
+    assert all(sum(row['method'] == docking['baseline'] for row in result['rows']) == 1 for result in results if result['table'] == 2)
     assert all(row['values'][index][0] < 0 for result in results if result['table'] == 2 for row in result['rows'] for index in (1, 2))
     hit_figure = panels['oodEvidence']['figure']
     assert hashlib.sha256((ROOT / hit_figure['file']).read_bytes()).hexdigest() == hit_figure['sha256']
