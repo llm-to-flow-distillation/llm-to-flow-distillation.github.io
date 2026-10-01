@@ -82,7 +82,7 @@
   function renderTable(result) {
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
     $('#results-table-title').textContent = 'Numerical results';
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${esc(row.method === 'LFD' ? 'LFD · ours' : row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}">${interval(mean,error)}</td>`).join('')}</tr>`).join('')}</tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${esc(row.method === 'LFD' ? 'LFD · ours' : row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
     $('#results-table-note').textContent = 'Means and ± terms are preserved from the paper. These are computational evaluations; see the paper for evaluation and checkpoint-selection details.';
   }
   function dockingMarkup() {
@@ -96,10 +96,60 @@
     const d2=task.id === 'd2';
     return `<details class="task-example"><summary>Illustrative docking pose · Figure ${d2 ? '6' : '8'}</summary><figure><img src="assets/${d2 ? 'd2' : 'gsk3b'}-docking.png" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"><figcaption>Computational docking example from the supplied preprint.</figcaption></figure></details>`;
   }
+  function unitFor(metric) {
+    return metric.label.includes('(%)') ? '%' : metric.label.includes('(pK)') ? 'pK' : metric.label.includes('(kcal/mol)') ? 'kcal/mol' : '';
+  }
+  function cardOutcome(goal, result) {
+    if (!result) return '<span class="goal-preview"><span>Pretrained FlowMol3</span><strong>0 <small>/ 38,500</small></strong><span>LFD: a reported full-goal hit</span></span>';
+    const mean=result.rows.find(row=>row.method==='LFD').values[0][0];
+    const base=result.rows.find(row=>row.method==='Pre-trained').values[0][0];
+    return `<span class="goal-preview"><span>LFD · ${esc(result.metricShort.replace(' ↑',''))}</span><strong>${mean.toFixed(2)}<small>${esc(result.unit)}</small></strong><span>${base.toFixed(2)}${result.unit==='%' ? '%' : ' '+esc(result.unit)} pretrained</span></span>`;
+  }
+  function renderScoreSummary(result) {
+    const ours=result.rows.find(row=>row.method==='LFD');
+    const prior=result.rows.find(row=>row.method==='Pre-trained');
+    $('#result-score-summary').innerHTML=`<div class="metric-summary" aria-label="LFD and pretrained numerical results">${result.metrics.map((metric,index)=>{
+      const [mean,spread]=ours.values[index];
+      const unit=unitFor(metric);
+      const descriptive=result.table===1 && index===2;
+      return `<article class="metric-tile"><div class="metric-tile-heading"><h4>${esc(metric.label)}</h4><span>${descriptive ? 'Descriptive' : metric.direction==='up' ? '↑ Higher' : '↓ Lower'}</span></div><span class="metric-policy">LFD</span><div class="metric-value"><strong>${mean.toFixed(2)}</strong><span class="metric-unit">${esc(unit)}</span><span class="metric-uncertainty">± ${spread.toFixed(2)}</span></div><div class="metric-prior"><span>Pretrained</span><span>${interval(...prior.values[index])}${unit ? ' '+esc(unit) : ''}</span></div></article>`;
+    }).join('')}</div>`;
+  }
+  function renderDiscoverySummary() {
+    const evidence=window.LFD_DATA.resultPanels.oodEvidence;
+    const figure=evidence.figure;
+    $('#result-score-summary').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
+  }
+  function renderTaskContext(goal) {
+    $('#task-result-context').innerHTML=`<div class="task-context-grid"><div class="proxy-context"><h4>Direct proxy baselines</h4><p>${esc(goal.proxy)}</p></div><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div><div class="context-source"><a href="assets/paper.pdf#page=${goal.appendixPages[0]}" target="_blank" rel="noopener">Task details · Appendix D <span aria-hidden="true">↗</span></a></div>`;
+  }
+  function curriculumLabel(stage) {
+    return stage.id==='g' ? stage.rounds===0 ? 'Final assessment' : 'Final goal' : 'g'+stage.id.slice(1);
+  }
+  function showCurriculumStage(task, id) {
+    const stage=task.stages.find(item=>item.id===id);
+    const controls=$('#task-result-curriculum');
+    controls.dataset.selectedStage=id;
+    controls.querySelectorAll('[data-curriculum-stage]').forEach(button=>{
+      const selected=button.dataset.curriculumStage===id;
+      button.setAttribute('aria-selected',String(selected));
+      button.tabIndex=selected ? 0 : -1;
+    });
+    const preview=$('#result-curriculum-preview');
+    preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
+    const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
+    preview.innerHTML=`<div class="curriculum-preview-heading"><h5>${esc(stage.title)}</h5><span>${esc(rounds)}</span></div><p>${esc(stage.exactGoal || stage.summary)}</p><div class="curriculum-preview-links"><span>${stage.exactGoal ? 'Paper subgoal' : 'Recorded subgoal summary'}</span><a href="#explorer?task=${encodeURIComponent(task.id)}&stage=${encodeURIComponent(id)}&tab=traces">Inspect judge traces <span aria-hidden="true">↗</span></a></div>`;
+  }
+  function renderCurriculum(task) {
+    const target=$('#task-result-curriculum');
+    target.dataset.curriculumTask=task.id;
+    target.innerHTML=`<div class="curriculum-heading"><h4>Explore the subgoals</h4><span>${task.stages.filter(stage=>stage.id!=='g').length} intermediate subgoals</span></div><div class="curriculum-tabs" role="tablist" aria-label="${esc(task.name)} curriculum">${task.stages.map((stage,index)=>`<button id="curriculum-${task.id}-${stage.id}" type="button" role="tab" data-curriculum-stage="${stage.id}" aria-selected="${index===0}" aria-controls="result-curriculum-preview" aria-label="${esc(curriculumLabel(stage)+': '+stage.title)}" tabindex="${index===0 ? 0 : -1}">${stage.id==='g' ? esc(curriculumLabel(stage)) : 'g<sub>'+esc(stage.id.slice(1))+'</sub>'}</button>`).join('')}</div><div id="result-curriculum-preview" class="curriculum-preview" role="tabpanel" aria-labelledby="curriculum-${task.id}-${task.stages[0].id}"></div>`;
+    showCurriculumStage(task,task.stages[0].id);
+  }
   function renderOODTable() {
     const evidence = window.LFD_DATA.resultPanels.oodEvidence;
     $('#results-table-title').textContent = 'Reported discovery evidence';
-    $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design, paper Figure 9. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">Pre-trained</th><td>No hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">LFD · ours</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design, paper Figure 9. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">Pre-trained</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">LFD · ours</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
     $('#results-table-note').textContent = evidence.caveat;
   }
   function renderOOD(task) {
@@ -134,7 +184,7 @@
     const panel=$('#task-results-panel');
     let active=goals[0].id;
     let generation=0;
-    cards.innerHTML=goals.map((task,index)=>`<button id="result-card-${esc(task.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-name-${esc(task.id)}" aria-describedby="result-goal-${esc(task.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(task.id)}"><span class="goal-card-heading"><span class="tiny-label">GOAL ${task.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><strong id="result-name-${esc(task.id)}" class="result-task-name">${esc(task.name)}</strong><span id="result-goal-${esc(task.id)}" class="result-goal">${esc(task.goal)}</span></button>`).join('');
+    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="result-goal-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-card-heading"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><span class="card-generator">${esc(goal.generator)} · ${esc(goal.domain.toLowerCase())}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span id="result-goal-${esc(goal.id)}" class="result-goal">${esc(goal.goal)}</span>${cardOutcome(goal,results.find(result=>result.id===goal.id))}</button>`).join('');
     function render(id) {
       active=id;
       const current=++generation;
@@ -142,6 +192,7 @@
       const task=data.tasks.find(task=>task.id===id);
       const result=results.find(result=>result.id===id);
       panel.dataset.selectedTask=id;
+      panel.dataset.generator=goal.generator;
       delete panel.dataset.plotReadyTask;
       panel.setAttribute('aria-labelledby','result-card-'+id);
       cards.querySelectorAll('[data-result-task]').forEach(card=>{
@@ -154,21 +205,24 @@
       // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
       $('#task-results-title').textContent=goal.name;
+      $('#result-generator').dataset.generator=goal.generator;
+      $('#result-generator').textContent=goal.generator+' · '+goal.domain.toLowerCase();
+      $('#task-result-description').textContent=goal.description;
+      if (result) renderScoreSummary(result); else renderDiscoverySummary();
+      renderTaskContext(goal);
+      renderCurriculum(task);
       $('#result-source').textContent=`GOAL ${goal.number} · ${result ? 'TABLE '+result.table : 'FIGURE 9'}${id==='gsk3b' ? ' · FIGURE 7' : ''}`;
       $('#result-paper-link').href=`assets/paper.pdf#page=${goal.paperPage}`;
       $('#task-result-example').innerHTML=molecularExample(task);
       if (id==='gsk3b') {
-        $('#task-result-description').textContent='Follow docking performance across curriculum rounds, then explore the relation between docking quality and scaffold novelty.';
         $('#task-results-plots').innerHTML=dockingMarkup();
         $('#task-results-evidence').innerHTML='<details class="figure-evidence"><summary>Plot data and uncertainty</summary><p>The trajectory is a descriptive post-hoc comparison of independently sampled checkpoint cohorts. Shaded 95% intervals belong to the selected checkpoint and are not adjusted for best-so-far selection. Novelty error bars are Student-t 95% intervals across five sampling seeds, conditional on one frozen checkpoint per method and using the filtered scaffold reference.</p><div id="figure-data-tables"></div><div class="chart-data-links"><a href="data/charts.json" download>Download chart data (JSON)</a><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">Figure 7 in the paper ↗</a></div></details>';
         renderTable(result);
       } else if (id==='ood') {
-        $('#task-result-description').textContent='The curriculum reaches a reported design satisfying the full structural goal. The final-goal assessment is separate from the intermediate training subgoal.';
         $('#task-results-plots').innerHTML='<figure class="task-scatter"><h4>From intermediate subgoals to the full goal</h4><div class="plot-key" aria-label="Curriculum markers"><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#8732ad" aria-hidden="true"><circle cx="8" cy="8" r="5"/></svg>Curriculum subgoal</span><span><svg viewBox="0 0 16 16" width="15" height="15" fill="#c54b59" aria-hidden="true"><rect x="3" y="3" width="10" height="10"/></svg>Final-goal assessment</span></div><div id="curriculum-chart" class="interactive-chart" role="region" aria-label="Interactive constrained-design curriculum"></div><p id="curriculum-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a round to inspect the active subgoal.</p><figcaption>Six recorded training rounds; the full-goal assessment at round 6 uses no additional training update.</figcaption></figure>';
         $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#explorer?task=ood&stage=g&tab=traces">Inspect the recorded discovery example ↗</a><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">Figure 9 in the paper ↗</a></div>';
         renderOODTable();
       } else {
-        $('#task-result-description').textContent=result.table===1 ? 'Activity and predicted toxicity are shown together. Moving right and down increases the activity score and reduces predicted hemolysis.' : 'Explore the joint docking scores, with all three evaluators reported in the table and marker details.';
         $('#task-results-plots').innerHTML=scatterMarkup(result);
         $('#task-results-evidence').innerHTML=id==='d2' ? '<div class="chart-data-links"><a href="assets/paper.pdf#page=9" target="_blank" rel="noopener">D2 trajectory and novelty panels in Figure 7 ↗</a></div>' : '';
         renderTable(result);
@@ -179,6 +233,26 @@
         return Promise.resolve(work).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
       });
     }
+    $('#task-result-curriculum').addEventListener('click',event=>{
+      const button=event.target.closest('[data-curriculum-stage]');
+      if (!button) return;
+      const task=data.tasks.find(task=>task.id===active);
+      showCurriculumStage(task,button.dataset.curriculumStage);
+    });
+    $('#task-result-curriculum').addEventListener('keydown',event=>{
+      if (!event.target.matches('[data-curriculum-stage]')) return;
+      const task=data.tasks.find(task=>task.id===active);
+      const index=task.stages.findIndex(stage=>stage.id===$('#task-result-curriculum').dataset.selectedStage);
+      let next;
+      if (event.key==='ArrowRight' || event.key==='ArrowDown') next=(index+1)%task.stages.length;
+      if (event.key==='ArrowLeft' || event.key==='ArrowUp') next=(index+task.stages.length-1)%task.stages.length;
+      if (event.key==='Home') next=0;
+      if (event.key==='End') next=task.stages.length-1;
+      if (next==null) return;
+      event.preventDefault();
+      showCurriculumStage(task,task.stages[next].id);
+      $('#curriculum-'+task.id+'-'+task.stages[next].id).focus({preventScroll:true});
+    });
     cards.addEventListener('click',event=>{
       const card=event.target.closest('[data-result-task]');
       if (card) render(card.dataset.resultTask);

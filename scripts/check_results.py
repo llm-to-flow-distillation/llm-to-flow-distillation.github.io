@@ -16,7 +16,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     results = json.loads((root / 'data/results.json').read_text())
     charts = json.loads((root / 'data/charts.json').read_text())
-    goals = json.loads((root / 'data/result-panels.json').read_text())['tasks']
+    panel_data = json.loads((root / 'data/result-panels.json').read_text())
+    goals = panel_data['tasks']
+    tasks = json.loads((root / 'data/tasks.json').read_text())['tasks']
     widths = [360, 390, 768, 901, 1024, 1280, 1440, 1920, 2227, 2560]
     errors, failures = [], []
     expected_symbols={'LFD':'square','Pre-trained':'x','DPO':'circle','DiffusionNFT':'diamond','Flow-GRPO':'triangle-up','Guidance':'triangle-down'}
@@ -36,8 +38,48 @@ def main():
             expect(page.locator('#result-cards [aria-selected="true"]')).to_have_count(1)
             expect(page.locator(f'[data-result-task="{task}"]')).to_have_attribute('aria-selected','true')
             expect(page.locator('#task-results-panel')).to_have_attribute('aria-labelledby','result-card-'+task)
+        # Each colored goal owns its appendix context and all recorded curriculum stages.
+        inspected_stages = 0
+        for goal in goals:
+            task = next(t for t in tasks if t['id'] == goal['id'])
+            select(goal['id'])
+            card = page.locator(f'[data-result-task="{goal["id"]}"]')
+            expect(card).to_have_attribute('data-generator', task['generator'])
+            assert card.locator('.goal-number').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)') >= 22
+            expect(page.locator('#result-generator')).to_contain_text(task['generator'])
+            expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
+            assert page.locator('.proxy-context p').inner_text() == goal['proxy']
+            page.locator('.observable-details summary').click()
+            assert page.locator('.observable-details li').all_text_contents() == goal['observables']
+            page.locator('.observable-details summary').click()
+            assert page.locator('[data-curriculum-stage]').count() == len(task['stages'])
+            for stage in task['stages']:
+                page.locator(f'[data-curriculum-stage="{stage["id"]}"]').click()
+                expect(page.locator('#task-result-curriculum')).to_have_attribute('data-selected-stage', stage['id'])
+                assert page.locator('#result-curriculum-preview p').inner_text() == stage.get('exactGoal', stage['summary'])
+                link = page.locator('.curriculum-preview-links a')
+                assert link.get_attribute('href') == f'#explorer?task={task["id"]}&stage={stage["id"]}&tab=traces'
+                inspected_stages += 1
+            # The final-stage link opens the matching trace view, not merely an anchor.
+            page.locator('.curriculum-preview-links a').click()
+            expect(page.locator(f'[data-task="{task["id"]}"]')).to_have_attribute('aria-pressed','true')
+            expect(page.locator('[data-stage="g"]')).to_have_attribute('aria-pressed','true')
+            expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
+            assert page.locator('.trace-card').count() == len(task['stages'][-1]['traces'])
+        assert inspected_stages == 23
+        select('anticancer')
+        page.locator('[data-curriculum-stage="g0"]').focus()
+        page.keyboard.press('ArrowRight')
+        expect(page.locator('[data-curriculum-stage="g1"]')).to_be_focused()
+        expect(page.locator('[data-curriculum-stage="g1"]')).to_have_attribute('aria-selected','true')
+        page.keyboard.press('End')
+        expect(page.locator('[data-curriculum-stage="g"]')).to_be_focused()
+        page.keyboard.press('Home')
+        expect(page.locator('[data-curriculum-stage="g0"]')).to_be_focused()
         for result in results:
             select(result['id'])
+            expected_values=[f'{mean:.2f}' for mean,error in next(row for row in result['rows'] if row['method']=='LFD')['values']]
+            assert page.locator('.metric-value strong').all_text_contents() == expected_values
             for index,row in enumerate(result['rows']):
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
@@ -72,6 +114,13 @@ def main():
         select('ood')
         assert page.locator('#task-results-plots .js-plotly-plot').count()==1
         assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart').count()==0
+        expect(page.locator('.discovery-zero')).to_have_text('0 / 38,500')
+        expect(page.locator('.discovery-hit')).to_contain_text('Round 6')
+        expect(page.locator('.discovery-hit')).to_contain_text('512-sample batch')
+        hit=page.locator('.goal5-hit img')
+        expect(hit).to_have_attribute('src','assets/hitGoal5.png')
+        hit.scroll_into_view_if_needed()
+        page.wait_for_function('document.querySelector(".goal5-hit img").naturalWidth===7212')
         assert '38,500' in page.locator('#results-table').inner_text()
         assert '512-sample batch' in page.locator('#results-table').inner_text()
         assert 'Reported full-goal hit' in page.locator('#results-table').inner_text()
@@ -114,6 +163,8 @@ def main():
         for task in ['cpp','gsk3b','ood']:
             touch.locator(f'[data-result-task="{task}"]').tap()
             touch.wait_for_function('(id)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===id',arg=task)
+            touch.locator('[data-curriculum-stage="g1"]').tap()
+            expect(touch.locator('[data-curriculum-stage="g1"]')).to_have_attribute('aria-selected','true')
             if task=='cpp':
                 touch.locator('#comparison-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
                 expect(touch.locator('#comparison-readout')).to_contain_text('69.06')
@@ -130,7 +181,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','numerical_summaries':'passed','rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

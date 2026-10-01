@@ -105,11 +105,15 @@
 
     <section id="results" class="results-section wrap section-space" aria-labelledby="results-title">
       <h2 id="results-title">Results</h2>
-      <p class="results-intro">Choose a discovery goal to explore its results. Each task brings together its plots, numerical results, and recorded evidence.</p>
+      <p class="results-intro">Five natural-language discovery goals, two scientific generators. Select a goal to explore its results and curriculum.</p>
+      <div class="generator-legend" aria-label="Starting generators"><span>Starting generators</span><span class="generator-label" data-generator="PepDFM">PepDFM <span>· peptides</span></span><span class="generator-label" data-generator="FlowMol3">FlowMol3 <span>· molecules</span></span></div>
       <div id="result-cards" class="result-cards" role="tablist" aria-label="Discovery goals"></div>
       <div id="task-results-panel" class="results-explorer" role="tabpanel" tabindex="0" aria-labelledby="result-card-anticancer">
-        <div class="results-toolbar"><div><span id="result-source" class="tiny-label"></span><h3 id="task-results-title"></h3></div><a id="result-paper-link" class="text-link" href="assets/paper.pdf#page=6" target="_blank" rel="noopener">In the paper <span aria-hidden="true">↗</span></a></div>
+        <div class="results-toolbar"><div><div class="result-panel-labels"><span id="result-source" class="tiny-label"></span><span id="result-generator" class="generator-label"></span></div><h3 id="task-results-title"></h3></div><a id="result-paper-link" class="text-link" href="assets/paper.pdf#page=6" target="_blank" rel="noopener">In the paper <span aria-hidden="true">↗</span></a></div>
         <p id="task-result-description" class="chart-context"></p>
+        <div id="result-score-summary"></div>
+        <div id="task-result-context"></div>
+        <section id="task-result-curriculum" class="result-curriculum" aria-label="Recorded curriculum"></section>
         <div id="task-results-plots"></div>
         <div id="results-values" class="results-values"><h4 id="results-table-title">Numerical results</h4><div class="table-scroll" tabindex="0" role="region" aria-label="Task results table"><table id="results-table"></table></div><p id="results-table-note" class="table-note"></p></div>
         <div id="task-results-evidence" class="task-results-evidence"></div>

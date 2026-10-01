@@ -5,35 +5,177 @@
       "number": 1,
       "name": "Selective anticancer activity",
       "goal": "Generate peptides with promising anticancer activity while maintaining low toxicity toward healthy cells.",
-      "paperPage": 6
+      "paperPage": 6,
+      "generator": "PepDFM",
+      "domain": "Peptides",
+      "description": "Adapt a peptide generator toward anticancer activity while considering toxicity to healthy cells.",
+      "proxy": "DPO, DiffusionNFT and Guidance optimize the frozen ACP-A anticancer predictor. AntiCP2-alt. and HemoPI2 are downstream evaluation metrics.",
+      "observableSummary": "Sequence, composition and relative developability bands; target-specific activity and the HemoPI2 evaluator are not shown to the teacher.",
+      "observables": [
+        "Full N-to-C sequence",
+        "Sequence length",
+        "Side-chain charge index",
+        "Basic residue fraction",
+        "Acidic residue fraction",
+        "Hydrophobic residue fraction",
+        "Aromatic residue fraction",
+        "Glycine/proline fraction",
+        "Distinct residue count",
+        "Longest identical-residue run",
+        "Normalized Shannon complexity",
+        "Idealized alpha-helical hydrophobic moment",
+        "Predicted non-hemolysis band",
+        "Predicted non-fouling band",
+        "Predicted solubility band",
+        "Predicted half-life band"
+      ],
+      "appendixPages": [
+        27,
+        29
+      ]
     },
     {
       "id": "cpp",
       "number": 2,
       "name": "Cell penetration",
       "goal": "Generate peptides with promising mammalian-cell-penetrating activity while minimizing toxicity to mammalian cells.",
-      "paperPage": 8
+      "paperPage": 8,
+      "generator": "PepDFM",
+      "domain": "Peptides",
+      "description": "Adapt a peptide generator toward mammalian-cell penetration while considering toxicity.",
+      "proxy": "DPO, DiffusionNFT and Guidance optimize a CellPPD-trained classifier. pLM4CPPs and HemoPI2 are downstream evaluators; the CPP reward and evaluator share historical labels.",
+      "observableSummary": "Sequence, composition and relative developability bands; the teacher does not see the CPP reward or downstream evaluator scores.",
+      "observables": [
+        "Full N-to-C sequence",
+        "Sequence length",
+        "Side-chain charge index",
+        "Basic residue fraction",
+        "Acidic residue fraction",
+        "Hydrophobic residue fraction",
+        "Aromatic residue fraction",
+        "Glycine/proline fraction",
+        "Distinct residue count",
+        "Longest identical-residue run",
+        "Normalized Shannon complexity",
+        "Idealized alpha-helical hydrophobic moment",
+        "Predicted non-hemolysis band",
+        "Predicted non-fouling band",
+        "Predicted solubility band",
+        "Predicted half-life band"
+      ],
+      "appendixPages": [
+        33,
+        34
+      ]
     },
     {
       "id": "d2",
       "number": 3,
       "name": "Dopamine D2 receptor",
       "goal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
-      "paperPage": 8
+      "paperPage": 8,
+      "generator": "FlowMol3",
+      "domain": "Molecules",
+      "description": "Generate plausible drug-like candidates for dopamine D2 receptor binding, with moderate lipophilicity.",
+      "proxy": "DPO, Flow-GRPO, DiffusionNFT and Guidance optimize a TDC-DRD2 reward with a MolLogP term. GNINA, Vina and rDock provide the reported docking evaluations.",
+      "observableSummary": "Molecular structure, physicochemical descriptors and geometry checks, including Crippen LogP; docking scores are not shown to the teacher.",
+      "observables": [
+        "Isomeric SMILES",
+        "Atom-mapped SMILES",
+        "Empirical formula",
+        "Elements",
+        "Atom count",
+        "Molecular weight",
+        "Formal charge",
+        "Hydrogen-bond donors",
+        "Hydrogen-bond acceptors",
+        "Topological polar surface area",
+        "Rotatable bonds",
+        "Aromatic ring count",
+        "Total ring count",
+        "Crippen LogP",
+        "Graph-local functional groups",
+        "Intramolecular clash count",
+        "Abnormal-bond count",
+        "Maximum aromatic-planarity deviation"
+      ],
+      "appendixPages": [
+        36,
+        37
+      ]
     },
     {
       "id": "gsk3b",
       "number": 4,
       "name": "GSK3β binding",
       "goal": "Generate promising drug-like small molecules for binding the ATP pocket of glycogen synthase kinase-3 beta (GSK3β), while maintaining reasonable aqueous solubility and chemically plausible structures.",
-      "paperPage": 9
+      "paperPage": 9,
+      "generator": "FlowMol3",
+      "domain": "Molecules",
+      "description": "Generate plausible candidates for the GSK3β ATP pocket, with reasonable aqueous solubility.",
+      "proxy": "DPO, Flow-GRPO, DiffusionNFT and Guidance optimize a TDC GSK3β activity classifier. GNINA, Vina and rDock provide the reported docking evaluations.",
+      "observableSummary": "Molecular structure, physicochemical descriptors and geometry checks. Numerical LogP, activity/solubility predictions, and docking scores or poses are not shown to the teacher.",
+      "observables": [
+        "Isomeric SMILES",
+        "Atom-mapped SMILES",
+        "Empirical formula",
+        "Elements",
+        "Atom count",
+        "Molecular weight",
+        "Formal charge",
+        "Hydrogen-bond donors",
+        "Hydrogen-bond acceptors",
+        "Topological polar surface area",
+        "Rotatable bonds",
+        "Aromatic ring count",
+        "Total ring count",
+        "Graph-local functional groups with atom indices",
+        "Intramolecular clash count",
+        "Abnormal-bond count",
+        "Maximum aromatic-planarity deviation",
+        "Calculation status and failure reasons"
+      ],
+      "appendixPages": [
+        39,
+        40
+      ]
     },
     {
       "id": "ood",
       "number": 5,
       "name": "Constrained molecular design",
       "goal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign that contain a six-membered aza-aromatic ring bearing a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen, and a distinct fully saturated ring containing a free secondary amine.",
-      "paperPage": 9
+      "paperPage": 9,
+      "generator": "FlowMol3",
+      "domain": "Molecules",
+      "description": "Reach a rare molecular region defined by a conjunction of structural constraints stated in natural language.",
+      "proxy": "Reward-guided baselines receive an LLM-generated binary checker for the full structural goal. The paper reports that these baselines fail to find a hit.",
+      "observableSummary": "Molecular structure, physicochemical descriptors, atom-indexed functional groups and geometry checks; evidence availability is reported explicitly.",
+      "observables": [
+        "Isomeric SMILES",
+        "Atom-mapped SMILES",
+        "Empirical formula",
+        "Elements",
+        "Atom count",
+        "Molecular weight",
+        "Formal charge",
+        "Hydrogen-bond donors",
+        "Hydrogen-bond acceptors",
+        "Topological polar surface area",
+        "Rotatable bonds",
+        "Aromatic ring count",
+        "Total ring count",
+        "Crippen LogP",
+        "Graph-local functional groups with atom indices",
+        "Intramolecular clash count",
+        "Abnormal-bond count",
+        "Maximum aromatic-planarity deviation",
+        "Evidence availability and failure reasons"
+      ],
+      "appendixPages": [
+        42,
+        43
+      ]
     }
   ],
   "source": "Goals 1–5 of the supplied preprint; exact wording verified against pages 6, 8, and 9.",
@@ -48,6 +190,14 @@
       "round": 6,
       "outcome": "Reported full-goal hit"
     },
-    "caveat": "A reported discovery example with different sampling budgets, not a replicated success-rate estimate."
-  }
+    "caveat": "A reported discovery example with different sampling budgets, not a replicated success-rate estimate.",
+    "figure": {
+      "file": "assets/hitGoal5.png",
+      "width": 7212,
+      "height": 5292,
+      "sha256": "d9f5aa90486a30e17520206fa6db49eb58a28ecfe58244dcf9e010740c7e4896",
+      "source": "User-supplied illustration of the reported Goal 5 hit, committed in ab447e3."
+    }
+  },
+  "contextSource": "Observable lists and baseline descriptions: supplied preprint Appendix D, pages 27/29, 33/34, 36/37, 39/40, and 42/43. Goal 5 binary-reward comparison: page 9."
 }

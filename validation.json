@@ -23,18 +23,17 @@
       "wcag21aa"
     ],
     "views": [
-      "390px overview and all five function panels",
-      "1440px overview and all five function panels"
+      "All five result panels, with observable lists expanded, at 390px and 1440px"
     ],
     "violations": 0,
-    "view_count": 12
+    "view_count": 10
   },
   "deployment": "GitHub Pages destination: https://llm-to-flow-distillation.github.io/; publication tracked by the repository Actions history.",
   "design": "Compact paper title with a smaller subtitle; uniform author names and affiliations; smaller arxiv and GitHub resource buttons; main_ltf.png opening figure; clickable left contents rail with automatic current-section tracking and a collapsible menu on smaller screens.",
   "contents_navigation": "passed",
   "method": {
     "source": "Author-provided arXiv Method introduction, algorithm, and DPO description",
-    "layout": "Mathematical introduction beside eight-line pseudocode capped at 400px and 38% of desktop content width. Stacked below 901px, with a readable mobile width. KL interpretation follows the overview.",
+    "layout": "Mathematical introduction beside paper-style pseudocode, capped at 460px and 40% of desktop content width. KL interpretation spans the full content width and stays left-aligned.",
     "interactive_functions": [
       "Sample",
       "Observables",
@@ -68,9 +67,9 @@
     "implicit_target": "Author-provided Bradley–Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
     "implicit_target_checks": "Both formulas render without KaTeX errors or horizontal overflow at 360/390/768/1024/1280/1440px. Desktop/mobile visual review and axe checks passed.",
     "heading": "Method: LLM-to-Flow Distillation",
-    "width_checks": "Measured at 360/390/768/901/1024/1280/1440/1920px: algorithm at most 400px, no more than 38% of the content width on desktop; no clipped equations or horizontal overflow.",
+    "width_checks": "Passed at 360/390/768/901/1280/1440/1920/2560px: KL width equals section width; algorithm at most 460px and 40% of desktop content; no equation clipping.",
     "menu_label": "Method (LFD)",
-    "interpretation_alignment": "The KL interpretation heading, prose, and equations align with the section’s left edge."
+    "interpretation_alignment": "Full section width; heading, prose, and equations share the section’s left edge."
   },
   "section_order": [
     "overview",
@@ -537,5 +536,146 @@
     ],
     "scientificSources": "Original tasks, tables, and GSK3β chart data preserved byte-for-byte. All five card goals verified against the supplied paper. Fifth-task plot derives from recorded stage counts; no success rate inferred.",
     "publication": "Standing publishing approval explicitly granted in this conversation: yes I approve (do not ask me every time, just do it)."
+  },
+  "resultsRedesignRevision": {
+    "date": "2026-10-01",
+    "goal_labels": "Large Goal 1–5 labels with full paper goal text preserved.",
+    "generator_colors": {
+      "PepDFM": "Blue · peptide goals 1–2",
+      "FlowMol3": "Green · molecular goals 3–5"
+    },
+    "numbers": "LFD/pretrained summaries preserve original mean and ± pairs; formatted numerical tables retain all 66 pairs. Original results, task records, and chart data are unchanged.",
+    "goal5": "Explicit 0/38,500 pretrained full-goal hits, reported LFD hit at round 6 in a 512-sample batch, and user-committed assets/hitGoal5.png. Different-budget caveat retained.",
+    "context": "Brief task descriptions, direct proxy baselines, and expandable observable lists sourced from Appendix D. GSK3β excludes numerical LogP and prediction/docking outputs from teacher inputs.",
+    "curriculum": "All 23 recorded stages have clickable previews with keyboard/touch controls and links to their matching judge traces.",
+    "checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "numerical_summaries": "passed",
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "method_layout": [
+      {
+        "viewport": 360,
+        "kl_full_width": true,
+        "algorithm_width": 324
+      },
+      {
+        "viewport": 390,
+        "kl_full_width": true,
+        "algorithm_width": 354
+      },
+      {
+        "viewport": 768,
+        "kl_full_width": true,
+        "algorithm_width": 460
+      },
+      {
+        "viewport": 901,
+        "kl_full_width": true,
+        "algorithm_width": 341.1875
+      },
+      {
+        "viewport": 1280,
+        "kl_full_width": true,
+        "algorithm_width": 326.390625
+      },
+      {
+        "viewport": 1440,
+        "kl_full_width": true,
+        "algorithm_width": 390.390625
+      },
+      {
+        "viewport": 1920,
+        "kl_full_width": true,
+        "algorithm_width": 448
+      },
+      {
+        "viewport": 2560,
+        "kl_full_width": true,
+        "algorithm_width": 448
+      }
+    ],
+    "accessibility_views": [
+      {
+        "width": 390,
+        "task": "anticancer",
+        "violations": []
+      },
+      {
+        "width": 390,
+        "task": "cpp",
+        "violations": []
+      },
+      {
+        "width": 390,
+        "task": "d2",
+        "violations": []
+      },
+      {
+        "width": 390,
+        "task": "gsk3b",
+        "violations": []
+      },
+      {
+        "width": 390,
+        "task": "ood",
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "task": "anticancer",
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "task": "cpp",
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "task": "d2",
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "task": "gsk3b",
+        "violations": []
+      },
+      {
+        "width": 1440,
+        "task": "ood",
+        "violations": []
+      }
+    ]
   }
 }

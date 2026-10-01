@@ -87,6 +87,13 @@ def main():
     assert [t['id'] for t in panels['tasks']] == [t['id'] for t in task_data['tasks']]
     assert [t['number'] for t in panels['tasks']] == list(range(1, 6))
     assert all(t['goal'] and 1 <= t['paperPage'] <= 43 for t in panels['tasks'])
+    for panel, task in zip(panels['tasks'], task_data['tasks']):
+        assert panel['generator'] == task['generator']
+        assert panel['description'] and panel['proxy'] and panel['observableSummary']
+        assert panel['observables'] and len(panel['observables']) == len(set(panel['observables']))
+        assert all(1 <= page <= 43 for page in panel['appendixPages'])
+    hit_figure = panels['oodEvidence']['figure']
+    assert hashlib.sha256((ROOT / hit_figure['file']).read_bytes()).hexdigest() == hit_figure['sha256']
     assert panels['oodEvidence']['pretrained'] == {'attempts': 38500, 'fullGoalHits': 0}
     assert panels['oodEvidence']['lfd']['batchSize'] == 512 and panels['oodEvidence']['lfd']['round'] == 6
     payload = {'tasks': task_data['tasks'], 'results': results, 'charts': charts, 'resultPanels': panels}
