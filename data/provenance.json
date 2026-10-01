@@ -50,5 +50,15 @@
     "source": "Saved aggregate data for Figure 7(c,d), verified against the supplied figure. D2 panels remain available through the original paper because no verified numeric plot source was found.",
     "retrieved": "2026-10-01",
     "library": "Self-hosted Plotly.js basic v4.1.1 (MIT)"
+  },
+  "resultPanels": {
+    "file": "data/result-panels.json",
+    "source": "Natural-language Goals 1–5 and the reported Goal 5 discovery example in the supplied preprint.",
+    "pages": [
+      6,
+      8,
+      9
+    ],
+    "retrieved": "2026-10-01"
   }
 }

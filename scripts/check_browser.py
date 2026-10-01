@@ -91,7 +91,7 @@ def main():
         assert page.locator('[data-stage="g0"]').get_attribute('aria-pressed') == 'true'
         table_values = json.loads((root / 'data/results.json').read_text())
         for result in table_values:
-            page.locator('#result-task').select_option(result['id'])
+            page.locator(f'[data-result-task="{result["id"]}"]').click()
             for index,row in enumerate(result['rows']):
                 rendered = page.locator('#results-table tbody tr').nth(index)
                 assert row['method'] in rendered.inner_text()

@@ -365,5 +365,177 @@
       }
     ],
     "publication": "User explicitly approved publication on 2026-10-01 and reaffirmed standing approval for future updates to this project page."
+  },
+  "taskPanelRevision": {
+    "date": "2026-10-01",
+    "baseCommit": "b51d28848e545b70e091a843fde8b954a7e487db",
+    "resultsChecks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "browserRegression": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "methodInteractions": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        1024,
+        1280,
+        1440
+      ],
+      "pointer_hover": "passed",
+      "pinning": "passed",
+      "keyboard": "passed",
+      "touch": "passed",
+      "responsive_positioning": "passed",
+      "trace_smoke": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "accessibility": [
+      {
+        "width": 390,
+        "task": "anticancer",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "task": "cpp",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "task": "d2",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "task": "gsk3b",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "task": "ood",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "task": "anticancer",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "task": "cpp",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "task": "d2",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "task": "gsk3b",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 2227,
+        "task": "ood",
+        "violations": [],
+        "incomplete": [
+          "aria-prohibited-attr",
+          "aria-valid-attr-value",
+          "color-contrast"
+        ]
+      }
+    ],
+    "scientificSources": "Original tasks, tables, and GSK3β chart data preserved byte-for-byte. All five card goals verified against the supplied paper. Fifth-task plot derives from recorded stage counts; no success rate inferred.",
+    "publication": "Standing publishing approval explicitly granted in this conversation: yes I approve (do not ask me every time, just do it)."
   }
 }
