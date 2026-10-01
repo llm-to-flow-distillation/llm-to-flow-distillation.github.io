@@ -25,7 +25,7 @@ def main():
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.on('response', lambda response: failed_requests.append(response.url) if response.status >= 400 else None)
         page.goto(args.url, wait_until='networkidle')
-        assert page.locator('h1').inner_text() == 'LLM-to-Flow\nDistillation.'
+        assert ' '.join(page.locator('h1').inner_text().split()) == 'LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators'
         assert page.locator('.task-button').count() == 5
         assert page.get_by_label('Play conceptual animation').count() == 1
         page.locator('#flow-progress').fill('75')

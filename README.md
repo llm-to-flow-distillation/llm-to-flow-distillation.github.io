@@ -4,6 +4,8 @@ An interactive research website for **LLM-to-Flow Distillation: Teaching Natural
 
 The site includes a conceptual curriculum animation, all five discovery tasks, 23 curriculum/assessment stages, 36 illustrative recorded judgments, searchable/filterable traces, shareable task/subgoal URLs, JSON downloads, the full paper, and every value from the paper’s two main result tables. It works without a JavaScript framework, runtime CDN, API key, or paid service.
 
+The page uses a white background, self-hosted Inter fonts, and a single centered paper title/author block. Font and icon credits are in `assets/ATTRIBUTIONS.txt`.
+
 ## Preview
 
 [Desktop preview](preview.png) · [Trace explorer preview](preview-traces.png)
@@ -14,6 +16,8 @@ From this directory, using Python 3.9 or newer:
 python3 scripts/build.py
 python3 -m http.server 8000 --directory dist --bind 127.0.0.1
 ```
+
+If workspace storage is limited, use `python3 scripts/build.py --output-dir /tmp/lfd-site` and serve that directory instead.
 
 Open `http://localhost:8000`. On a remote cluster, forward port 8000 in VS Code or through SSH. The checked-in `index.html` also works directly after building; task data is loaded as a local script.
 

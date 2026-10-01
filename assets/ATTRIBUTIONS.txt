@@ -1,0 +1,13 @@
+Inter font — The Inter Project Authors, SIL Open Font License 1.1.
+Source: https://github.com/google/fonts/tree/main/ofl/inter
+License: fonts/OFL.txt
+Self-hosted Latin and Latin-ext subsets, weights 400–700.
+
+GitHub mark — Primer Octicons, MIT license.
+Source: https://github.com/primer/octicons/blob/main/icons/mark-github-16.svg
+License: icons/octicons-LICENSE.txt
+
+arXiv mark — Simple Icons, CC0-1.0.
+Source: https://github.com/simple-icons/simple-icons/blob/develop/icons/arxiv.svg
+https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md
+Brand marks identify the linked resources; no affiliation is implied.

@@ -175,16 +175,16 @@
     if (canvas.width !== w*ratio || canvas.height !== h*ratio) {canvas.width = w*ratio;canvas.height = h*ratio;}
     ctx.setTransform(ratio,0,0,ratio,0,0);ctx.clearRect(0,0,w,h);
     const t = Number(slider.value)/100;
-    ctx.fillStyle = 'rgba(110,150,82,.055)';ctx.strokeStyle = '#9ab58b';ctx.lineWidth = 1;
+    ctx.fillStyle = 'rgba(30,30,30,.025)';ctx.strokeStyle = '#a3a3a3';ctx.lineWidth = 1;
     ctx.setLineDash([3,4]);ctx.beginPath();ctx.ellipse(w*.8,h*.48,w*.145,h*.35,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.setLineDash([]);
     for (let line=-2;line<=2;line++) {
       ctx.beginPath();ctx.moveTo(w*.29,h*(.48+line*.045));ctx.bezierCurveTo(w*.43,h*(.13+line*.05),w*.56,h*(.83+line*.035),w*.77,h*(.48+line*.045));
-      ctx.strokeStyle = 'rgba(123,150,108,.16)';ctx.lineWidth=.8;ctx.stroke();
+      ctx.strokeStyle = 'rgba(70,70,70,.12)';ctx.lineWidth=.8;ctx.stroke();
     }
     particles.forEach(p => {
       const x = p.sx*(1-t)+p.tx*t;
       const y = p.sy*(1-t)+p.ty*t+Math.sin(t*Math.PI)*Math.sin(p.phase)*.12;
-      ctx.beginPath();ctx.arc(w*x,h*y,p.size,0,Math.PI*2);ctx.fillStyle=t>.7 ? 'rgba(45,102,63,.65)' : `rgba(${Math.round(70-t*35)},${Math.round(125-t*23)},${Math.round(91-t*23)},.60)`;ctx.fill();
+      ctx.beginPath();ctx.arc(w*x,h*y,p.size,0,Math.PI*2);ctx.fillStyle=t>.7 ? 'rgba(160,15,27,.65)' : 'rgba(60,65,75,.60)';ctx.fill();
     });
     $('#flow-value').textContent = `${slider.value}%`;
     $$('.teacher-step').forEach((step,i) => step.classList.toggle('active', i === Math.min(3,Math.floor(t*4))));
