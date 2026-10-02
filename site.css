@@ -565,10 +565,11 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-preview-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 15px; font-size: 11px; }
 .curriculum-preview-links > span { color: #5c6570; }
 .curriculum-traces { margin-top: 18px; scroll-margin-top: 80px; }
-.curriculum-traces > summary { padding: 13px 0; border-top: 1px solid var(--goal-border); color: var(--goal-strong); font-size: 14px; font-weight: 600; }
-.curriculum-traces > summary > span { color: var(--goal-accent); }
-.curriculum-traces > summary:hover { color: var(--goal-accent); }
-.curriculum-traces .explorer-tabs { margin-top: 3px; }
+.curriculum-traces > summary { display: inline-flex; gap: 24px; min-height: 48px; max-width: 100%; padding: 12px 18px; border: 1px solid var(--goal-accent); border-radius: 10px; background: var(--goal-accent); color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; box-shadow: 0 3px 9px #26384b18; cursor: pointer; transition: background .16s, border-color .16s; }
+.curriculum-traces > summary > span { color: inherit; flex-shrink: 0; }
+.curriculum-traces > summary:hover { background: var(--goal-strong); border-color: var(--goal-strong); }
+.curriculum-traces > summary:focus-visible { outline-color: var(--goal-accent); }
+.curriculum-traces .explorer-tabs { margin-top: 14px; }
 .curriculum-traces .explorer-tabs button { font-size: 13px; }
 .curriculum-traces .explorer-tabs button[aria-selected=true] { color: var(--goal-strong); border-bottom-color: var(--goal-accent); }
 .curriculum-traces .selection-card { background: var(--goal-surface); border-color: var(--goal-border); }
