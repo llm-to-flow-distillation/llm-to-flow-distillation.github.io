@@ -189,20 +189,6 @@
       $(`.task-button[data-task="${state.task}"]`).focus({preventScroll:true});
     }));
   }
-  function displayContext(value = '') {
-    return value
-      .replace('paper reports p7.', 'reported checkpoint: p7.')
-      .replace('The paper reports p7 after human selection', 'Checkpoint p7 was chosen after human selection')
-      .replace('Reported nine-update D2 curriculum in the paper;', 'Reported nine-update D2 curriculum;')
-      .replace('The two intermediate curricula are documented in the paper;', 'The two intermediate curricula are documented;')
-      .replace('Final-goal examples come from the paper.', 'Selected final-goal examples are available.')
-      .replace(', as disclosed in the paper', '')
-      .replace('The paper reports the second final-goal update.', 'The reported endpoint is the second final-goal update.')
-      .replace('Paper-reported constrained molecular design campaign;', 'Reported constrained molecular design campaign;')
-      .replace('Their curriculum summaries are sourced from the paper.', 'Their curriculum summaries are available.')
-      .replace('The main text refers to the third rung as g2, while the appendix labels it g3. This explorer uses sequential g0/g1/g2 and records that numbering discrepancy.', 'Source records label the third intermediate stage inconsistently as g2 or g3. This explorer uses sequential g0/g1/g2.')
-      .replace('The paper reports agreement across both judge passes.', 'Both judge passes agree.');
-  }
   function renderExplorer() {
     const task = currentTask();
     const stage = currentStage();
@@ -219,10 +205,6 @@
       $(`.stage-button[data-stage="${state.stage}"]`).focus({preventScroll:true});
     }));
     $('#stage-detail').innerHTML = `<p class="stage-summary goal-quotation"><q>${esc(stage.exactGoal)}</q></p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span>`;
-    const total = task.stages.reduce((sum,s) => sum + s.rounds, 0);
-    const index = task.stages.indexOf(stage);
-    const start = task.stages.slice(0,index).reduce((sum,s) => sum + s.rounds,0);
-    const bars = Array.from({length:total},(_,i) => `<span class="round-block ${i >= start && i < start + stage.rounds ? 'active' : ''}"></span>`).join('');
     const recorded = stage.traces.filter(trace => trace.status === 'recorded').length;
     const selection = stage.selection;
     let selectionBody;
@@ -233,8 +215,7 @@
     } else {
       selectionBody = `<div class="selection-card"><span class="evidence-status">LLM goal selection · verbatim</span><h4>Why this subgoal?</h4><p class="selection-rationale goal-quotation"><q>${esc(selection.rationale)}</q></p>${selection.uncertainty ? `<div class="selection-limitations"><strong>LLM-stated limitations</strong><p class="goal-quotation"><q>${esc(selection.uncertainty)}</q></p></div>` : ''}${selection.bridge ? `<details class="selection-bridge"><summary>Connection to the final goal</summary><p class="goal-quotation"><q>${esc(selection.bridge)}</q></p>${selection.deferredRequirements?.length ? `<strong>Requirements deferred by the LLM</strong><ul>${selection.deferredRequirements.map(item => `<li>${esc(item)}</li>`).join('')}</ul>` : ''}</details>` : ''}</div>`;
     }
-    $('#panel-overview').innerHTML = `${selectionBody}<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal assessment. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div></div><div><div class="panel-label">Candidate judgments</div><div class="panel-description">${recorded ? 'Two size-matched positive/negative pairs, with both judge passes.' : 'Two positive and two negative placeholder slots. Candidate evidence is pending.'}</div><button class="trace-open-button" id="open-stage-traces">${recorded ? 'Inspect the four candidates' : 'View placeholder slots'} <span aria-hidden="true">→</span></button></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))}</p>`;
-    $('#open-stage-traces').addEventListener('click', () => {state.tab = 'traces'; updateHash(); renderTab(); $('#tab-traces').focus({preventScroll:true});});
+    $('#panel-overview').innerHTML = selectionBody;
     $('#trace-count').textContent = recorded || '4 slots';
     renderTraces();
     renderTab();
@@ -290,16 +271,6 @@
   });
   $('#trace-search').addEventListener('input', renderTraces);
   $('#trace-filter').addEventListener('change', renderTraces);
-  $('#share-trace').addEventListener('click', () => {updateHash();copy(location.href,'Link to this view copied');});
-  $('#download-task').addEventListener('click', () => {
-    const blob = new Blob([JSON.stringify(currentTask(),null,2) + '\n'],{type:'application/json'});
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;link.download = `lfd-${state.task}-evidence.json`;
-    document.body.append(link);link.click();link.remove();
-    setTimeout(() => URL.revokeObjectURL(url),1000);
-    toast('Task evidence downloaded');
-  });
   window.addEventListener('hashchange', () => {
     if (readHash()) {renderExplorer();$('#explorer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});}
   });

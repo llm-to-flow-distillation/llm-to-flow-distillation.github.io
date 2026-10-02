@@ -68,7 +68,7 @@ def main():
                     assert 'Placeholder' in page.locator('.selection-card').inner_text()
                 else:
                     assert 'Original discovery goal' in page.locator('.selection-card').inner_text()
-                page.locator('#open-stage-traces').click()
+                page.locator('#tab-traces').click()
                 assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
                 assert page.locator('.trace-card').count() == len(stage['traces'])
                 assert page.locator('.trace-pair').count() == 2
@@ -120,13 +120,7 @@ def main():
         assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
         page.reload(wait_until='networkidle')
         assert page.locator('[data-stage="g"]').get_attribute('aria-pressed') == 'true'
-        page.locator('#share-trace').click()
-        assert 'task=cpp&stage=g&tab=traces' in page.evaluate('navigator.clipboard.readText()')
-        with page.expect_download() as downloaded:
-            page.locator('#download-task').click()
-        file = downloaded.value
-        file.save_as(out / file.suggested_filename)
-        assert json.loads((out / file.suggested_filename).read_text())['id'] == 'cpp'
+        assert page.locator('.overview-grid, .round-track, .context-note, .explorer-bottom, #open-stage-traces, #share-trace, #download-task').count() == 0
         page.locator('#tab-traces').focus()
         page.keyboard.press('ArrowRight')
         assert page.locator('#tab-overview').get_attribute('aria-selected') == 'true'
@@ -143,7 +137,7 @@ def main():
                 rendered = page.locator('#results-table tbody tr').nth(index)
                 assert row['method'] in rendered.inner_text()
                 assert rendered.locator('td').all_text_contents() == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']]
-        print('Deep links, reload, invalid-link recovery, keyboard tabs, clipboard, download and 66 result cells passed.')
+        print('Deep links, reload, invalid-link recovery, keyboard tabs, candidate clipboard and 66 result cells passed.')
         for width in [360,390,768,1200,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
             page.goto(args.url,wait_until='networkidle')
@@ -182,7 +176,7 @@ def main():
         assert not failed_requests, failed_requests
         browser.close()
     print('Responsive widths 360/390/768/1200/1280/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
-    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
+    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','overview_progress_and_footer':'removed','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
 
 
 if __name__ == '__main__':

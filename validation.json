@@ -2300,5 +2300,43 @@
       "browser_errors": [],
       "failed_http_requests": []
     }
+  },
+  "traceOverviewCleanup": {
+    "date": "2026-10-02",
+    "baseCommit": "25b1c64cf4665ea8c1b16abed2b90d5bcbaf0c1e",
+    "removed": [
+      "curriculum-position text and progress bars",
+      "candidate-count explanation and shortcut",
+      "stage context note",
+      "copy-link and download-evidence footer"
+    ],
+    "preserved": "All trace and scientific data, goal-rationale cards, judge traces and direct URL navigation.",
+    "checks": {
+      "status": "passed",
+      "stages": 23,
+      "recorded_candidates": 64,
+      "placeholder_slots": 28,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "verbatim_goal_rationales": 13,
+      "verbatim_judge_outputs": 128,
+      "copy_representations": "passed",
+      "judge_pass_switching": "passed",
+      "placeholder_separation": "passed",
+      "size_matched_pairs": 32,
+      "source_tab": "removed",
+      "overview_progress_and_footer": "removed",
+      "legacy_source_links": "fall back to goal rationale",
+      "browser_errors": [],
+      "failed_http_requests": []
+    }
   }
 }
