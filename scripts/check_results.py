@@ -75,18 +75,19 @@ def main():
             for stage in task['stages']:
                 page.locator(f'[data-curriculum-stage="{stage["id"]}"]').click()
                 expect(page.locator('#task-result-curriculum')).to_have_attribute('data-selected-stage', stage['id'])
-                assert page.locator('#result-curriculum-preview q').inner_text() == stage['exactGoal']
-                assert page.locator('#result-curriculum-preview h5').count()==0
-                assert page.locator('#result-curriculum-preview q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
-                link = page.locator('.curriculum-preview-links a')
-                assert link.get_attribute('href') == f'#explorer?task={task["id"]}&stage={stage["id"]}&tab=traces'
+                assert page.locator('#result-curriculum-preview > p q').inner_text() == stage['exactGoal']
+                assert page.locator('#result-curriculum-preview > h5').count()==0
+                assert page.locator('#result-curriculum-preview > p q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
+                expect(page.locator('.curriculum-traces > summary')).to_contain_text('Explore LLM traces')
                 inspected_stages += 1
-            # The final-stage link opens the matching trace view, not merely an anchor.
-            page.locator('.curriculum-preview-links a').click()
-            expect(page.locator(f'[data-task="{task["id"]}"]')).to_have_attribute('aria-pressed','true')
-            expect(page.locator('[data-stage="g"]')).to_have_attribute('aria-pressed','true')
+            # The selected subgoal expands its own traces inside the same goal panel.
+            page.locator('.curriculum-traces > summary').click()
+            expect(page.locator('#tab-overview')).to_be_visible()
+            page.locator('#tab-traces').click()
+            expect(page.locator(f'[data-result-task="{task["id"]}"]')).to_have_attribute('aria-selected','true')
+            expect(page.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
             expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
-            assert page.locator('.trace-card').count() == len(task['stages'][-1]['traces'])
+            assert page.locator('#task-results-panel .trace-card').count() == len(task['stages'][-1]['traces'])
         assert inspected_stages == 23
         select('anticancer')
         page.locator('[data-curriculum-stage="g0"]').focus()

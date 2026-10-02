@@ -158,53 +158,23 @@
   }
   function currentTask() { return tasks.find(t => t.id === state.task); }
   function currentStage() { return currentTask().stages.find(s => s.id === state.stage); }
-  function stageLabel(stage) { return stage.id === 'g' ? (stage.rounds === 0 ? 'Final assessment' : 'Final goal') : `g<sub>${esc(stage.id.slice(1))}</sub>`; }
-  function readHash() {
-    if (!location.hash.startsWith('#explorer?')) return false;
-    const params = new URLSearchParams(location.hash.split('?')[1]);
+  let traceDisclosure;
+  function readHash(hash=location.hash) {
+    if (!/^#(?:explorer|results)\?/.test(hash) && hash !== '#explorer') return null;
+    const params = new URLSearchParams(hash.split('?')[1] || '');
     const task = tasks.find(t => t.id === params.get('task')) || tasks[0];
-    state.task = task.id;
-    state.stage = task.stages.some(s => s.id === params.get('stage')) ? params.get('stage') : task.stages[0].id;
-    state.tab = ['overview','traces'].includes(params.get('tab')) ? params.get('tab') : 'overview';
-    return true;
+    return {
+      task: task.id,
+      stage: task.stages.some(s => s.id === params.get('stage')) ? params.get('stage') : task.stages[0].id,
+      tab: ['overview','traces'].includes(params.get('tab')) ? params.get('tab') : 'overview'
+    };
   }
   function updateHash() {
-    const hash = '#explorer?' + new URLSearchParams({task:state.task,stage:state.stage,tab:state.tab});
+    const hash = traceDisclosure?.open ? '#results?' + new URLSearchParams(state) : '#results';
     history.replaceState(null, '', hash);
   }
-  function renderTasks() {
-    let category = '';
-    $('#task-list').innerHTML = tasks.map(task => {
-      const label = category !== task.category ? `<div class="task-category">${esc(task.category.toUpperCase())}</div>` : '';
-      category = task.category;
-      return `${label}<button class="task-button" data-task="${esc(task.id)}" aria-pressed="${task.id === state.task}">${esc(task.name)}<small>${esc(task.generator)} · ${task.stages.length} stages</small></button>`;
-    }).join('');
-    $$('.task-button').forEach(button => button.addEventListener('click', () => {
-      state.task = button.dataset.task;
-      state.stage = currentTask().stages[0].id;
-      $('#trace-search').value = '';
-      $('#trace-filter').value = 'all';
-      updateHash();
-      renderExplorer();
-      $(`.task-button[data-task="${state.task}"]`).focus({preventScroll:true});
-    }));
-  }
   function renderExplorer() {
-    const task = currentTask();
     const stage = currentStage();
-    renderTasks();
-    $('#task-header').innerHTML = `<div class="task-header-line"><h3>${esc(task.name)}</h3><span class="generator-badge">${esc(task.generator)}</span></div><p class="task-goal">${esc(task.goal)}</p>`;
-    $('#stage-count').textContent = `${task.stages.filter(s => s.rounds > 0).length} training stages · ${task.stages.reduce((sum,s) => sum + s.rounds,0)} updates`;
-    $('#stage-list').innerHTML = task.stages.map(s => `<button class="stage-button" data-stage="${esc(s.id)}" aria-label="${esc(s.id === 'g' ? 'Final goal' : `Subgoal ${s.id.slice(1)}`)}" aria-pressed="${s.id === stage.id}">${stageLabel(s)}</button>`).join('');
-    $$('.stage-button').forEach(button => button.addEventListener('click', () => {
-      state.stage = button.dataset.stage;
-      $('#trace-search').value = '';
-      $('#trace-filter').value = 'all';
-      updateHash();
-      renderExplorer();
-      $(`.stage-button[data-stage="${state.stage}"]`).focus({preventScroll:true});
-    }));
-    $('#stage-detail').innerHTML = `<p class="stage-summary goal-quotation"><q>${esc(stage.exactGoal)}</q></p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span>`;
     const recorded = stage.traces.filter(trace => trace.status === 'recorded').length;
     const selection = stage.selection;
     let selectionBody;
@@ -255,30 +225,66 @@
       $(`#panel-${button.dataset.tab}`).hidden = !active;
     });
   }
-  $$('.explorer-tabs button').forEach(button => {
-    button.addEventListener('click', () => {state.tab = button.dataset.tab; updateHash(); renderTab();});
-    button.addEventListener('keydown', event => {
-      const buttons = $$('.explorer-tabs button');
-      let index = buttons.indexOf(button);
-      if (event.key === 'ArrowRight') index = (index + 1) % buttons.length;
-      else if (event.key === 'ArrowLeft') index = (index - 1 + buttons.length) % buttons.length;
-      else if (event.key === 'Home') index = 0;
-      else if (event.key === 'End') index = buttons.length - 1;
-      else return;
-      event.preventDefault();
-      buttons[index].click();buttons[index].focus();
+  function bindTraceControls() {
+    $$('.explorer-tabs button').forEach(button => {
+      button.addEventListener('click', () => {state.tab = button.dataset.tab; updateHash(); renderTab();});
+      button.addEventListener('keydown', event => {
+        const buttons = $$('.explorer-tabs button');
+        let index = buttons.indexOf(button);
+        if (event.key === 'ArrowRight') index = (index + 1) % buttons.length;
+        else if (event.key === 'ArrowLeft') index = (index - 1 + buttons.length) % buttons.length;
+        else if (event.key === 'Home') index = 0;
+        else if (event.key === 'End') index = buttons.length - 1;
+        else return;
+        event.preventDefault();
+        buttons[index].click();buttons[index].focus();
+      });
     });
-  });
-  $('#trace-search').addEventListener('input', renderTraces);
-  $('#trace-filter').addEventListener('change', renderTraces);
-  window.addEventListener('hashchange', () => {
-    if (readHash()) {renderExplorer();$('#explorer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});}
-  });
-  readHash();
-  renderExplorer();
-  if (location.hash.startsWith('#explorer?')) requestAnimationFrame(() => $('#explorer').scrollIntoView({behavior:'instant'}));
-
-  window.LFD_RESULTS.init(results);
+    $('#trace-search').addEventListener('input', renderTraces);
+    $('#trace-filter').addEventListener('change', renderTraces);
+  }
+  function populateTraces() {
+    const view = $('.inline-trace-view',traceDisclosure);
+    if (view.childElementCount) return;
+    view.append($('#trace-view-template').content.cloneNode(true));
+    bindTraceControls();
+    renderExplorer();
+  }
+  window.LFD_TRACES = {
+    mount(disclosure,task,stage) {
+      traceDisclosure = disclosure;
+      state.task = task;
+      state.stage = stage;
+      if (!disclosure.open) state.tab = 'overview';
+      disclosure.addEventListener('toggle', () => {
+        // A previous subgoal's queued toggle must never affect the new view.
+        if (disclosure !== traceDisclosure || !disclosure.isConnected) return;
+        if (disclosure.open) populateTraces();
+        updateHash();
+      });
+      if (disclosure.open) {populateTraces();updateHash();}
+      else if (/^#results\?/.test(location.hash)) updateHash();
+    },
+    open(tab='overview') {
+      state.tab = tab;
+      traceDisclosure.open = true;
+      populateTraces();
+      renderTab();
+      updateHash();
+      return traceDisclosure;
+    }
+  };
+  // Read before initialization: mounting a default goal can normalize the hash.
+  const initialTrace = readHash();
+  const resultViewer = window.LFD_RESULTS.init(results);
+  function openLinkedTrace(target) {
+    if (!target) return;
+    const disclosure = resultViewer.showTraces(target.task,target.stage,target.tab);
+    requestAnimationFrame(() => disclosure.scrollIntoView({behavior:'instant',block:'start'}));
+  }
+  // Use the destination captured by the event, even if a queued toggle normalized the URL.
+  window.addEventListener('hashchange', event => openLinkedTrace(readHash(new URL(event.newURL).hash)));
+  openLinkedTrace(initialTrace);
 
   // Track section geometry so expanding traces and figures keeps the rail accurate.
   const contents = $('#contents');

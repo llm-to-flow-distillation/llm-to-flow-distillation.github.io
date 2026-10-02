@@ -127,9 +127,11 @@
       button.tabIndex=selected ? 0 : -1;
     });
     const preview=$('#result-curriculum-preview');
+    const expanded=preview.querySelector('.curriculum-traces')?.open || false;
     preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
     const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
-    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q></p><div class="curriculum-preview-links"><span>${stage.id==='g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${esc(rounds)}</span><a href="#explorer?task=${encodeURIComponent(task.id)}&stage=${encodeURIComponent(id)}&tab=traces">Inspect judge traces <span aria-hidden="true">↗</span></a></div>`;
+    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q></p><div class="curriculum-preview-links"><span>${stage.id==='g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${esc(rounds)}</span></div><details class="curriculum-traces" ${expanded ? 'open' : ''}><summary>Explore LLM traces <span aria-hidden="true">+</span></summary><div class="inline-trace-view"></div></details>`;
+    window.LFD_TRACES.mount(preview.querySelector('.curriculum-traces'),task.id,id);
   }
   function renderCurriculum(task) {
     const target=$('#task-result-curriculum');
@@ -237,7 +239,7 @@
         renderTable(result);
       } else if (id==='ood') {
         $('#task-results-plots').innerHTML='';
-        $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#explorer?task=ood&stage=g&tab=traces">Inspect the recorded discovery example ↗</a></div>';
+        $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#results?task=ood&stage=g&tab=traces">Explore final-goal traces ↗</a></div>';
         renderOODTable();
       } else {
         $('#task-results-plots').innerHTML=scatterMarkup(result);
@@ -291,6 +293,14 @@
       nextCard.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     });
     render(active);
+    return {
+      showTraces(taskId,stageId,tab) {
+        if (active!==taskId) render(taskId);
+        const task=data.tasks.find(task=>task.id===taskId);
+        if ($('#task-result-curriculum').dataset.selectedStage!==stageId) showCurriculumStage(task,stageId);
+        return window.LFD_TRACES.open(tab);
+      }
+    };
   }
   function renderDockingBars(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;

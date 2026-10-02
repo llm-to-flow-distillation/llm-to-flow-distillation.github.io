@@ -561,10 +561,19 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-tabs sub { font-size: .75em; line-height: 0; }
 .curriculum-tabs button[aria-selected="true"] { background: var(--goal-accent); border-color: var(--goal-accent); color: #fff; }
 .curriculum-preview { padding: 8px 0 2px; }
-.curriculum-preview p { margin: 12px 0 16px; font-size: 14px; line-height: 1.85; }
+.curriculum-preview > p { margin: 12px 0 16px; font-size: 14px; line-height: 1.85; }
 .curriculum-preview-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 15px; font-size: 11px; }
 .curriculum-preview-links > span { color: #5c6570; }
-.curriculum-preview-links a { font-weight: 500; color: var(--goal-strong); text-decoration: underline; text-underline-offset: 3px; }
+.curriculum-traces { margin-top: 18px; scroll-margin-top: 80px; }
+.curriculum-traces > summary { padding: 13px 0; border-top: 1px solid var(--goal-border); color: var(--goal-strong); font-size: 14px; font-weight: 600; }
+.curriculum-traces > summary > span { color: var(--goal-accent); }
+.curriculum-traces > summary:hover { color: var(--goal-accent); }
+.curriculum-traces .explorer-tabs { margin-top: 3px; }
+.curriculum-traces .explorer-tabs button { font-size: 13px; }
+.curriculum-traces .explorer-tabs button[aria-selected=true] { color: var(--goal-strong); border-bottom-color: var(--goal-accent); }
+.curriculum-traces .selection-card { background: var(--goal-surface); border-color: var(--goal-border); }
+.curriculum-traces .selection-card h4 { color: var(--goal-strong); }
+.inline-trace-view { min-width: 0; }
 .results-values h4 { font-size: 20px; }
 #results-table th, #results-table td { padding-block: 17px; }
 #results-table thead th { font-size: 13px; font-weight: 600; background: #fafbfc; }
