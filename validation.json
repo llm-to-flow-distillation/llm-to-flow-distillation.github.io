@@ -1989,5 +1989,201 @@
       "failed_requests": []
     },
     "source_data": "Scientific values, uncertainty widths, source JSON, paper and molecular figures unchanged."
+  },
+  "largerTablesAndReferenceCleanup": {
+    "date": "2026-10-02",
+    "baseCommit": "4b7b8567fbaedfe7fe371eb5104c9d8e1c089989",
+    "typography": {
+      "method_names_px": 16,
+      "table_headers_px": 13,
+      "result_headings_px": 20
+    },
+    "removed_from_page": [
+      "arxiv/PDF button and all PDF links",
+      "table and figure numbers",
+      "appendix and paper mentions in results, tooltips and trace views",
+      "citation block and contents entry",
+      "algorithm title number"
+    ],
+    "preserved": "All 66 numerical pairs, 23 verbatim goals, scientific source JSON, original PDF and downloadable source evidence. Selection context remains with references rephrased. Evaluation notes moved below the trace explorer.",
+    "results_checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "docking_grouped_bars": "passed",
+      "docking_absolute_values": "passed",
+      "docking_baseline_deltas": "passed",
+      "docking_negative_improvements": "passed",
+      "docking_zero_reference": "passed",
+      "docking_black_error_bars": "passed",
+      "docking_signed_hover": "passed",
+      "molecule_context_layout": "passed",
+      "scaffold_novelty_values": "passed",
+      "scaffold_novelty_marker_colored_cis": "passed",
+      "table_method_colors": "passed",
+      "scaffold_axis_definition_hover_focus_touch": "passed",
+      "scaffold_novelty_hover_touch": "passed",
+      "scaffold_novelty_table_layout": "passed",
+      "plot_data_disclosure": "removed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_curriculum_plot": "removed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "page_checks": {
+      "status": "passed",
+      "stages": 23,
+      "traces": 36,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "reference_audit": "All 23 trace stages, displayed structured records, and paper-link absence checked.",
+    "layout_checks": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        },
+        {
+          "width": 1280,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        },
+        {
+          "width": 1440,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    }
   }
 }

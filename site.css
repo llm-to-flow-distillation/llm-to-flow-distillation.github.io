@@ -442,12 +442,12 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .results-details { border-top: 1px solid var(--line); }
 .results-values, #task-scaffold-novelty { min-width: 0; }
 #task-scaffold-novelty:empty { display: none; }
-.results-details.has-novelty { display: grid; grid-template-columns: minmax(420px,1.18fr) minmax(0,1fr); gap: 28px; align-items: start; }
-.has-novelty #results-table th, .has-novelty #results-table td { padding-inline: 10px; }
+.results-details.has-novelty { display: grid; grid-template-columns: minmax(460px,1.18fr) minmax(0,1fr); gap: 28px; align-items: start; }
+.has-novelty #results-table th, .has-novelty #results-table td { padding-inline: 8px; }
 .has-novelty #results-table .table-mean { font-size: 14px; }
 .has-novelty #results-table .table-uncertainty { font-size: 11px; }
 .scaffold-novelty { margin: 0; }
-.scaffold-novelty h4 { padding: 22px 0 16px; margin: 0; font-size: 17px; }
+.scaffold-novelty h4 { padding: 22px 0 16px; margin: 0; font-size: 20px; }
 .scaffold-novelty .plot-key { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px 10px; margin-bottom: 8px; font-size: 11px; }
 .scaffold-novelty .plot-key span { white-space: nowrap; }
 .scaffold-novelty .interactive-chart { height: 320px; }
@@ -460,7 +460,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .metric-tooltip[hidden] { display: none; }
 .metric-tooltip > strong { display: block; font-size: 14px; margin-bottom: 9px; }
 .metric-tooltip p { margin: 0 0 9px; }
-.metric-tooltip-source { color: #626975; font-size: 11px; }
 .scaffold-novelty .chart-readout { margin-bottom: 12px; }
 .scaffold-novelty figcaption { font-size: 11px; line-height: 1.8; color: #535b67; }
 @media (max-width: 1199px) {
@@ -521,8 +520,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .observable-details[open] > summary > span > span { transform: rotate(45deg); }
 .observable-details ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 24px; list-style: disc; margin: 14px 0 0; padding-left: 17px; }
 .observable-details li { padding: 0; color: #535b67; font-size: 12px; line-height: 1.65; }
-.context-source { padding: 14px 0 22px; font-size: 11px; color: #5b626c; }
-.context-source a { text-decoration: underline; text-underline-offset: 3px; }
+.task-context-grid { margin-bottom: 26px; }
 .result-curriculum { margin: 0 0 4px; padding: 22px 0; border-block: 1px solid var(--line); }
 .curriculum-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 7px 18px; }
 .curriculum-heading h4 { font-size: 16px; margin: 0; }
@@ -539,10 +537,10 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-preview-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 15px; font-size: 11px; }
 .curriculum-preview-links > span { color: #5c6570; }
 .curriculum-preview-links a { font-weight: 500; color: var(--goal-strong); text-decoration: underline; text-underline-offset: 3px; }
-.results-values h4 { font-size: 17px; }
+.results-values h4 { font-size: 20px; }
 #results-table th, #results-table td { padding-block: 17px; }
-#results-table thead th { font-size: 11px; background: #fafbfc; }
-#results-table .table-method { font-weight: 600; }
+#results-table thead th { font-size: 13px; font-weight: 600; background: #fafbfc; }
+#results-table .table-method { font-size: 16px; font-weight: 600; }
 #results-table .table-mean { font-weight: 500; font-size: 15px; color: #343d4a; }
 #results-table .table-uncertainty { color: #666f7e; font-size: 12px; font-weight: 400; }
 #results-table tr.ours { background: var(--goal-surface); }
@@ -589,4 +587,8 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .chart-scroll-hint { display: none; }
 @media (max-width: 760px) {
   .chart-scroll-hint { display: block; margin: 0 0 12px; font-size: 11px; color: #59616d; }
+}
+
+@media (min-width: 1200px) and (max-width: 1359px) {
+  .scaffold-novelty .plot-key { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }

@@ -59,7 +59,7 @@ def main():
             assert card.locator('.goal-number').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)') >= 22
             expect(page.locator('#result-generator')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
-            assert page.locator('.proxy-context p').inner_text() == goal['proxy']
+            assert page.locator('.proxy-context p').inner_text() == goal['proxy'].replace('The paper reports that these baselines fail to find a hit.','These baselines did not find a full-goal hit.')
             proxy=page.locator('.proxy-context').bounding_box()
             obs=page.locator('.observable-context').bounding_box()
             assert obs['y']>proxy['y']+proxy['height'] and abs(obs['x']-proxy['x'])<1
@@ -102,8 +102,11 @@ def main():
             for index,row in enumerate(result['rows']):
                 name=page.locator('#results-table tbody tr').nth(index).locator('.table-method')
                 assert name.evaluate('(el)=>getComputedStyle(el).color')==rgb(expected_colors[row['method']])
+                assert name.evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)')>=16
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
+            assert page.locator('#results-table thead th').first.evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)')>=13
+            assert page.locator('#results-table-title').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)')>=20
             if result['table']==2:
                 baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
                 methods=[row for row in result['rows'] if row is not baseline]

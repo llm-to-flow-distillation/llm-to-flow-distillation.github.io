@@ -189,6 +189,29 @@
       $(`.task-button[data-task="${state.task}"]`).focus({preventScroll:true});
     }));
   }
+  function displayContext(value = '') {
+    return value
+      .replace('paper reports p7.', 'reported checkpoint: p7.')
+      .replace('The paper reports p7 after human selection', 'Checkpoint p7 was chosen after human selection')
+      .replace('Reported nine-update D2 curriculum in the paper;', 'Reported nine-update D2 curriculum;')
+      .replace('The two intermediate curricula are documented in the paper;', 'The two intermediate curricula are documented;')
+      .replace('Final-goal examples come from the paper.', 'Selected final-goal examples are available.')
+      .replace(', as disclosed in the paper', '')
+      .replace('The paper reports the second final-goal update.', 'The reported endpoint is the second final-goal update.')
+      .replace('Paper-reported constrained molecular design campaign;', 'Reported constrained molecular design campaign;')
+      .replace('Their curriculum summaries are sourced from the paper.', 'Their curriculum summaries are available.')
+      .replace('The main text refers to the third rung as g2, while the appendix labels it g3. This explorer uses sequential g0/g1/g2 and records that numbering discrepancy.', 'Source records label the third intermediate stage inconsistently as g2 or g3. This explorer uses sequential g0/g1/g2.')
+      .replace('The paper reports agreement across both judge passes.', 'Both judge passes agree.');
+  }
+  function displayedRecord(value) {
+    if (Array.isArray(value)) return value.map(displayedRecord);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(Object.entries(value)
+        .filter(([key,item]) => !['paperPages','goalTextSource'].includes(key) && !(key === 'source' && /paper|appendix/i.test(item)))
+        .map(([key,item]) => [key,displayedRecord(item)]));
+    }
+    return typeof value === 'string' ? displayContext(value) : value;
+  }
   function renderExplorer() {
     const task = currentTask();
     const stage = currentStage();
@@ -204,14 +227,14 @@
       renderExplorer();
       $(`.stage-button[data-stage="${state.stage}"]`).focus({preventScroll:true});
     }));
-    $('#stage-detail').innerHTML = `<div class="stage-title-line"><h4>${esc(stage.title)}</h4><span class="stage-rounds">${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span></div><p class="stage-summary">${esc(stage.exactGoal)}</p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim from Appendix D' : 'LLM subgoal · verbatim from Appendix D'}</span>`;
+    $('#stage-detail').innerHTML = `<div class="stage-title-line"><h4>${esc(stage.title)}</h4><span class="stage-rounds">${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span></div><p class="stage-summary">${esc(stage.exactGoal)}</p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'}</span>`;
     const total = task.stages.reduce((sum,s) => sum + s.rounds, 0);
     const index = task.stages.indexOf(stage);
     const start = task.stages.slice(0,index).reduce((sum,s) => sum + s.rounds,0);
     const bars = Array.from({length:total},(_,i) => `<span class="round-block ${i >= start && i < start + stage.rounds ? 'active' : ''}"></span>`).join('');
-    $('#panel-overview').innerHTML = `<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal evaluation of samples from the third intermediate stage. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div><div class="round-track-label">Pretrained generator → reported checkpoint</div></div><div><div class="panel-label">Available judgments</div><div class="panel-description">${stage.traces.length ? `${stage.traces.length} illustrative recorded examples. Open Judge traces to inspect assessments and stated uncertainties.` : 'The curriculum is documented in the paper. Candidate-level judgments for this stage are not included in the available evidence.'}</div></div></div><p class="context-note">${esc(stage.context || task.shortCaveat)} These examples are selected illustrations, not an exhaustive trace archive.</p>`;
+    $('#panel-overview').innerHTML = `<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal evaluation of samples from the third intermediate stage. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div><div class="round-track-label">Pretrained generator → reported checkpoint</div></div><div><div class="panel-label">Available judgments</div><div class="panel-description">${stage.traces.length ? `${stage.traces.length} illustrative recorded examples. Open Judge traces to inspect assessments and stated uncertainties.` : 'The curriculum is recorded, but candidate-level judgments for this stage are not included in the available evidence.'}</div></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))} These examples are selected illustrations, not an exhaustive trace archive.</p>`;
     $('#trace-count').textContent = stage.traces.length;
-    $('#panel-evidence').innerHTML = `<div class="panel-label">Source lineage</div><p class="panel-description">${esc(task.lineage)}</p><div class="source-links">${stage.paperPages.map(page => `<a href="assets/paper.pdf#page=${page}" target="_blank" rel="noopener">Paper · page ${page} ↗</a>`).join('')}<a href="data/tasks.json" target="_blank" rel="noopener">Public evidence JSON ↗</a></div><div class="panel-label">Interpretation & selection context</div><ul class="caveat-list">${task.caveats.map(c => `<li>${esc(c)}</li>`).join('')}</ul><details><summary>Inspect this stage’s structured record <span aria-hidden="true">+</span></summary><pre class="evidence-json">${esc(JSON.stringify(stage,null,2))}</pre></details>`;
+    $('#panel-evidence').innerHTML = `<div class="panel-label">Source lineage</div><p class="panel-description">${esc(displayContext(task.lineage))}</p><div class="source-links"><a href="data/tasks.json" target="_blank" rel="noopener">Public evidence JSON ↗</a></div><div class="panel-label">Interpretation & selection context</div><ul class="caveat-list">${task.caveats.map(c => `<li>${esc(displayContext(c))}</li>`).join('')}</ul><details><summary>Inspect this stage’s structured record <span aria-hidden="true">+</span></summary><pre class="evidence-json">${esc(JSON.stringify(displayedRecord(stage),null,2))}</pre></details>`;
     renderTraces();
     renderTab();
   }
@@ -221,11 +244,11 @@
     const label = $('#trace-filter').value;
     const traces = stage.traces.filter(trace => (label === 'all' || trace.label === label) && [trace.rationale,trace.uncertainty,trace.sampleId,trace.label].join(' ').toLowerCase().includes(query));
     if (!stage.traces.length) {
-      $('#trace-list').innerHTML = `<div class="trace-empty">This subgoal is documented in the paper, but its raw candidate judgments were not available in the local evidence archive. The explorer preserves that gap.<div class="source-links"><a href="assets/paper.pdf#page=${stage.paperPages[0]}" target="_blank" rel="noopener">Read the documented curriculum ↗</a></div></div>`;
+      $('#trace-list').innerHTML = `<div class="trace-empty">This subgoal is recorded, but its raw candidate judgments were not available in the local evidence archive.</div>`;
     } else if (!traces.length) {
       $('#trace-list').innerHTML = '<div class="trace-empty">No examples match this search and judgment filter. Clear the search or choose All judgments.</div>';
     } else {
-      $('#trace-list').innerHTML = traces.map(trace => `<article class="trace-card"><div class="trace-card-header"><span class="judgment-badge judgment-${esc(trace.label.toLowerCase())}">${esc(trace.label)}</span><span>${esc(trace.sampleId)}</span></div><p>${esc(trace.rationale)}</p><div class="trace-uncertainty"><strong>Still unknown</strong> · ${esc(trace.uncertainty)}</div><div class="trace-provenance">${trace.paraphrased ? 'Faithful high-level paraphrase' : 'Recorded excerpt'}${trace.agreement ? ' · ' + esc(trace.agreement) : ''}<br>Source: ${esc(trace.source)}${trace.sourceSha256 ? `<br>SHA-256: ${esc(trace.sourceSha256)}` : ''}</div></article>`).join('');
+      $('#trace-list').innerHTML = traces.map(trace => `<article class="trace-card"><div class="trace-card-header"><span class="judgment-badge judgment-${esc(trace.label.toLowerCase())}">${esc(trace.label)}</span><span>${esc(trace.sampleId)}</span></div><p>${esc(trace.rationale)}</p><div class="trace-uncertainty"><strong>Still unknown</strong> · ${esc(trace.uncertainty)}</div><div class="trace-provenance">${trace.paraphrased ? 'Faithful high-level paraphrase' : 'Recorded excerpt'}${trace.agreement ? ' · ' + esc(displayContext(trace.agreement)) : ''}${/paper|appendix/i.test(trace.source) ? '' : `<br>Source: ${esc(trace.source)}`}${trace.sourceSha256 ? `<br>SHA-256: ${esc(trace.sourceSha256)}` : ''}</div></article>`).join('');
     }
   }
   function renderTab() {
@@ -262,7 +285,6 @@
     setTimeout(() => URL.revokeObjectURL(url),1000);
     toast('Task evidence downloaded');
   });
-  $('#copy-citation').addEventListener('click', () => copy($('#citation-text').textContent,'BibTeX copied'));
   window.addEventListener('hashchange', () => {
     if (readHash()) {renderExplorer();$('#explorer').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});}
   });

@@ -2,6 +2,7 @@
 """Exercise the public explorer with Playwright; no scientific or external API calls."""
 import argparse
 import json
+import re
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
@@ -27,7 +28,7 @@ def main():
         page.goto(args.url, wait_until='networkidle')
         assert ' '.join(page.locator('h1').inner_text().split()) == 'LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators'
         assert page.locator('.task-button').count() == 5
-        assert page.locator('.paper-button span').inner_text() == 'arxiv'
+        assert page.locator('a[href*="paper.pdf"], .paper-button, #citation').count() == 0
         assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 4546')
         assert page.locator('.title-subtitle').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)') < page.locator('.title-main').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
         assert len(set(page.locator('.author-row > span').evaluate_all('(els) => els.map(el => getComputedStyle(el).fontSize)'))) == 1
@@ -36,7 +37,7 @@ def main():
         page.evaluate('window.scrollTo({top: 300, behavior: "instant"})')
         expect(page.locator('#contents')).to_be_visible()
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#overview')
-        for section in ['method', 'explorer', 'results', 'citation']:
+        for section in ['method', 'explorer', 'results']:
             page.locator(f'.contents-list a[href="#{section}"]').click()
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
             assert page.evaluate('location.hash') == '#' + section
@@ -55,7 +56,7 @@ def main():
                 page.locator(f'[data-stage="{stage["id"]}"]').click()
                 assert page.locator('#stage-detail h4').inner_text() == stage['title']
                 assert page.locator('#stage-detail .stage-summary').inner_text() == stage['exactGoal']
-                assert 'verbatim from Appendix D' in page.locator('#stage-detail .summary-label').inner_text()
+                assert 'verbatim' in page.locator('#stage-detail .summary-label').inner_text()
                 page.locator('#tab-traces').click()
                 assert page.locator('.trace-card').count() == len(stage['traces'])
                 if stage['traces']:
@@ -70,8 +71,11 @@ def main():
                 else:
                     assert 'not available' in page.locator('.trace-empty').inner_text()
                 page.locator('#tab-evidence').click()
-                assert task['lineage'] in page.locator('#panel-evidence').inner_text()
-                assert page.locator('#panel-evidence a').count() >= 2
+                assert page.locator('#panel-evidence .panel-description').inner_text()
+                assert page.locator('#panel-evidence a').count() == 1
+                assert page.locator('a[href*="paper.pdf"]').count() == 0
+                rendered = page.locator('body').inner_text() + page.locator('#panel-evidence .evidence-json').text_content()
+                assert not re.search(r'\b(?:paper|appendix|preprint|arxiv|bibtex|table\s+\d|figure\s+\d|algorithm\s+\d)\b',rendered,re.I), (task['id'],stage['id'])
         print('All 23 stages, 36 judgments, searches, filters and evidence panels passed.')
         page.goto(args.url + '/#explorer?task=cpp&stage=g&tab=traces', wait_until='networkidle')
         assert page.locator('#task-header h3').inner_text() == 'Cell penetration'
@@ -98,8 +102,6 @@ def main():
                 rendered = page.locator('#results-table tbody tr').nth(index)
                 assert row['method'] in rendered.inner_text()
                 assert rendered.locator('td').all_text_contents() == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']]
-        page.locator('#copy-citation').click()
-        assert '@misc{desanti2026llmtoflow' in page.evaluate('navigator.clipboard.readText()')
         print('Deep links, reload, invalid-link recovery, keyboard tabs, clipboard, download and 66 result cells passed.')
         for width in [360,390,768,1200,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
