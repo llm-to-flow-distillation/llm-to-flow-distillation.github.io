@@ -14,7 +14,7 @@
   "browser_errors": [],
   "failed_http_requests": [],
   "date": "2026-10-01",
-  "scientific_review": "All 66 mean/uncertainty pairs independently checked against the supplied PDF Tables 1–2; no mismatches.",
+  "scientific_review": "All 66 mean/uncertainty pairs independently checked against the supplied PDF Tables 1\u20132; no mismatches.",
   "accessibility": {
     "checker": "axe-core 4.13.0",
     "tags": [
@@ -64,12 +64,12 @@
     },
     "checks": "Full trace/browser regression suite passed. No clipped equations or horizontal page overflow in the tested layouts.",
     "presentation": "No inline comment lines or equation references. Removed the opening figure caption, Method paper-link helper, interaction hint, popup footer, and citation-status helper. Preserved function explanations and evidence provenance.",
-    "implicit_target": "Author-provided Bradley–Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
+    "implicit_target": "Author-provided Bradley\u2013Terry assumption with unobserved utility f_{g_t}; p_t^star proportional to p_{theta_t} exp(f_{g_t}/beta), equivalently arg max_q {E_q[f_{g_t}] - beta KL(q || p_{theta_t})}; beta > 0; successive targets define local curriculum steps toward Omega_g.",
     "implicit_target_checks": "Both formulas render without KaTeX errors or horizontal overflow at 360/390/768/1024/1280/1440px. Desktop/mobile visual review and axe checks passed.",
     "heading": "Method: LLM-to-Flow Distillation",
     "width_checks": "Passed at 360/390/768/901/1280/1440/1920/2560px: KL width equals section width; algorithm at most 460px and 40% of desktop content; no equation clipping.",
     "menu_label": "Method (LFD)",
-    "interpretation_alignment": "Full section width; heading, prose, and equations share the section’s left edge."
+    "interpretation_alignment": "Full section width; heading, prose, and equations share the section\u2019s left edge."
   },
   "section_order": [
     "overview",
@@ -534,19 +534,19 @@
         ]
       }
     ],
-    "scientificSources": "Original tasks, tables, and GSK3β chart data preserved byte-for-byte. All five card goals verified against the supplied paper. Fifth-task plot derives from recorded stage counts; no success rate inferred.",
+    "scientificSources": "Original tasks, tables, and GSK3\u03b2 chart data preserved byte-for-byte. All five card goals verified against the supplied paper. Fifth-task plot derives from recorded stage counts; no success rate inferred.",
     "publication": "Standing publishing approval explicitly granted in this conversation: yes I approve (do not ask me every time, just do it)."
   },
   "resultsRedesignRevision": {
     "date": "2026-10-01",
-    "goal_labels": "Large Goal 1–5 labels with full paper goal text preserved.",
+    "goal_labels": "Large Goal 1\u20135 labels with full paper goal text preserved.",
     "generator_colors": {
-      "PepDFM": "Blue · peptide goals 1–2",
-      "FlowMol3": "Green · molecular goals 3–5"
+      "PepDFM": "Blue \u00b7 peptide goals 1\u20132",
+      "FlowMol3": "Green \u00b7 molecular goals 3\u20135"
     },
-    "numbers": "LFD/pretrained summaries preserve original mean and ± pairs; formatted numerical tables retain all 66 pairs. Original results, task records, and chart data are unchanged.",
+    "numbers": "LFD/pretrained summaries preserve original mean and \u00b1 pairs; formatted numerical tables retain all 66 pairs. Original results, task records, and chart data are unchanged.",
     "goal5": "Explicit 0/38,500 pretrained full-goal hits, reported LFD hit at round 6 in a 512-sample batch, and user-committed assets/hitGoal5.png. Different-budget caveat retained.",
-    "context": "Brief task descriptions, direct proxy baselines, and expandable observable lists sourced from Appendix D. GSK3β excludes numerical LogP and prediction/docking outputs from teacher inputs.",
+    "context": "Brief task descriptions, direct proxy baselines, and expandable observable lists sourced from Appendix D. GSK3\u03b2 excludes numerical LogP and prediction/docking outputs from teacher inputs.",
     "curriculum": "All 23 recorded stages have clickable previews with keyboard/touch controls and links to their matching judge traces.",
     "checks": {
       "status": "passed",
@@ -1290,7 +1290,7 @@
     "context_layout": "What the LLM sees is below Direct proxy baselines for each task. D2 and GSK3beta docking PNGs are always visible to the right on desktop and stack below on mobile.",
     "charts": "One grouped bar chart per docking task. GNINA, |Vina| and |rDock| appear on the x-axis; each method has three bars. Legend order follows bar order. Bars and uncertainty whiskers use the same method color.",
     "interaction": "Hover and tap show original signed scores, plotted magnitudes and reported uncertainty. Narrow displays scroll horizontally within the chart.",
-    "uncertainty": "The original Table 2 ± terms are used unchanged. The preprint does not define their confidence level; they are labelled reported uncertainty rather than inferred 95% confidence intervals.",
+    "uncertainty": "The original Table 2 \u00b1 terms are used unchanged. The preprint does not define their confidence level; they are labelled reported uncertainty rather than inferred 95% confidence intervals.",
     "removed": "The Plot data and uncertainty disclosure and old docking round/scaffold plots are removed from the page. Original archived chart data remain available in the repository.",
     "checks": {
       "status": "passed",
@@ -1468,7 +1468,7 @@
     "formula": "abs(method mean) - abs(pretrained mean)",
     "baseline": "Pretrained FlowMol3 is the zero reference, represented by a visible zero line; the five adapted methods each have one bar per metric.",
     "sign": "Positive deltas indicate improved metric values; negative deltas remain negative rather than being converted to magnitudes.",
-    "uncertainty": "Each method’s original ± terms are shifted using the reported pretrained mean as a fixed reference. No joint confidence interval or covariance is inferred. This interpretation is explicit in the caption.",
+    "uncertainty": "Each method\u2019s original \u00b1 terms are shifted using the reported pretrained mean as a fixed reference. No joint confidence interval or covariance is inferred. This interpretation is explicit in the caption.",
     "hover": "Original signed score, original magnitude, pretrained score and signed delta are inspectable with mouse and touch.",
     "checked_examples": {
       "D2 LFD": [
@@ -1720,5 +1720,104 @@
       "browser_errors": []
     },
     "scientific_data": "Original task records, numerical source data and supplied hit figure unchanged."
+  },
+  "scaffoldNoveltyTableRevision": {
+    "date": "2026-10-02",
+    "baseCommit": "2f5408cbbc3572843416e71dd73e34ad281a3e02",
+    "layout": "GSK3\u03b2 numerical table on the left and interactive scaffold-novelty plot on the right at widths of 1200px or more; stacked below the table on smaller screens. Desktop table fits without horizontal scrolling.",
+    "scientific_data": "Original data/charts.json records preserved: distinct novel scaffolds among the top 100 candidates versus negative rDock for the top 5%; Student-t 95% confidence intervals across five sampling seeds conditional on frozen checkpoints. No new D2 novelty data introduced.",
+    "interactions": "Method colors and marker shapes; hover and touch values; black horizontal and vertical confidence intervals; screen-reader data table.",
+    "results_checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "docking_grouped_bars": "passed",
+      "docking_absolute_values": "passed",
+      "docking_baseline_deltas": "passed",
+      "docking_negative_improvements": "passed",
+      "docking_zero_reference": "passed",
+      "docking_black_error_bars": "passed",
+      "docking_signed_hover": "passed",
+      "molecule_context_layout": "passed",
+      "scaffold_novelty_values": "passed",
+      "scaffold_novelty_black_cis": "passed",
+      "scaffold_novelty_hover_touch": "passed",
+      "scaffold_novelty_table_layout": "passed",
+      "plot_data_disclosure": "removed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_curriculum_plot": "removed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "layout_accessibility": {
+      "status": "passed",
+      "viewports": [
+        390,
+        1024,
+        1280,
+        1440,
+        2227
+      ],
+      "accessibility_views": [
+        {
+          "width": 390,
+          "layout": "stacked",
+          "table_width": 316,
+          "plot_width": 316,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        },
+        {
+          "width": 1440,
+          "layout": "side by side",
+          "table_width": 481.734375,
+          "plot_width": 408.265625,
+          "violations": [],
+          "incomplete": [
+            "aria-prohibited-attr",
+            "aria-valid-attr-value",
+            "color-contrast"
+          ]
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "source_preservation": "data/tasks.json, data/results.json, data/charts.json, data/result-panels.json, assets/paper.pdf and assets/hitGoal5.png unchanged."
   }
 }

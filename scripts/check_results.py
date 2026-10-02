@@ -105,7 +105,21 @@ def main():
                 methods=[row for row in result['rows'] if row is not baseline]
                 assert page.locator('#task-results-plots .js-plotly-plot').count()==1
                 expect(page.locator('#docking-chart')).to_be_visible()
-                assert page.locator('#comparison-chart,#trajectory-chart,#novelty-chart').count()==0
+                assert page.locator('#comparison-chart,#trajectory-chart').count()==0
+                if result['id']=='gsk3b':
+                    expect(page.locator('#novelty-chart')).to_be_visible()
+                    assert page.locator('#task-results-panel .js-plotly-plot').count()==2
+                    novelty=page.locator('#novelty-chart').evaluate('(plot)=>plot.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],symbol:t.marker.symbol,color:t.marker.color,xColor:t.error_x.color,yColor:t.error_y.color}))')
+                    assert novelty==[{'method':r['method'],'x':r['noveltyMean'],'y':r['negativeRDockMean'],'dx':r['noveltyCI95'],'dy':r['negativeRDockCI95'],'symbol':expected_symbols[r['method']],'color':expected_colors[r['method']],'xColor':'#000000','yColor':'#000000'} for r in charts['novelty']]
+                    strokes=page.locator('#novelty-chart .errorbar path').evaluate_all('(els)=>els.map(el=>getComputedStyle(el).stroke)')
+                    assert len(strokes)==12 and all(color=='rgb(0, 0, 0)' for color in strokes)
+                    page.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').hover(force=True)
+                    expect(page.locator('#novelty-readout')).to_contain_text('LFD')
+                    expect(page.locator('#novelty-readout')).to_contain_text('89.00')
+                    expect(page.locator('#novelty-readout')).to_contain_text('17.373')
+                    expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('95% CIs')
+                else:
+                    assert page.locator('#novelty-chart').count()==0
                 bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0]),baseline:t.customdata.map(v=>v[4])}))')
                 assert bars == [{'type':'bar','method':r['method'],'x':['GNINA<br>(pK)','|Vina|<br>(kcal/mol)','|rDock|'],'y':[abs(v[0])-abs(baseline['values'][i][0]) for i,v in enumerate(r['values'])],'error':[v[1] for v in r['values']],'color':expected_colors[r['method']],'errorColor':'#000000','original':[v[0] for v in r['values']],'baseline':[v[0] for v in baseline['values']]} for r in methods]
                 reference_deltas={'d2':{'DPO':[-.51,-.71,.47],'LFD':[.43,.96,2.25]},'gsk3b':{'Guidance':[-.04,-.20,-.48],'LFD':[.97,1.52,4.36]}}
@@ -190,6 +204,16 @@ def main():
                     assert obs['y']>proxy['y']+proxy['height']
                     if width>900:assert figure.bounding_box()['x']>proxy['x']+proxy['width']
                     else:assert figure.bounding_box()['y']>obs['y']+obs['height']
+                if task=='gsk3b':
+                    table=page.locator('#results-values').bounding_box();novelty=page.locator('#task-scaffold-novelty').bounding_box()
+                    if width>=1200:
+                        assert novelty['x']>=table['x']+table['width']+20,(width,table,novelty)
+                        assert abs(novelty['y']-table['y'])<1
+                        assert page.locator('#results-values .table-scroll').evaluate('(el)=>el.scrollWidth<=el.clientWidth+1'),width
+                    else:
+                        assert novelty['y']>=table['y']+table['height']+19,(width,table,novelty)
+                else:
+                    assert page.locator('#novelty-chart').count()==0
                 if width in [390,2227]:
                     page.locator('#task-results-panel').screenshot(path=str(out/f'{task}-{width}.png'))
             if width>=1280:
@@ -218,6 +242,10 @@ def main():
                     baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
                     delta=abs(result['rows'][-1]['values'][index][0])-abs(baseline['values'][index][0])
                     expect(touch.locator('#docking-readout')).to_contain_text(f'{delta:+.2f}')
+                if task=='gsk3b':
+                    touch.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').tap(force=True)
+                    expect(touch.locator('#novelty-readout')).to_contain_text('89.00')
+                    expect(touch.locator('#novelty-readout')).to_contain_text('17.373')
             else:
                 assert touch.locator('#task-results-plots .js-plotly-plot').count()==0
                 expect(touch.locator('#task-results-plots')).to_be_hidden()
@@ -230,7 +258,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_black_cis':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

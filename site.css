@@ -432,14 +432,31 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .chart-context { margin: 0 -28px 26px; padding: 0 28px 24px; border-bottom: 1px solid var(--goal-border); background: var(--goal-surface); font-size: 14px; color: #565c66; }
 #task-results-plots { padding: 26px 0 0; }
 #task-results-plots:empty { display: none; }
-#task-results-plots:empty + .results-values { border-top: 0; }
+#task-results-plots:empty + .results-details { border-top: 0; }
 .interactive-chart { width: 100%; min-width: 0; height: 370px; }
 .chart-readout { min-height: 45px; margin: 0 0 16px; padding: 10px 13px; border-radius: 6px; background: #f6f7f9; color: #4b515c; font-size: 12px; line-height: 1.7; }
 .chart-readout strong { color: var(--ink); font-weight: 600; }
 .task-scatter { margin: 0; }
 .task-scatter h4 { font-size: 16px; margin: 0 0 6px; }
 .task-scatter figcaption { font-size: 12px; line-height: 1.7; margin: 0 0 24px; }
-.results-values { border-top: 1px solid var(--line); }
+.results-details { border-top: 1px solid var(--line); }
+.results-values, #task-scaffold-novelty { min-width: 0; }
+#task-scaffold-novelty:empty { display: none; }
+.results-details.has-novelty { display: grid; grid-template-columns: minmax(420px,1.18fr) minmax(0,1fr); gap: 28px; align-items: start; }
+.has-novelty #results-table th, .has-novelty #results-table td { padding-inline: 10px; }
+.has-novelty #results-table .table-mean { font-size: 14px; }
+.has-novelty #results-table .table-uncertainty { font-size: 11px; }
+.scaffold-novelty { margin: 0; }
+.scaffold-novelty h4 { padding: 22px 0 16px; margin: 0; font-size: 17px; }
+.scaffold-novelty .plot-key { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px 10px; margin-bottom: 8px; font-size: 11px; }
+.scaffold-novelty .plot-key span { white-space: nowrap; }
+.scaffold-novelty .interactive-chart { height: 320px; }
+.scaffold-novelty .chart-readout { margin-bottom: 12px; }
+.scaffold-novelty figcaption { font-size: 11px; line-height: 1.8; color: #535b67; }
+@media (max-width: 1199px) {
+  .results-details.has-novelty { grid-template-columns: minmax(0,1fr); gap: 20px; }
+  .scaffold-novelty { padding-top: 0; border-top: 1px solid var(--line); }
+}
 .results-values h4 { padding: 22px 0 16px; margin: 0; font-size: 16px; }
 .results-values .table-note { padding-inline: 0; }
 .task-results-evidence { padding: 0; }
