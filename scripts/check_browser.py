@@ -54,8 +54,9 @@ def main():
             assert page.locator('#task-header h3').inner_text() == task['name']
             for stage in task['stages']:
                 page.locator(f'[data-stage="{stage["id"]}"]').click()
-                assert page.locator('#stage-detail h4').inner_text() == stage['title']
-                assert page.locator('#stage-detail .stage-summary').inner_text() == stage['exactGoal']
+                assert page.locator('#stage-detail h4').count()==0
+                assert page.locator('#stage-detail q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
+                assert page.locator('#stage-detail q').inner_text() == stage['exactGoal']
                 assert 'verbatim' in page.locator('#stage-detail .summary-label').inner_text()
                 page.locator('#tab-traces').click()
                 assert page.locator('.trace-card').count() == len(stage['traces'])

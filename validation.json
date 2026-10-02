@@ -2185,5 +2185,34 @@
       "browser_errors": [],
       "failed_requests": []
     }
+  },
+  "subgoalQuotationRevision": {
+    "date": "2026-10-02",
+    "baseCommit": "13d93b000bb550722ac951306dc743ac530efc96",
+    "presentation": "Both results and trace inspectors show only verbatim goal text in italic double quotation marks, without editorial summary headings. Round/assessment metadata sits below the quotation. Summary titles also removed from accessible stage labels and displayed structured records.",
+    "source_data": "All 23 exactGoal strings and source JSON remain unchanged.",
+    "checks": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 1440,
+          "verbatim_stages_in_each_view": 23,
+          "italic_double_quotations": "passed",
+          "summary_headings": "removed",
+          "round_and_assessment_metadata": "preserved",
+          "overflow": "none"
+        },
+        {
+          "width": 390,
+          "verbatim_stages_in_each_view": 23,
+          "italic_double_quotations": "passed",
+          "summary_headings": "removed",
+          "round_and_assessment_metadata": "preserved",
+          "overflow": "none"
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    }
   }
 }

@@ -75,7 +75,9 @@ def main():
             for stage in task['stages']:
                 page.locator(f'[data-curriculum-stage="{stage["id"]}"]').click()
                 expect(page.locator('#task-result-curriculum')).to_have_attribute('data-selected-stage', stage['id'])
-                assert page.locator('#result-curriculum-preview p').inner_text() == stage['exactGoal']
+                assert page.locator('#result-curriculum-preview q').inner_text() == stage['exactGoal']
+                assert page.locator('#result-curriculum-preview h5').count()==0
+                assert page.locator('#result-curriculum-preview q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
                 link = page.locator('.curriculum-preview-links a')
                 assert link.get_attribute('href') == f'#explorer?task={task["id"]}&stage={stage["id"]}&tab=traces'
                 inspected_stages += 1
@@ -274,7 +276,7 @@ def main():
                 expect(touch.locator('#task-results-plots')).to_be_hidden()
                 touch.locator('[data-curriculum-stage="g"]').tap()
                 expect(touch.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
-                expect(touch.locator('#result-curriculum-preview .curriculum-preview-heading > span')).to_have_text('Assessment only')
+                expect(touch.locator('#result-curriculum-preview .curriculum-preview-links > span')).to_contain_text('Assessment only')
         page.goto((root/'index.html').as_uri(),wait_until='load')
         page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask === "anticancer"')
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)

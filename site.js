@@ -207,7 +207,7 @@
     if (Array.isArray(value)) return value.map(displayedRecord);
     if (value && typeof value === 'object') {
       return Object.fromEntries(Object.entries(value)
-        .filter(([key,item]) => !['paperPages','goalTextSource'].includes(key) && !(key === 'source' && /paper|appendix/i.test(item)))
+        .filter(([key,item]) => !['paperPages','goalTextSource','title','summary'].includes(key) && !(key === 'source' && /paper|appendix/i.test(item)))
         .map(([key,item]) => [key,displayedRecord(item)]));
     }
     return typeof value === 'string' ? displayContext(value) : value;
@@ -218,7 +218,7 @@
     renderTasks();
     $('#task-header').innerHTML = `<div class="task-header-line"><h3>${esc(task.name)}</h3><span class="generator-badge">${esc(task.generator)}</span></div><p class="task-goal">${esc(task.goal)}</p>`;
     $('#stage-count').textContent = `${task.stages.filter(s => s.rounds > 0).length} training stages · ${task.stages.reduce((sum,s) => sum + s.rounds,0)} updates`;
-    $('#stage-list').innerHTML = task.stages.map(s => `<button class="stage-button" data-stage="${esc(s.id)}" aria-label="${esc(s.id === 'g' ? 'Final goal' : `Subgoal ${s.id.slice(1)}`)}: ${esc(s.title)}" aria-pressed="${s.id === stage.id}">${esc(stageLabel(s))}</button>`).join('');
+    $('#stage-list').innerHTML = task.stages.map(s => `<button class="stage-button" data-stage="${esc(s.id)}" aria-label="${esc(s.id === 'g' ? 'Final goal' : `Subgoal ${s.id.slice(1)}`)}" aria-pressed="${s.id === stage.id}">${esc(stageLabel(s))}</button>`).join('');
     $$('.stage-button').forEach(button => button.addEventListener('click', () => {
       state.stage = button.dataset.stage;
       $('#trace-search').value = '';
@@ -227,7 +227,7 @@
       renderExplorer();
       $(`.stage-button[data-stage="${state.stage}"]`).focus({preventScroll:true});
     }));
-    $('#stage-detail').innerHTML = `<div class="stage-title-line"><h4>${esc(stage.title)}</h4><span class="stage-rounds">${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span></div><p class="stage-summary">${esc(stage.exactGoal)}</p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'}</span>`;
+    $('#stage-detail').innerHTML = `<p class="stage-summary goal-quotation"><q>${esc(stage.exactGoal)}</q></p><span class="summary-label">${stage.id === 'g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${stage.rounds ? `${stage.rounds} update${stage.rounds === 1 ? '' : 's'}` : 'Assessment only'}</span>`;
     const total = task.stages.reduce((sum,s) => sum + s.rounds, 0);
     const index = task.stages.indexOf(stage);
     const start = task.stages.slice(0,index).reduce((sum,s) => sum + s.rounds,0);

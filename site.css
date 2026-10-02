@@ -199,11 +199,9 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 .stage-button { min-width: 44px; padding: 7px 13px; border: 1px solid #d3d5da; background: #fff; border-radius: 5px; font-size: 13px; color: #555b66; }
 .stage-button:hover { border-color: #777; }
 .stage-button[aria-pressed=true] { background: #2b2c30; border-color: #2b2c30; color: #fff; }
-.stage-title-line { display: flex; justify-content: space-between; gap: 15px; align-items: flex-start; }
-.stage-title-line h4 { margin: 0 0 7px; font-size: 18px; font-weight: 500; line-height: 1.5; }
-.stage-rounds { color: #666b76; font-size: 11px; white-space: nowrap; }
 .stage-summary { font-size: 16px; line-height: 1.8; color: #4d525d; margin: 9px 0 12px; }
 .summary-label { font-size: 11px; color: #676c76; }
+.goal-quotation q { font-style: italic; quotes: "“" "”" "‘" "’"; }
 .explorer-tabs { display: flex; gap: 27px; border-bottom: 1px solid var(--line); margin-top: 23px; }
 .explorer-tabs button { background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 11px 0; font-size: 12px; color: #62666e; }
 .explorer-tabs button[aria-selected=true] { color: #25262a; border-bottom-color: #25262a; }
@@ -372,7 +370,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .stage-label { align-items: flex-start; }
   .stage-label .tiny-label { font-size: 10px; }
   .stage-label > span:last-child { font-size: 9px; text-align: right; }
-  .stage-title-line h4 { font-size: 16px; }
   .stage-summary { font-size: 14px; }
   .stage-rounds { font-size: 10px; }
   .stage-button { min-width: 37px; padding: 7px 11px; }
@@ -530,9 +527,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-tabs sub { font-size: .75em; line-height: 0; }
 .curriculum-tabs button[aria-selected="true"] { background: var(--goal-accent); border-color: var(--goal-accent); color: #fff; }
 .curriculum-preview { padding: 8px 0 2px; }
-.curriculum-preview-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px; }
-.curriculum-preview h5 { font-size: 15px; margin: 0; font-weight: 600; }
-.curriculum-preview-heading > span { font-size: 11px; color: var(--goal-strong); }
 .curriculum-preview p { margin: 12px 0 16px; font-size: 14px; line-height: 1.85; }
 .curriculum-preview-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 15px; font-size: 11px; }
 .curriculum-preview-links > span { color: #5c6570; }
