@@ -8,7 +8,7 @@
     "retrieved": "2026-09-30"
   },
   "results": "Transcribed from Tables 1 and 2 of the supplied preprint; uncertainty values preserved as printed.",
-  "curricula": "Operative subgoal and final-goal wording reproduced verbatim from Appendix D; editorial stage titles and illustrative judgment summaries remain labeled separately.",
+  "curricula": "Operative subgoal and final-goal wording reproduced verbatim from Appendix D. Editorial stage titles are retained as provenance but are not rendered.",
   "evidence_note": "LLM judgments and computational evaluation do not establish experimental activity or clinical efficacy.",
   "figures": [
     {
@@ -67,5 +67,24 @@
     ],
     "retrieved": "2026-10-01",
     "context": "Brief task context, direct proxy rewards, and teacher-observable lists checked against Appendix D; page references are stored per goal."
+  },
+  "candidateTraces": {
+    "file": "data/tasks.json",
+    "sources": "data/trace-sources.json",
+    "recordedCandidates": 64,
+    "judgeOutputs": 128,
+    "placeholderSlots": 28,
+    "recordedTasks": [
+      "anticancer",
+      "cpp",
+      "gsk3b"
+    ],
+    "placeholderTasks": [
+      "d2",
+      "ood"
+    ],
+    "fields": "Only explicit structured goal explanations, final-output judgment rationales and critical_unknowns, candidate sequence/SMILES, and selected observed descriptors. Provider reasoning metadata is excluded.",
+    "priorSummaries": "data/trace-summary-archive.json",
+    "importer": "scripts/import_traces.py"
   }
 }

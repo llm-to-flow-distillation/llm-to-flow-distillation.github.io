@@ -58,8 +58,41 @@ def main():
                 assert page.locator('#stage-detail q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
                 assert page.locator('#stage-detail q').inner_text() == stage['exactGoal']
                 assert 'verbatim' in page.locator('#stage-detail .summary-label').inner_text()
-                page.locator('#tab-traces').click()
+                page.locator('#tab-overview').click()
+                selection = stage['selection']
+                if selection['status'] == 'recorded':
+                    assert page.locator('.selection-rationale q').inner_text() == selection['rationale']
+                    if selection.get('uncertainty'):
+                        assert page.locator('.selection-limitations q').inner_text() == selection['uncertainty']
+                elif selection['status'] == 'placeholder':
+                    assert 'Placeholder' in page.locator('.selection-card').inner_text()
+                else:
+                    assert 'Original discovery goal' in page.locator('.selection-card').inner_text()
+                page.locator('#open-stage-traces').click()
+                assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
                 assert page.locator('.trace-card').count() == len(stage['traces'])
+                assert page.locator('.trace-group').count() == 2
+                for trace in stage['traces']:
+                    card = page.locator(f'.trace-card[data-sample-id="{trace["sampleId"]}"]')
+                    if trace['status'] == 'placeholder':
+                        assert 'Placeholder' in card.inner_text()
+                        assert card.locator('code, .judge-pass, .copy-candidate').count() == 0
+                    else:
+                        assert card.locator('.candidate-representation code').inner_text() == trace['representation']['value']
+                        for index, output in enumerate(trace['passes']):
+                            card.locator('.judge-pass').nth(index).click()
+                            visible = card.locator('.judge-output:visible')
+                            assert visible.count() == 1
+                            assert visible.locator('.trace-field').nth(0).locator('q').inner_text() == output['rationale']
+                            assert visible.locator('.trace-field').nth(1).locator('q').inner_text() == output['uncertainty']
+                        card.locator('.judge-pass').first.click()
+                if stage['traces'][0]['status'] == 'recorded':
+                    first = stage['traces'][0]
+                    page.locator('.copy-candidate').first.click()
+                    assert page.evaluate('navigator.clipboard.readText()') == first['representation']['value']
+                    page.locator('#trace-search').fill(first['representation']['value'])
+                    assert page.locator('.trace-card').count() == 1
+                    page.locator('#trace-search').fill('')
                 if stage['traces']:
                     page.locator('#trace-filter').select_option('POSITIVE')
                     assert page.locator('.trace-card').count() == sum(t['label'] == 'POSITIVE' for t in stage['traces'])
@@ -77,7 +110,7 @@ def main():
                 assert page.locator('a[href*="paper.pdf"]').count() == 0
                 rendered = page.locator('body').inner_text() + page.locator('#panel-evidence .evidence-json').text_content()
                 assert not re.search(r'\b(?:paper|appendix|preprint|arxiv|bibtex|table\s+\d|figure\s+\d|algorithm\s+\d)\b',rendered,re.I), (task['id'],stage['id'])
-        print('All 23 stages, 36 judgments, searches, filters and evidence panels passed.')
+        print('All 23 stages, 64 recorded candidates and 28 placeholders, searches, filters and evidence panels passed.')
         page.goto(args.url + '/#explorer?task=cpp&stage=g&tab=traces', wait_until='networkidle')
         assert page.locator('#task-header h3').inner_text() == 'Cell penetration'
         assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
@@ -110,6 +143,9 @@ def main():
             assert page.evaluate('document.documentElement.scrollWidth') <= width, f'Overflow at {width}px'
             for task in data['tasks']:
                 page.locator(f'[data-task="{task["id"]}"]').click()
+                page.locator('#tab-traces').click()
+                assert page.locator('.explorer-shell').evaluate('(el) => el.scrollWidth <= el.clientWidth + 1'), f'Clipped explorer at {width}px'
+                assert page.locator('.trace-card').evaluate_all('(els) => els.every(el => el.scrollWidth <= el.clientWidth + 1)'), f'Clipped candidate at {width}px'
                 assert page.evaluate('document.documentElement.scrollWidth') <= width, f'{task["id"]} overflow at {width}px'
             if width < 1280:
                 page.locator('#method').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
@@ -139,7 +175,7 @@ def main():
         assert not failed_requests, failed_requests
         browser.close()
     print('Responsive widths 360/390/768/1200/1280/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
-    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'traces':36,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
+    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
 
 
 if __name__ == '__main__':

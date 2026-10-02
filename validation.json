@@ -2214,5 +2214,46 @@
       "browser_errors": [],
       "failed_requests": []
     }
+  },
+  "traceExplorerRevision": {
+    "date": "2026-10-02",
+    "baseCommit": "18f656623109bbc30daca367f2b09a9d8faa9592",
+    "presentation": "Goal-selection rationale, two positive and two negative candidate cards per stage, copyable sequences/SMILES, switchable judge passes, verbatim rationales and uncertainties. D2 and Goal 5 have explicitly marked placeholders. Final goals are distinguished from LLM-proposed subgoals.",
+    "source_checks": {
+      "status": "passed",
+      "receipts": 90,
+      "recordedCandidates": 64,
+      "verbatimJudgeOutputs": 128,
+      "recordedGoalRationales": 13,
+      "originalGoals": 3,
+      "placeholderSlots": 28,
+      "roundPoolMatching": "passed",
+      "importerDeterministic": "passed"
+    },
+    "browser_checks": {
+      "status": "passed",
+      "stages": 23,
+      "recorded_candidates": 64,
+      "placeholder_slots": 28,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "verbatim_goal_rationales": 13,
+      "verbatim_judge_outputs": 128,
+      "copy_representations": "passed",
+      "judge_pass_switching": "passed",
+      "placeholder_separation": "passed",
+      "browser_errors": [],
+      "failed_http_requests": []
+    },
+    "preserved": "All 23 verbatim goals, training-round counts, and original result/chart data.",
+    "layout": "Desktop positive/negative columns stack on smaller screens. Mobile grid clipping and missing subscript glyphs corrected."
   }
 }

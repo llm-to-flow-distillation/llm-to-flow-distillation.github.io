@@ -31,12 +31,37 @@ def validate():
             assert stage['goalTextSource']['page'] in stage['paperPages']
             assert stage['goalTextSource']['kind'] == ('original-goal' if stage['id'] == 'g' else 'llm-subgoal')
             assert all(1 <= page <= 43 for page in stage['paperPages'])
+            selection = stage['selection']
+            assert selection['status'] in {'recorded', 'original-goal', 'placeholder'}
+            if selection['status'] == 'recorded':
+                assert selection['rationale'] and selection['source']
+            assert len(stage['traces']) == 4
+            assert [t['label'] for t in stage['traces']].count('POSITIVE') == 2
+            assert [t['label'] for t in stage['traces']].count('NEGATIVE') == 2
             for trace in stage['traces']:
-                assert trace['label'] in {'POSITIVE', 'NEGATIVE', 'ABSTAIN'}
+                assert trace['label'] in {'POSITIVE', 'NEGATIVE'}
+                if trace['status'] == 'placeholder':
+                    assert task['id'] in {'d2', 'ood'}
+                    assert all(trace[key] is None for key in ['representation', 'rationale', 'uncertainty'])
+                    assert 'source' not in trace and 'passes' not in trace
+                    continue
+                assert trace['status'] == 'recorded' and task['id'] not in {'d2', 'ood'}
                 assert trace['source'] and trace['rationale'] and trace['uncertainty']
-                assert trace['paraphrased'] is True
+                assert trace['paraphrased'] is False
                 assert re.fullmatch(r'[a-f0-9]{64}', trace['sourceSha256'])
+                assert trace['representation']['kind'] in {'peptide', 'smiles'}
+                assert trace['representation']['value']
+                assert [p['pass'] for p in trace['passes']] == [1, 2]
+                assert all(p['label'] == trace['label'] for p in trace['passes'])
+                assert all(p['rationale'] and p['uncertainty'] and re.fullmatch(r'[a-f0-9]{64}', p['source']['sha256']) for p in trace['passes'])
+                assert trace['rationale'] == trace['passes'][0]['rationale']
+                assert trace['uncertainty'] == trace['passes'][0]['uncertainty']
                 trace_count += 1
+            if selection['status'] != 'placeholder':
+                assert len({t['sampleId'] for t in stage['traces']}) == 4
+                assert len({t['representation']['value'] for t in stage['traces']}) == 4
+    assert trace_count == 64
+    assert not any(key in json.dumps(task_data) for key in ['thought_summary', 'thought_summaries', 'request_hash', 'model_versions'])
     provenance = json.loads((ROOT / 'data/provenance.json').read_text())
     assert hashlib.sha256((ROOT / provenance['paper']['file']).read_bytes()).hexdigest() == provenance['paper']['sha256']
     assert len(results) == 4
@@ -134,7 +159,7 @@ def main():
         shutil.copy2(ROOT / name, dist / name)
     for name in ['assets', 'data']:
         shutil.copytree(ROOT / name, dist / name, dirs_exist_ok=True)
-    print(f'Validated 5 tasks, 23 stages, {count} trace examples, 4 result tables and the paper hash.')
+    print(f'Validated 5 tasks, 23 stages, {count} recorded candidates + 28 placeholder slots, 4 result tables and the paper hash.')
     print(f'Site artifact: {dist}')
 
 

@@ -158,7 +158,7 @@
   }
   function currentTask() { return tasks.find(t => t.id === state.task); }
   function currentStage() { return currentTask().stages.find(s => s.id === state.stage); }
-  function stageLabel(stage) { return stage.id === 'g' ? (stage.rounds === 0 ? 'g · assess' : 'g · final') : 'g' + [...stage.id.slice(1)].map(n => '₀₁₂₃₄₅₆₇₈₉'[Number(n)]).join(''); }
+  function stageLabel(stage) { return stage.id === 'g' ? (stage.rounds === 0 ? 'Final assessment' : 'Final goal') : `g<sub>${esc(stage.id.slice(1))}</sub>`; }
   function readHash() {
     if (!location.hash.startsWith('#explorer?')) return false;
     const params = new URLSearchParams(location.hash.split('?')[1]);
@@ -218,7 +218,7 @@
     renderTasks();
     $('#task-header').innerHTML = `<div class="task-header-line"><h3>${esc(task.name)}</h3><span class="generator-badge">${esc(task.generator)}</span></div><p class="task-goal">${esc(task.goal)}</p>`;
     $('#stage-count').textContent = `${task.stages.filter(s => s.rounds > 0).length} training stages · ${task.stages.reduce((sum,s) => sum + s.rounds,0)} updates`;
-    $('#stage-list').innerHTML = task.stages.map(s => `<button class="stage-button" data-stage="${esc(s.id)}" aria-label="${esc(s.id === 'g' ? 'Final goal' : `Subgoal ${s.id.slice(1)}`)}" aria-pressed="${s.id === stage.id}">${esc(stageLabel(s))}</button>`).join('');
+    $('#stage-list').innerHTML = task.stages.map(s => `<button class="stage-button" data-stage="${esc(s.id)}" aria-label="${esc(s.id === 'g' ? 'Final goal' : `Subgoal ${s.id.slice(1)}`)}" aria-pressed="${s.id === stage.id}">${stageLabel(s)}</button>`).join('');
     $$('.stage-button').forEach(button => button.addEventListener('click', () => {
       state.stage = button.dataset.stage;
       $('#trace-search').value = '';
@@ -232,24 +232,49 @@
     const index = task.stages.indexOf(stage);
     const start = task.stages.slice(0,index).reduce((sum,s) => sum + s.rounds,0);
     const bars = Array.from({length:total},(_,i) => `<span class="round-block ${i >= start && i < start + stage.rounds ? 'active' : ''}"></span>`).join('');
-    $('#panel-overview').innerHTML = `<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal evaluation of samples from the third intermediate stage. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div><div class="round-track-label">Pretrained generator → reported checkpoint</div></div><div><div class="panel-label">Available judgments</div><div class="panel-description">${stage.traces.length ? `${stage.traces.length} illustrative recorded examples. Open Judge traces to inspect assessments and stated uncertainties.` : 'The curriculum is recorded, but candidate-level judgments for this stage are not included in the available evidence.'}</div></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))} These examples are selected illustrations, not an exhaustive trace archive.</p>`;
-    $('#trace-count').textContent = stage.traces.length;
+    const recorded = stage.traces.filter(trace => trace.status === 'recorded').length;
+    const selection = stage.selection;
+    let selectionBody;
+    if (selection.status === 'placeholder') {
+      selectionBody = `<div class="selection-card selection-placeholder"><span class="evidence-status">Placeholder · awaiting source traces</span><h4>${stage.id === 'g' ? 'Final-goal transition' : 'Why this subgoal?'}</h4><p>The ${stage.id === 'g' ? 'transition record' : 'LLM’s goal-selection explanation'} is not yet available for this task.</p></div>`;
+    } else if (selection.status === 'original-goal') {
+      selectionBody = `<div class="selection-card"><span class="evidence-status">Original discovery goal</span><h4>Return to the original goal</h4><p>This is the original task objective, rather than a newly proposed LLM subgoal.</p>${selection.uncertainty ? `<div class="selection-limitations"><strong>Recorded limitation</strong><p>${esc(selection.uncertainty)}</p></div>` : ''}</div>`;
+    } else {
+      selectionBody = `<div class="selection-card"><span class="evidence-status">LLM goal selection · verbatim</span><h4>Why this subgoal?</h4><p class="selection-rationale goal-quotation"><q>${esc(selection.rationale)}</q></p>${selection.uncertainty ? `<div class="selection-limitations"><strong>LLM-stated limitations</strong><p class="goal-quotation"><q>${esc(selection.uncertainty)}</q></p></div>` : ''}${selection.bridge ? `<details class="selection-bridge"><summary>Connection to the final goal</summary><p class="goal-quotation"><q>${esc(selection.bridge)}</q></p>${selection.deferredRequirements?.length ? `<strong>Requirements deferred by the LLM</strong><ul>${selection.deferredRequirements.map(item => `<li>${esc(item)}</li>`).join('')}</ul>` : ''}</details>` : ''}</div>`;
+    }
+    $('#panel-overview').innerHTML = `${selectionBody}<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal assessment. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div></div><div><div class="panel-label">Candidate judgments</div><div class="panel-description">${recorded ? 'Two positive and two negative candidates, with both judge passes.' : 'Two positive and two negative placeholder slots. Candidate evidence is pending.'}</div><button class="trace-open-button" id="open-stage-traces">${recorded ? 'Inspect the four candidates' : 'View placeholder slots'} <span aria-hidden="true">→</span></button></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))}</p>`;
+    $('#open-stage-traces').addEventListener('click', () => {state.tab = 'traces'; updateHash(); renderTab(); $('#tab-traces').focus({preventScroll:true});});
+    $('#trace-count').textContent = recorded || '4 slots';
     $('#panel-evidence').innerHTML = `<div class="panel-label">Source lineage</div><p class="panel-description">${esc(displayContext(task.lineage))}</p><div class="source-links"><a href="data/tasks.json" target="_blank" rel="noopener">Public evidence JSON ↗</a></div><div class="panel-label">Interpretation & selection context</div><ul class="caveat-list">${task.caveats.map(c => `<li>${esc(displayContext(c))}</li>`).join('')}</ul><details><summary>Inspect this stage’s structured record <span aria-hidden="true">+</span></summary><pre class="evidence-json">${esc(JSON.stringify(displayedRecord(stage),null,2))}</pre></details>`;
     renderTraces();
     renderTab();
+  }
+  function renderTraceCard(trace) {
+    if (trace.status === 'placeholder') {
+      return `<article class="trace-card trace-placeholder" data-sample-id="${esc(trace.sampleId)}"><div class="trace-card-header"><span class="evidence-status">Placeholder</span><span>${esc(trace.label === 'POSITIVE' ? 'Positive' : 'Negative')} example ${esc(trace.sampleId.slice(-1))}</span></div><div class="candidate-representation representation-pending"><span class="representation-label">SMILES</span><p>Candidate pending</p></div><div class="trace-field"><h5>LLM rationale</h5><p>Awaiting the recorded judgment.</p></div><div class="trace-field trace-uncertainty"><h5>LLM uncertainty</h5><p>Awaiting the recorded uncertainty.</p></div><p class="placeholder-note">No molecule or LLM judgment is represented by this slot.</p></article>`;
+    }
+    const isPeptide = trace.representation.kind === 'peptide';
+    return `<article class="trace-card" data-sample-id="${esc(trace.sampleId)}"><div class="trace-card-header"><span class="judgment-badge judgment-${esc(trace.label.toLowerCase())}">${trace.label === 'POSITIVE' ? 'Positive (+/+)' : 'Negative (−/−)'}</span><span class="sample-id">${esc(trace.sampleId)}</span></div><div class="candidate-representation ${isPeptide ? 'peptide-sequence' : 'molecule-smiles'}"><div class="representation-header"><span class="representation-label">${isPeptide ? 'Peptide sequence' : 'SMILES'}</span><button class="copy-candidate" aria-label="Copy ${isPeptide ? 'sequence' : 'SMILES'} for ${esc(trace.sampleId)}">Copy</button></div><code>${esc(trace.representation.value)}</code></div><dl class="candidate-observables">${trace.observables.map(item => `<div><dt>${esc(item.label)}</dt><dd>${esc(item.value)}</dd></div>`).join('')}</dl><div class="judge-passes" role="group" aria-label="Choose judge pass for ${esc(trace.sampleId)}">${trace.passes.map((pass,index) => `<button class="judge-pass" data-pass="${index}" aria-pressed="${index === 0}">Pass ${index + 1}</button>`).join('')}<span>Same label in both</span></div>${trace.passes.map((pass,index) => `<div class="judge-output" data-pass="${index}" ${index ? 'hidden' : ''}><div class="trace-field"><h5>LLM rationale</h5><p class="goal-quotation"><q>${esc(pass.rationale)}</q></p></div><div class="trace-field trace-uncertainty"><h5>LLM uncertainty</h5><p class="goal-quotation">${pass.uncertainty ? `<q>${esc(pass.uncertainty)}</q>` : 'No uncertainty text was recorded for this pass.'}</p></div></div>`).join('')}<div class="trace-provenance">Verbatim recorded outputs · uncertainties are stated limitations, not confidence scores.</div></article>`;
   }
   function renderTraces() {
     const stage = currentStage();
     const query = $('#trace-search').value.trim().toLowerCase();
     const label = $('#trace-filter').value;
-    const traces = stage.traces.filter(trace => (label === 'all' || trace.label === label) && [trace.rationale,trace.uncertainty,trace.sampleId,trace.label].join(' ').toLowerCase().includes(query));
-    if (!stage.traces.length) {
-      $('#trace-list').innerHTML = `<div class="trace-empty">This subgoal is recorded, but its raw candidate judgments were not available in the local evidence archive.</div>`;
-    } else if (!traces.length) {
+    const traces = stage.traces.filter(trace => (label === 'all' || trace.label === label) && [trace.rationale,trace.uncertainty,trace.sampleId,trace.label,trace.representation?.value,...(trace.passes || []).flatMap(pass => [pass.rationale,pass.uncertainty])].join(' ').toLowerCase().includes(query));
+    if (!traces.length) {
       $('#trace-list').innerHTML = '<div class="trace-empty">No examples match this search and judgment filter. Clear the search or choose All judgments.</div>';
-    } else {
-      $('#trace-list').innerHTML = traces.map(trace => `<article class="trace-card"><div class="trace-card-header"><span class="judgment-badge judgment-${esc(trace.label.toLowerCase())}">${esc(trace.label)}</span><span>${esc(trace.sampleId)}</span></div><p>${esc(trace.rationale)}</p><div class="trace-uncertainty"><strong>Still unknown</strong> · ${esc(trace.uncertainty)}</div><div class="trace-provenance">${trace.paraphrased ? 'Faithful high-level paraphrase' : 'Recorded excerpt'}${trace.agreement ? ' · ' + esc(displayContext(trace.agreement)) : ''}${/paper|appendix/i.test(trace.source) ? '' : `<br>Source: ${esc(trace.source)}`}${trace.sourceSha256 ? `<br>SHA-256: ${esc(trace.sourceSha256)}` : ''}</div></article>`).join('');
+      return;
     }
+    const groups = ['POSITIVE','NEGATIVE','ABSTAIN'].map(label => ({label,items:traces.filter(trace => trace.label === label)})).filter(group => group.items.length);
+    $('#trace-list').innerHTML = `${stage.traces[0].status === 'placeholder' ? '<p class="placeholder-notice"><strong>Placeholder examples.</strong> Candidate structures, rationales, and uncertainties will appear here when the source traces are available.</p>' : ''}<div class="trace-columns ${groups.length === 1 ? 'single-group' : ''}">${groups.map(group => `<section class="trace-group" aria-label="${esc(group.label.toLowerCase())} examples"><h4 class="trace-group-heading ${esc(group.label.toLowerCase())}">${esc(group.label === 'POSITIVE' ? 'Positive examples' : group.label === 'NEGATIVE' ? 'Negative examples' : 'Abstentions')} <span>${group.items.length}</span></h4>${group.items.map(renderTraceCard).join('')}</section>`).join('')}</div>`;
+    $$('.trace-card').forEach(card => {
+      const trace = traces.find(item => item.sampleId === card.dataset.sampleId);
+      $('.copy-candidate', card)?.addEventListener('click', () => copy(trace.representation.value, 'Candidate copied'));
+      $$('.judge-pass', card).forEach(button => button.addEventListener('click', () => {
+        $$('.judge-pass', card).forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+        $$('.judge-output', card).forEach(output => {output.hidden = output.dataset.pass !== button.dataset.pass;});
+      }));
+    });
   }
   function renderTab() {
     $$('.explorer-tabs button').forEach(button => {

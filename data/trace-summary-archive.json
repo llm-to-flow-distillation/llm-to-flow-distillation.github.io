@@ -1,0 +1,414 @@
+{
+  "description": "Previous illustrative paraphrases, superseded by verbatim archived judgments or explicitly marked placeholders.",
+  "tasks": {
+    "anticancer": {
+      "g0": [
+        {
+          "label": "POSITIVE",
+          "rationale": "Broad observable features were judged compatible with the current activity-related hypothesis.",
+          "uncertainty": "Folding and cellular selectivity remain unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-0.json",
+          "sampleId": "p0-l12-0005",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0768621cd70e136bdc0183ea51357b877e57c9b0d004819db745154ab188001b"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "Observed features did not satisfy the current interaction-related criterion.",
+          "uncertainty": "Other mechanisms of biological interaction remain possible.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-0.json",
+          "sampleId": "p0-l12-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0768621cd70e136bdc0183ea51357b877e57c9b0d004819db745154ab188001b"
+        }
+      ],
+      "g1": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found supporting evidence for all requirements of this intermediate goal.",
+          "uncertainty": "Structure and selective biological effects remain unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-0.json",
+          "sampleId": "p1-t00-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "c7f03138cc8773c2c0ad5c78a67169abb80616ce4fdf353f126b7547b571ff95"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate failed an explicit requirement of the current intermediate goal.",
+          "uncertainty": "Structural stability in a membrane environment remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-0.json",
+          "sampleId": "p1-t00-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "c7f03138cc8773c2c0ad5c78a67169abb80616ce4fdf353f126b7547b571ff95"
+        }
+      ],
+      "g2": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found the candidate consistent with the current interaction and nonspecific-toxicity criteria.",
+          "uncertainty": "Mechanism of action and cellular selectivity remain unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-0.json",
+          "sampleId": "p2-t01-child-0004",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "c2a272106a67b6c9624a0363db03de72753900df3fb681d2bfd33e396e90ce49"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate did not meet a retained requirement of the selected route.",
+          "uncertainty": "Actual target interaction remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-0.json",
+          "sampleId": "p2-t01-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "c2a272106a67b6c9624a0363db03de72753900df3fb681d2bfd33e396e90ce49"
+        }
+      ],
+      "g3": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The candidate matched the recorded positive witness and was judged to satisfy the current criteria.",
+          "uncertainty": "The detailed biological interaction mechanism remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-0.json",
+          "sampleId": "p4-t03-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0f810cf52c4263f4c144934e6c83984d43888253c3431504edcf9d382433f6d8"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate lacked evidence required by the current intermediate goal.",
+          "uncertainty": "The proposed interaction capability remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-0.json",
+          "sampleId": "p4-t03-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0f810cf52c4263f4c144934e6c83984d43888253c3431504edcf9d382433f6d8"
+        }
+      ],
+      "g4": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge considered the candidate compatible with the current structural and interaction criteria.",
+          "uncertainty": "Interaction kinetics remain unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-0.json",
+          "sampleId": "p5-t04-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "47735f33bd278df06d5300299effe94aca70c4a0fb288b45e42b8acdbb31f9bb"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge identified conflicts with two retained structural requirements.",
+          "uncertainty": "Aggregation and structural consequences remain uncertain.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-0.json",
+          "sampleId": "p5-t04-child-0003",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "47735f33bd278df06d5300299effe94aca70c4a0fb288b45e42b8acdbb31f9bb"
+        }
+      ],
+      "g5": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found all current requirements satisfied by the observable candidate features.",
+          "uncertainty": "Actual biological activity remains unmeasured.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-0.json",
+          "sampleId": "p6-t05-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "6e357639468312b295f767559f1e7f5319db1573a9943478b9018ee9af80b773"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "A retained structural requirement was contradicted by the candidate.",
+          "uncertainty": "Aggregation behavior remains uncertain.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-0.json",
+          "sampleId": "p6-t05-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "6e357639468312b295f767559f1e7f5319db1573a9943478b9018ee9af80b773"
+        }
+      ],
+      "g6": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge inferred an organized candidate structure consistent with the current criteria.",
+          "uncertainty": "Actual structure and the therapeutic window remain unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-0.json",
+          "sampleId": "p7-t06-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "11c5348dc870f6bd9a761f8052444c3a0c451894c231fabca7371353b371fb16"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate contradicted a retained structural requirement.",
+          "uncertainty": "Behavior under physiological conditions remains uncertain.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-0.json",
+          "sampleId": "p7-t06-child-0002",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "11c5348dc870f6bd9a761f8052444c3a0c451894c231fabca7371353b371fb16"
+        }
+      ],
+      "g": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge interpreted the overall architecture and available evidence as plausibly consistent with selective activity.",
+          "uncertainty": "The structure adopted during biological interaction remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-0.json",
+          "sampleId": "p13-t12-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "52ac2172c8c05bac51209a6dd52cd86e785ddaeb6a55f5167740babfe8532709"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge found insufficient support for the proposed direct anticancer mechanism.",
+          "uncertainty": "The actual cytotoxic mechanism remains unknown.",
+          "source": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-0.json",
+          "sampleId": "p13-t12-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "52ac2172c8c05bac51209a6dd52cd86e785ddaeb6a55f5167740babfe8532709"
+        }
+      ]
+    },
+    "cpp": {
+      "g0": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found sequence-level evidence consistent with membrane interaction.",
+          "uncertainty": "The structure adopted near a membrane remains unknown.",
+          "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-0.json",
+          "sampleId": "p0-l12-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "22c998d3a142610c670f0d00a9b785fc3c0177c4ad98cfb0e23df98f081bb3ce"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge found insufficient sequence-level support for membrane association.",
+          "uncertainty": "Secondary-structure preference remains unknown.",
+          "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-0.json",
+          "sampleId": "p0-l12-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "22c998d3a142610c670f0d00a9b785fc3c0177c4ad98cfb0e23df98f081bb3ce"
+        }
+      ],
+      "g1": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge interpreted the candidate architecture as consistent with the current interaction criterion.",
+          "uncertainty": "Stability in serum remains unknown.",
+          "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-0.json",
+          "sampleId": "p3-t02-child-0003",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "26b1264512c72b0d4be917e0fa53995be7a78d28e0a31851d2013b7e68fb081c"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The observable features were judged inconsistent with the current interaction criterion.",
+          "uncertainty": "Membrane association under physiological conditions remains unknown.",
+          "source": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-0.json",
+          "sampleId": "p3-t02-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "26b1264512c72b0d4be917e0fa53995be7a78d28e0a31851d2013b7e68fb081c"
+        }
+      ],
+      "g": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge inferred that the candidate architecture could support the full requested activity.",
+          "uncertainty": "The possibility of disruptive effects at elevated concentrations remains unknown.",
+          "source": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-0.json",
+          "sampleId": "p1-t00-child-0001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "bf112a9680b4626f85b0510f84abb40ba939fc881cb9e38e5ca712422aaf87e1"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge found insufficient structural evidence to support cell penetration.",
+          "uncertainty": "Measurable cellular uptake remains unestablished.",
+          "source": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-0.json",
+          "sampleId": "p1-t00-child-0000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "bf112a9680b4626f85b0510f84abb40ba939fc881cb9e38e5ca712422aaf87e1"
+        }
+      ]
+    },
+    "d2": {
+      "g0": [],
+      "g1": [],
+      "g": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge considered the molecular architecture and overall physicochemical balance compatible with plausible D2 recognition.",
+          "uncertainty": "Receptor-subtype selectivity and in vitro binding affinity remain unknown.",
+          "source": "paper, Appendix D.2.1, page 36",
+          "sampleId": "item-004",
+          "paraphrased": true,
+          "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge raised concerns about central-nervous-system exposure and an undesirable structural alert.",
+          "uncertainty": "Blood–brain barrier penetration and cellular toxicity remain unknown.",
+          "source": "paper, Appendix D.2.1, page 36",
+          "sampleId": "item-005",
+          "paraphrased": true,
+          "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+        }
+      ]
+    },
+    "gsk3b": {
+      "g0": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found the required scaffold features and plausible covalent geometry.",
+          "uncertainty": "Cell permeability and ATP-competitive inhibition remain unknown.",
+          "source": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",
+          "sampleId": "item-000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "b974fa8b7046714dfc18369da706416a97ad837c91776b840521fc1aed216c31"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate lacked an explicit structural feature required by the current goal.",
+          "uncertainty": "The missing structural feature is sufficient for this intermediate-goal judgment.",
+          "source": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",
+          "sampleId": "item-009",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "b974fa8b7046714dfc18369da706416a97ad837c91776b840521fc1aed216c31"
+        }
+      ],
+      "g1": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The candidate was judged chemically plausible and consistent with the required intermediate scaffold.",
+          "uncertainty": "Aqueous stability and experimental binding orientation and affinity remain unknown.",
+          "source": "EXP-0131/campaign/judgments/G02-p2/repeat-1.json",
+          "sampleId": "item-000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "4267a89c26d1ef121452a15557adf7a0ab776e010af02600e379da2d8fb32069"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate lacked a required structural feature of the current intermediate goal.",
+          "uncertainty": "GSK3β binding remains unknown; the current rejection is based on structural noncompliance.",
+          "source": "EXP-0131/campaign/judgments/G02-p2/repeat-1.json",
+          "sampleId": "item-004",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "4267a89c26d1ef121452a15557adf7a0ab776e010af02600e379da2d8fb32069"
+        }
+      ],
+      "g2": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found a plausible drug-like scaffold without the reactive groups excluded by this goal.",
+          "uncertainty": "Experimental binding affinity and metabolic stability remain unknown.",
+          "source": "EXP-0131/campaign/judgments/G03-p5/repeat-1.json",
+          "sampleId": "item-001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "49c2473a98e09252303ce7190db54097e03d69b4185c2ebf60411fe34fc14d76"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate lacked foundational structural requirements retained in the current goal.",
+          "uncertainty": "The judge raised uncertainty about the proposed binding interactions.",
+          "source": "EXP-0131/campaign/judgments/G03-p5/repeat-1.json",
+          "sampleId": "item-004",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "49c2473a98e09252303ce7190db54097e03d69b4185c2ebf60411fe34fc14d76"
+        }
+      ],
+      "g3": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found the molecular architecture and descriptors compatible with the current drug-likeness and stability requirements.",
+          "uncertainty": "Kinase selectivity and aqueous solubility remain experimentally unknown.",
+          "source": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-1.json",
+          "sampleId": "item-000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0a2621e77cc2d8a6213b2980e20b50122fbeb541ea4869cdc72886046bead53f"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge identified a potentially unstable and reactive structural feature.",
+          "uncertainty": "Chemical lifetime in aqueous buffer remains unmeasured.",
+          "source": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-1.json",
+          "sampleId": "item-001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "0a2621e77cc2d8a6213b2980e20b50122fbeb541ea4869cdc72886046bead53f"
+        }
+      ],
+      "g": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge inferred a compact architecture with plausible kinase-recognition features and suitable polarity.",
+          "uncertainty": "Selectivity against related kinases and thermodynamic aqueous solubility remain unknown.",
+          "source": "EXP-0165/campaign/judgments/F-direct-p2/repeat-1.json",
+          "sampleId": "item-001",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "3f5c86e40b82699f6f8bd008bbdd67900f4add02918f44d0f89b24d8e6059521"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The judge identified stability concerns and insufficient support for the proposed kinase-recognition mechanism.",
+          "uncertainty": "Aqueous stability, aggregation, and nonspecific assay interference remain uncertain.",
+          "source": "EXP-0165/campaign/judgments/F-direct-p2/repeat-1.json",
+          "sampleId": "item-000",
+          "paraphrased": true,
+          "agreement": "Same label in both recorded judge passes.",
+          "sourceSha256": "3f5c86e40b82699f6f8bd008bbdd67900f4add02918f44d0f89b24d8e6059521"
+        }
+      ]
+    },
+    "ood": {
+      "g0": [],
+      "g1": [],
+      "g2": [],
+      "g": [
+        {
+          "label": "POSITIVE",
+          "rationale": "The judge found that the rendered candidate satisfied every operative structural requirement of the complete discovery goal.",
+          "uncertainty": "Experimental target activity and other experimental properties remain unmeasured.",
+          "source": "paper, Appendix D.2.3, pages 42–43",
+          "sampleId": "sample-154 / item-151",
+          "paraphrased": true,
+          "agreement": "The paper reports agreement across both judge passes.",
+          "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+        },
+        {
+          "label": "NEGATIVE",
+          "rationale": "The candidate failed the specified placement of a required functional group and lacked another required ring feature.",
+          "uncertainty": "Target activity remains unmeasured, but the observed structure contradicts the requested specification.",
+          "source": "paper, Appendix D.2.3, page 43",
+          "sampleId": "sample-505 / item-499",
+          "paraphrased": true,
+          "agreement": "The paper reports agreement across both judge passes.",
+          "sourceSha256": "ba900c330bc0c53dd7973ae8777952398dd1bc3366d6cae4fd54bd577d0e0dd4"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "selection": "Two distinct stable-positive and two distinct stable-negative candidates per available stage. Previously illustrated candidates are retained when eligible, then archive order is used. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders and are not recorded judgments. Provider reasoning metadata is excluded.",
+  "sources": [
+    {
+      "file": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",
+      "sha256": "b974fa8b7046714dfc18369da706416a97ad837c91776b840521fc1aed216c31"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G01-p1/repeat-2.json",
+      "sha256": "795d10d6f05f3af70cd562cb020c0538f574c891d6bf76b32705530836f8f20a"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G01-p1/stable_summary.json",
+      "sha256": "77a57fe825f7487ef5eb0234e1d7b69c16bec83bb36f76390ea1b8471588f9ff"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G02-p2/repeat-1.json",
+      "sha256": "4267a89c26d1ef121452a15557adf7a0ab776e010af02600e379da2d8fb32069"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G02-p2/repeat-2.json",
+      "sha256": "c98977cd0e3fb30cda636a5e53720ca223a63970959ffa1e47d5a056ce759161"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G02-p2/stable_summary.json",
+      "sha256": "a124484a5f74594fe15877055068dec5eb1692d52a7cca9ac8bedf5c714f3091"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G03-p5/repeat-1.json",
+      "sha256": "49c2473a98e09252303ce7190db54097e03d69b4185c2ebf60411fe34fc14d76"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G03-p5/repeat-2.json",
+      "sha256": "f725d2573b1b4b2e14918ff831b270c0976a1b39d4978894c2a041e63107a9a6"
+    },
+    {
+      "file": "EXP-0131/campaign/judgments/G03-p5/stable_summary.json",
+      "sha256": "9bd0b0bf674775e9f3370b365fa18d06652d0805d9b5d03cd79bd7f3683d59ac"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-01/development/child/attempts/attempt-01/pool/candidate_pool.jsonl",
+      "sha256": "92012f1abeb64f2cf1c2d28465b69813269f8d8c8a79f1671a927edb7353919d"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-01/development/child/cohort_receipt.json",
+      "sha256": "dd09c06084774385f200b5e943b70f3aa772541f3a0e9056dd52650034c39f7a"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-01/goal_selection/proposal-1.json",
+      "sha256": "d1afac0aa9e77ab29fd9dedd740d5c9b2bc42f727b150e6aa6cb6081d789864a"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-01/round_result.json",
+      "sha256": "57b3429a842d173200da8106b56269f1796669210bdefa3c6fcec1d64e5a4fd6"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-02/development/child/attempts/attempt-01/pool/candidate_pool.jsonl",
+      "sha256": "62e52f3ae1224b3a024c5af543901d86e56423c3e19d36fd83e908217b79deb3"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-02/development/child/cohort_receipt.json",
+      "sha256": "c854c19da35768b4731e185685af4f5ea12e5e0136bd72c368cc682e500b5144"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-02/goal_selection/proposal-1.json",
+      "sha256": "835a330b23af5c2d9ab6356a93fcf8f1730f94ff5867c1506fd802ff83f811a6"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-02/round_result.json",
+      "sha256": "1ac12dd3e2b36fdf347a55f9b29b5a81c5acfe04e5b7559b140b05acfaad89c6"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-03/goal_selection/proposal-1.json",
+      "sha256": "ac9072b5cd3e120b2689071aa7a702fbc7f9a8f588c5ea6848c1a64168f6516c"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-05/development/child/attempts/attempt-01/pool/candidate_pool.jsonl",
+      "sha256": "4584d665bfcc5c6de3bd80b3795816d75cf1a2d6be677f986867cb5c6bb52f5c"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-05/development/child/cohort_receipt.json",
+      "sha256": "52a780919b56a123e5164f7af9b9ba3ae5546284a450e518b2542d021eb1eeb5"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-05/round_result.json",
+      "sha256": "ebdc3fed4a9bacef3090e09125ffbb36f1b7cb0469961c7bf881cce45ee1b67b"
+    },
+    {
+      "file": "EXP-0131/campaign/rounds/round-06/goal_selection/proposal-1.json",
+      "sha256": "e8cae0ed639a4882599065ba49e24104b42eef6801765096a066ba1bdc159270"
+    },
+    {
+      "file": "EXP-0155/campaign/bound_goal/round-03/development/child/attempts/attempt-01/pool/candidate_pool.jsonl",
+      "sha256": "3c4a4371950842557b6649ef62a9e978624413b5a64b61fac2623cde068c3a94"
+    },
+    {
+      "file": "EXP-0155/campaign/bound_goal/round-03/development/child/cohort_receipt.json",
+      "sha256": "f03b4bf362d647cf8c31e71ba08f5ebdde12f3702e225410b81e78e0cd6ca394"
+    },
+    {
+      "file": "EXP-0155/campaign/bound_goal/round-03/round_result.json",
+      "sha256": "6a9c742d595d4e854a89269600eef4940819b56edb82bc1681a30a748bc0a7bc"
+    },
+    {
+      "file": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-1.json",
+      "sha256": "0a2621e77cc2d8a6213b2980e20b50122fbeb541ea4869cdc72886046bead53f"
+    },
+    {
+      "file": "EXP-0155/campaign/judgments/G04-ablation-p3/repeat-2.json",
+      "sha256": "57b2b572a6f9a820d6e444f9fa9a46cfd7100e89227af933b415ac754f328e9f"
+    },
+    {
+      "file": "EXP-0155/campaign/judgments/G04-ablation-p3/stable_summary.json",
+      "sha256": "bb581a213bcc60fad739e5c2f72a15a133ddc54423b00f15502774ae8bdf6bcc"
+    },
+    {
+      "file": "EXP-0165/campaign/final_f/round-02/development/child/attempts/attempt-01/pool/candidate_pool.jsonl",
+      "sha256": "a19132fa1b369529a9d99c75919b0bc86dba9777d75f2daf410a0612e24e10c2"
+    },
+    {
+      "file": "EXP-0165/campaign/final_f/round-02/development/child/cohort_receipt.json",
+      "sha256": "8dc57d9d07bc9efa9fb5c1c844262e84c49824c8001a0e7762212f241c9c98b1"
+    },
+    {
+      "file": "EXP-0165/campaign/final_f/round-02/round_result.json",
+      "sha256": "b84be6f20d3d6c50bd44667f225e1a02a133da4d8a75db8756be28aef0e9b764"
+    },
+    {
+      "file": "EXP-0165/campaign/frozen_config.json",
+      "sha256": "8733d967351d616d6368f09528cd847c793a64e3a31a4d2bf6134a76a9575025"
+    },
+    {
+      "file": "EXP-0165/campaign/judgments/F-direct-p2/repeat-1.json",
+      "sha256": "3f5c86e40b82699f6f8bd008bbdd67900f4add02918f44d0f89b24d8e6059521"
+    },
+    {
+      "file": "EXP-0165/campaign/judgments/F-direct-p2/repeat-2.json",
+      "sha256": "3de6df3849fb4a174ec2f4b80636ac4ed109fd28223b44ecbe8cc008599298a4"
+    },
+    {
+      "file": "EXP-0165/campaign/judgments/F-direct-p2/stable_summary.json",
+      "sha256": "bbbc9ad0f4281ce028fc593a3282691af19c476963a597bbb566cd1c20f54631"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/distributions/p0/distribution_split_manifest.json",
+      "sha256": "7c5a801284dc07e809dc0fb4683d27e046b720672c0429d752b59b2126ce6bd2"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/distributions/p3/distribution_split_manifest.json",
+      "sha256": "d47a7f192465b33224d42258478368041a75c2f975c3f6077420a242de621c6b"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/goals/G01.json",
+      "sha256": "c3822d41ca36aba6a0bd5e01a4a6b4dc53e0cbb0719a3e008b6baccd555ff4ad"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/goals/G02.json",
+      "sha256": "42b5af7c1d97d4ea2d0cb7bbe1103fddb2268054a642f8cae32e95e09696a0e6"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-0.json",
+      "sha256": "22c998d3a142610c670f0d00a9b785fc3c0177c4ad98cfb0e23df98f081bb3ce"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/judgments/p0/fixed-cell-9f25f98320321f2882f02aa638617eb1f65dee0f9be9ed00da3e3525504900b2/pass-1.json",
+      "sha256": "a9a5c56c166bdcbf2f95d09c78c9d2c48ee0357b8ebbca92e75f2a720ccd70c2"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-0.json",
+      "sha256": "26b1264512c72b0d4be917e0fa53995be7a78d28e0a31851d2013b7e68fb081c"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/judgments/p3/fixed-cell-6c2a1da09367166f7e3aa3e0bd501eea66817abb5410997412f190e2b3cb5970/pass-1.json",
+      "sha256": "68bf628de7c711cd4f2a4f5e31656ea37a16b73eda6b0f155ee214e45db10d12"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/campaign/rounds/round-02/training/samples/child.jsonl",
+      "sha256": "727e53924eb5939eb5c1fc27a07067ed9a41b92fb2e1aa18ff443aa56bcf5429"
+    },
+    {
+      "file": "EXP-0189/gate50_F30/18601/p0/candidate_pool.jsonl",
+      "sha256": "55fb69f3066678fc7d638987d4cf1f024b34a820a244178c42416222ceea5327"
+    },
+    {
+      "file": "EXP-0194/campaign/distributions/p1/distribution_split_manifest.json",
+      "sha256": "836ea32916b2b008fb62156ee5fb2d1aaec4d2ae65219a42e7b7cb8b448153eb"
+    },
+    {
+      "file": "EXP-0194/campaign/goals/F.json",
+      "sha256": "9468e986972a0f5060059d098cfd0160f629651bfeec01a4256624db966f563a"
+    },
+    {
+      "file": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-0.json",
+      "sha256": "bf112a9680b4626f85b0510f84abb40ba939fc881cb9e38e5ca712422aaf87e1"
+    },
+    {
+      "file": "EXP-0194/campaign/judgments/p1/fixed-cell-0386c6002fc0d843bbcc23748cd6438f4d02c93654fd3ec4e9aa9bedb93427a8/pass-1.json",
+      "sha256": "88124c9d928291e8c858055aabee08e78ebd21b338750ad26e4e2268145f15ed"
+    },
+    {
+      "file": "EXP-0194/campaign/rounds/round-00/training/samples/child.jsonl",
+      "sha256": "516a720f04921cbcb663e4e713ed323ca5f416159deaaeb4f6d74a216c108bb2"
+    },
+    {
+      "file": "EXP-0199/gate50_F30/11001/campaign/rounds/round-00/training/samples/child.jsonl",
+      "sha256": "8b88776886e469e2634367b0660daa6701b2358a6291db6782d7718ed8734c93"
+    },
+    {
+      "file": "EXP-0199/gate50_F30/11001/p0/candidate_pool.jsonl",
+      "sha256": "b8801577a95205876dde2e630b055c51182cd0557440415fe71f3bbf0479e6e3"
+    },
+    {
+      "file": "EXP-0206/gate50_F30/11001/campaign/rounds/round-01/training/samples/child.jsonl",
+      "sha256": "4eff23232b29bf39138f6fef345af91ad37af944fe6668a00bd81893a3430908"
+    },
+    {
+      "file": "EXP-0206/gate50_F30/11001/campaign/rounds/round-03/training/samples/child.jsonl",
+      "sha256": "54bd693b7e42b2c94ef726f4dcf0485c6f406718622b618fd4bd56cd77f78585"
+    },
+    {
+      "file": "EXP-0206/gate50_F30/11001/campaign/rounds/round-04/training/samples/child.jsonl",
+      "sha256": "5c5f631701592d43c789ce1d794413ac9f95334ce956b13c9e254792d1309748"
+    },
+    {
+      "file": "EXP-0206/gate50_F30/11001/campaign/rounds/round-05/training/samples/child.jsonl",
+      "sha256": "6eb7b1f751e9ea8426cffcfc2f04b34f049f95155442759a5b999e5c8981c599"
+    },
+    {
+      "file": "EXP-0236/gate50_F30/11001/campaign/rounds/round-06/training/samples/child.jsonl",
+      "sha256": "9ed874d2467dbcb19c6121bbb28a8cae400e26e81afd89b738862cdb1c4e7a15"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p0/distribution_split_manifest.json",
+      "sha256": "674c1da62e8927595516b48331bae2a1827cf54f515618223b51bccf550206e8"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p1/distribution_split_manifest.json",
+      "sha256": "5923ce719d2ca3ff1d26931d5f6fb0dbc3837dfb92c6d9575b0771d20d3a4591"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p13/distribution_split_manifest.json",
+      "sha256": "9a4c83e11a6e50587f3ba25838f0c52550ce3f7dd02245a61a12726fdd2c7813"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p2/distribution_split_manifest.json",
+      "sha256": "fa73d1a791a07dbf56561aad9cecfe6f0f1f4f965da7781b4d44b0a717866d4d"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p4/distribution_split_manifest.json",
+      "sha256": "68750ea7d5691f34c46061d10497cb13e1d736872ad692d69cdce5b3252bd1c6"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p5/distribution_split_manifest.json",
+      "sha256": "477bd0d358586cb2b88375bd16ec6f68e03f3d5016e53cf6589f75ad99f790de"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p6/distribution_split_manifest.json",
+      "sha256": "6480a58fe15acc235b6f6ddab43e6b903f5bdc062b50fb8c4fa48558373082c3"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/distributions/p7/distribution_split_manifest.json",
+      "sha256": "a6785897671b0fdc23f5b47b008822914a94fcd266a4fb180c0ac87a3408915c"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/F.json",
+      "sha256": "accc9b03dd51fdeb4ca4cdcdcab900fb647b7579f832322d992e55e576c14f50"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G01.json",
+      "sha256": "179428ecb15cd0ddf9a719387494e764fe2412d7075b870ac328bd047a982515"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G02.json",
+      "sha256": "f48603349b6cdd55ff7cdb78b5f7c09dc7c7fc6f4e0f2e647cf1fc2f081d576b"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G03.json",
+      "sha256": "24c4e2dd167bcba4b6b9996807a98880c3b7dcef9c1013df1b2c670effb46153"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G04.json",
+      "sha256": "d8d2ca3547da16f3c9df204f1eb12bcc6349c565b8a127236a7a2acc214296b6"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G05.json",
+      "sha256": "17b7ce885424dde2e221ee0d3c972441ebedcdf1ebeae4821d53cfbea64f6e55"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G06.json",
+      "sha256": "f18e1e6b66b169222955f640dbca484b583bada7f8be693a28646271f7e2454a"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/goals/G07.json",
+      "sha256": "648f4727eda5de752dc0319662335c509c2e56c1e8dc5493e066f296df6fce62"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-0.json",
+      "sha256": "0768621cd70e136bdc0183ea51357b877e57c9b0d004819db745154ab188001b"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p0/fixed-cell-260d15aa6303caad4f3f33675e099264409334ab8785610e89b5d13f572e0b0b/pass-1.json",
+      "sha256": "f6aaf47b2721b0fb1fc576b92a61fffbb37e03374892ad8eba9432495839a1b0"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-0.json",
+      "sha256": "c7f03138cc8773c2c0ad5c78a67169abb80616ce4fdf353f126b7547b571ff95"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p1/fixed-cell-e0ba1ec681952fde669490bb1bf73aea2ae10b20315624a4eb4d34f0d4b74641/pass-1.json",
+      "sha256": "209459b232ba1e3870ae4bd3bdbc4b32cb068d0439366a5d8a04f5cf9747d2cf"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-0.json",
+      "sha256": "52ac2172c8c05bac51209a6dd52cd86e785ddaeb6a55f5167740babfe8532709"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p13/fixed-cell-ce866331f3314bf29e0eb53119c09e7c943cb7e509d149d1f9a283481aa4fea3/pass-1.json",
+      "sha256": "c6b46d1d67388da77d61b55f9bfb2643e4f393545478ef822ce5b465e7448ad6"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-0.json",
+      "sha256": "c2a272106a67b6c9624a0363db03de72753900df3fb681d2bfd33e396e90ce49"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p2/fixed-cell-3e58fee676fe4db96c9062edfe21cb9fc91a6ca48a11402749623d801219b345/pass-1.json",
+      "sha256": "684d7d535ad55a3a71f590cede21e43d3531c11d8edd4f5971da376b39184617"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-0.json",
+      "sha256": "0f810cf52c4263f4c144934e6c83984d43888253c3431504edcf9d382433f6d8"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p4/fixed-cell-14c705f4d02f9d53a4346a1990ff929e216e4a5754cf7d3ec77fe705abe7e630/pass-1.json",
+      "sha256": "22c5797f9385614d6ea7830428d659a778c755908ae5ba996c04a495639027f8"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-0.json",
+      "sha256": "47735f33bd278df06d5300299effe94aca70c4a0fb288b45e42b8acdbb31f9bb"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p5/fixed-cell-48b7f54c897dbd01cc5520dcb0080b4ce3488e3fb2a5f8843f2f375d39fe5590/pass-1.json",
+      "sha256": "6c567c58b9c39ec9ee01a93f7c95e71a1b14a8765b4f940d9542a0750f4cf3ed"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-0.json",
+      "sha256": "6e357639468312b295f767559f1e7f5319db1573a9943478b9018ee9af80b773"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p6/fixed-cell-234ab7dd2e36e0b896436c4071e626394ebe5918ddc793a62ddcdcd7db04e164/pass-1.json",
+      "sha256": "6347379a4f54a9ed248aab0ad21e9d6e0edadbe1f81e8e5b9678000a27b380c7"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-0.json",
+      "sha256": "11c5348dc870f6bd9a761f8052444c3a0c451894c231fabca7371353b371fb16"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/judgments/p7/fixed-cell-2f31f01f24874cfeb8a03c72efe23b354db3efd332b5602289f7aafba023aeb1/pass-1.json",
+      "sha256": "0a76aa565b615ce844df3d40685b598f332a2a7bec3105cb8dc3525de5e52828"
+    },
+    {
+      "file": "EXP-0244/gate50_F30/11001/campaign/rounds/round-12/training/samples/child.jsonl",
+      "sha256": "72d9cb8a249cd113d7af674ffc0ad27270a229256fb071978b8ecc7495acc908"
+    }
+  ]
+}
