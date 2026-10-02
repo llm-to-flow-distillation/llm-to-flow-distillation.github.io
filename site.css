@@ -451,6 +451,16 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .scaffold-novelty .plot-key { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px 10px; margin-bottom: 8px; font-size: 11px; }
 .scaffold-novelty .plot-key span { white-space: nowrap; }
 .scaffold-novelty .interactive-chart { height: 320px; }
+.novelty-chart-frame { position: relative; }
+.novelty-axis-help { position: absolute; bottom: 6px; left: 0; right: 0; padding-left: 62px; padding-right: 16px; text-align: center; }
+.metric-help-label { min-height: 34px; padding: 4px 0; border: 0; background: transparent; color: #4b515c; font: 12px/1.5 var(--sans); text-decoration: underline dotted #9299a4; text-underline-offset: 4px; cursor: help; }
+.metric-help-label:hover { color: var(--ink); }
+.metric-help-label:focus-visible { outline: 2px solid #426ba4; outline-offset: 3px; border-radius: 3px; }
+.metric-tooltip { position: absolute; z-index: 5; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); width: min(350px, calc(100% - 12px)); max-height: min(360px, calc(100vh - 32px)); overflow: auto; padding: 17px 18px; border: 1px solid #d8dce3; border-radius: 12px; background: #fff; box-shadow: 0 8px 28px #20212424; color: var(--ink); text-align: left; font-size: 12px; line-height: 1.65; }
+.metric-tooltip[hidden] { display: none; }
+.metric-tooltip > strong { display: block; font-size: 14px; margin-bottom: 9px; }
+.metric-tooltip p { margin: 0 0 9px; }
+.metric-tooltip-source { color: #626975; font-size: 11px; }
 .scaffold-novelty .chart-readout { margin-bottom: 12px; }
 .scaffold-novelty figcaption { font-size: 11px; line-height: 1.8; color: #535b67; }
 @media (max-width: 1199px) {
@@ -532,6 +542,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .results-values h4 { font-size: 17px; }
 #results-table th, #results-table td { padding-block: 17px; }
 #results-table thead th { font-size: 11px; background: #fafbfc; }
+#results-table .table-method { font-weight: 600; }
 #results-table .table-mean { font-weight: 500; font-size: 15px; color: #343d4a; }
 #results-table .table-uncertainty { color: #666f7e; font-size: 12px; font-weight: 400; }
 #results-table tr.ours { background: var(--goal-surface); }

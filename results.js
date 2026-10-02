@@ -77,10 +77,13 @@
       $('#comparison-readout').innerHTML = `<strong>${esc(row.method)}</strong> · ${result.metrics.map((m,i)=>`${esc(m.label)}: ${interval(...row.values[i])}`).join(' · ')}`;
     });
   }
+  function methodLabel(method) {
+    return `<span class="table-method" style="color:${style(method).color}">${esc(method === 'LFD' ? 'LFD · ours' : method)}</span>`;
+  }
   function renderTable(result) {
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
     $('#results-table-title').textContent = 'Numerical results';
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${esc(row.method === 'LFD' ? 'LFD · ours' : row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}, paper Table ${result.table}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
     $('#results-table-note').textContent = 'Means and ± terms are preserved from the paper. These are computational evaluations; see the paper for evaluation and checkpoint-selection details.';
   }
   const dockingMetrics = [
@@ -94,7 +97,7 @@
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
-    return `<figure class="scaffold-novelty"><h4>Scaffold novelty</h4>${legend(rows.map(row=>row.method))}<div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><p id="novelty-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a method to inspect its values and confidence intervals.</p><figcaption>Distinct novel scaffolds among the top 100 candidates; −rDock uses the top 5%. Black error bars are 95% CIs across five sampling seeds at fixed checkpoints.</figcaption><div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
+    return `<figure class="scaffold-novelty"><h4>Scaffold novelty</h4>${legend(rows.map(row=>row.method))}<div class="novelty-chart-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help"><button id="novelty-axis-label" class="metric-help-label" type="button" aria-expanded="false" aria-controls="novelty-metric-help" aria-describedby="novelty-metric-help">Novel scaffolds in top 100 ↑</button><div id="novelty-metric-help" class="metric-tooltip" role="tooltip" hidden><strong>What is scaffold novelty?</strong><p>A scaffold is a molecule’s core rings and connecting linkers after side-chain removal (Bemis–Murcko).</p><p>We count <b>distinct scaffolds absent from the consistency-filtered training reference</b>; duplicates count only once. Atom and bond types are retained; stereochemistry is ignored.</p><p>Higher values mean more previously unseen molecular cores.</p><span class="metric-tooltip-source">Appendix D.2 · Evaluation protocol</span></div></div></div><p id="novelty-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a method to inspect its values and confidence intervals.</p><figcaption>Distinct novel scaffolds among the top 100 candidates; −rDock uses the top 5%. Error bars match each method’s color and show 95% CIs across five sampling seeds at fixed checkpoints.</figcaption><div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -137,8 +140,56 @@
   function renderOODTable() {
     const evidence = window.LFD_DATA.resultPanels.oodEvidence;
     $('#results-table-title').textContent = 'Reported discovery evidence';
-    $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design, paper Figure 9. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">Pre-trained</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">LFD · ours</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design, paper Figure 9. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">${methodLabel('Pre-trained')}</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">${methodLabel('LFD')}</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
     $('#results-table-note').textContent = evidence.caveat;
+  }
+  function setupNoveltyHelp() {
+    const container = $('#task-scaffold-novelty');
+    let pinned = false, closeTimer;
+    function open() {
+      clearTimeout(closeTimer);
+      const label = $('#novelty-axis-label'), tooltip = $('#novelty-metric-help');
+      if (!label || !tooltip) return;
+      tooltip.hidden = false;
+      label.setAttribute('aria-expanded','true');
+    }
+    function close() {
+      clearTimeout(closeTimer);
+      pinned = false;
+      const label = $('#novelty-axis-label'), tooltip = $('#novelty-metric-help');
+      if (tooltip) tooltip.hidden = true;
+      if (label) label.setAttribute('aria-expanded','false');
+    }
+    function scheduleClose() {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        const help = container.querySelector('.novelty-axis-help');
+        if (!pinned && help && !help.matches(':hover') && !help.contains(document.activeElement)) close();
+      },180);
+    }
+    container.addEventListener('pointerover',event => {
+      if (event.pointerType === 'mouse' && event.target.closest('.novelty-axis-help')) open();
+    });
+    container.addEventListener('pointerout',event => {
+      const help = event.target.closest('.novelty-axis-help');
+      if (help && !help.contains(event.relatedTarget)) scheduleClose();
+    });
+    container.addEventListener('focusin',event => {
+      if (event.target.id === 'novelty-axis-label') open();
+    });
+    container.addEventListener('focusout',scheduleClose);
+    container.addEventListener('click',event => {
+      if (!event.target.closest('#novelty-axis-label')) return;
+      if (pinned) close();
+      else {pinned = true; open();}
+    });
+    document.addEventListener('keydown',event => {
+      if (event.key === 'Escape') close();
+    });
+    document.addEventListener('pointerdown',event => {
+      if (!event.target.closest('.novelty-axis-help')) close();
+    });
+    return close;
   }
   function init(results) {
     const data=window.LFD_DATA;
@@ -147,8 +198,10 @@
     const panel=$('#task-results-panel');
     let active=goals[0].id;
     let generation=0;
+    const closeNoveltyHelp=setupNoveltyHelp();
     cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="result-goal-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-card-heading"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><span class="card-generator">${esc(goal.generator)} · ${esc(goal.domain.toLowerCase())}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span id="result-goal-${esc(goal.id)}" class="result-goal">${esc(goal.goal)}</span></button>`).join('');
     function render(id) {
+      closeNoveltyHelp();
       active=id;
       const current=++generation;
       const goal=goals.find(task=>task.id===id);
@@ -270,13 +323,13 @@
     const traces=rows.map(row=>({
       type:'scatter',mode:'markers',name:row.method,x:[row.noveltyMean],y:[row.negativeRDockMean],
       marker:{color:style(row.method).color,symbol:style(row.method).symbol,size:row.method==='LFD' ? 12 : 10},
-      error_x:{type:'data',array:[row.noveltyCI95],visible:true,color:'#000000',thickness:1.3,width:4},
-      error_y:{type:'data',array:[row.negativeRDockCI95],visible:true,color:'#000000',thickness:1.3,width:4},
+      error_x:{type:'data',array:[row.noveltyCI95],visible:true,color:style(row.method).color,thickness:1.3,width:4},
+      error_y:{type:'data',array:[row.negativeRDockCI95],visible:true,color:style(row.method).color,thickness:1.3,width:4},
       hovertemplate:`<b>${esc(row.method)}</b><br>Novel scaffolds: ${interval(row.noveltyMean,row.noveltyCI95)}<br>−rDock (top 5%): ${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}<br>95% CIs · ${row.samplingSeeds} sampling seeds<extra></extra>`
     }));
     return draw('#novelty-chart',traces,layout({
       margin:{l:62,r:16,t:14,b:62},
-      xaxis:{fixedrange:true,title:{text:'Novel scaffolds in top 100 ↑',standoff:14},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true},
+      xaxis:{fixedrange:true,title:{text:''},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:'−rDock (top 5%) ↑',standoff:12},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true}
     }),point=>{
       const row=rows[point.curveNumber];

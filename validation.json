@@ -1819,5 +1819,175 @@
       "failed_requests": []
     },
     "source_preservation": "data/tasks.json, data/results.json, data/charts.json, data/result-panels.json, assets/paper.pdf and assets/hitGoal5.png unchanged."
+  },
+  "scaffoldColorsAndDefinitionRevision": {
+    "date": "2026-10-02",
+    "baseCommit": "42f98bf0b013949b7f2eacc5f45d59d1c6cf4bde",
+    "presentation": "Scaffold x/y confidence intervals match marker colors; numerical-table method names use the same palette. Docking bar uncertainties remain black.",
+    "metric_definition_source": "Supplied paper, Appendix D.2, Evaluation protocol, Scaffold novelty (PDF page 34).",
+    "metric_definition": "Distinct Bemis\u2013Murcko scaffolds absent from the consistency-filtered training reference, each counted once; core ring systems and connecting linkers after side-chain removal, retaining atom/bond types and ignoring stereochemistry.",
+    "interaction": "Dotted-underlined x-axis label opens its compact explanation on mouse hover or keyboard focus; click/tap pins or dismisses it, Escape and outside clicks dismiss it. State resets on task changes.",
+    "results_checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2227,
+        2560
+      ],
+      "goals": 5,
+      "table_metric_pairs": 66,
+      "paired_activity_toxicity": "passed",
+      "docking_grouped_bars": "passed",
+      "docking_absolute_values": "passed",
+      "docking_baseline_deltas": "passed",
+      "docking_negative_improvements": "passed",
+      "docking_zero_reference": "passed",
+      "docking_black_error_bars": "passed",
+      "docking_signed_hover": "passed",
+      "molecule_context_layout": "passed",
+      "scaffold_novelty_values": "passed",
+      "scaffold_novelty_marker_colored_cis": "passed",
+      "table_method_colors": "passed",
+      "scaffold_axis_definition_hover_focus_touch": "passed",
+      "scaffold_novelty_hover_touch": "passed",
+      "scaffold_novelty_table_layout": "passed",
+      "plot_data_disclosure": "removed",
+      "task_plot_isolation": "passed",
+      "marker_legends": "passed",
+      "paper_goals": "passed",
+      "fifth_task_evidence": "passed",
+      "goal5_curriculum_plot": "removed",
+      "goal5_figure": "passed",
+      "generator_colors": "passed",
+      "observable_lists": "passed",
+      "curriculum_stages": 23,
+      "curriculum_keyboard_touch": "passed",
+      "curriculum_trace_links": "passed",
+      "score_footers_and_metric_tiles": "removed",
+      "single_results_panel": "passed",
+      "selected_task_highlight": "passed",
+      "inline_paper_links": "removed",
+      "verbatim_curriculum_goals": 23,
+      "rapid_switching": "passed",
+      "keyboard": "passed",
+      "hover_touch": "passed",
+      "local_file": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "final_layout_checks": {
+      "status": "passed",
+      "views": [
+        {
+          "width": 390,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        },
+        {
+          "width": 1280,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        },
+        {
+          "width": 1440,
+          "marker_colored_intervals": "passed",
+          "docking_intervals": "black",
+          "table_method_colors": [
+            {
+              "name": "Pre-trained",
+              "color": "rgb(51, 55, 63)"
+            },
+            {
+              "name": "DPO",
+              "color": "rgb(215, 123, 0)"
+            },
+            {
+              "name": "Flow-GRPO",
+              "color": "rgb(113, 154, 220)"
+            },
+            {
+              "name": "DiffusionNFT",
+              "color": "rgb(40, 101, 101)"
+            },
+            {
+              "name": "Guidance",
+              "color": "rgb(197, 75, 89)"
+            },
+            {
+              "name": "LFD \u00b7 ours",
+              "color": "rgb(135, 50, 173)"
+            }
+          ],
+          "tooltip_layout_and_dismissal": "passed",
+          "task_switch_cleanup": "passed"
+        }
+      ],
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "source_data": "Scientific values, uncertainty widths, source JSON, paper and molecular figures unchanged."
   }
 }

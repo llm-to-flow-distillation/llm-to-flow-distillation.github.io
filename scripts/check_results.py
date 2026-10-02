@@ -22,6 +22,8 @@ def main():
     widths = [360, 390, 768, 901, 1024, 1280, 1440, 1920, 2227, 2560]
     errors, failures = [], []
     expected_colors={'LFD':'#8732ad','Pre-trained':'#33373f','DPO':'#d77b00','DiffusionNFT':'#286565','Flow-GRPO':'#719adc','Guidance':'#c54b59'}
+    def rgb(hex_color):
+        return 'rgb('+', '.join(str(int(hex_color[i:i+2],16)) for i in (1,3,5))+')'
     expected_symbols={'LFD':'square','Pre-trained':'x','DPO':'circle','DiffusionNFT':'diamond','Flow-GRPO':'triangle-up','Guidance':'triangle-down'}
     with sync_playwright() as p:
         browser = p.chromium.launch(args=['--no-sandbox'])
@@ -98,6 +100,8 @@ def main():
             assert page.locator('.metric-summary,.metric-tile,.goal-preview').count() == 0
             assert page.locator('#result-discovery').inner_html() == ''
             for index,row in enumerate(result['rows']):
+                name=page.locator('#results-table tbody tr').nth(index).locator('.table-method')
+                assert name.evaluate('(el)=>getComputedStyle(el).color')==rgb(expected_colors[row['method']])
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
             if result['table']==2:
@@ -110,14 +114,25 @@ def main():
                     expect(page.locator('#novelty-chart')).to_be_visible()
                     assert page.locator('#task-results-panel .js-plotly-plot').count()==2
                     novelty=page.locator('#novelty-chart').evaluate('(plot)=>plot.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],symbol:t.marker.symbol,color:t.marker.color,xColor:t.error_x.color,yColor:t.error_y.color}))')
-                    assert novelty==[{'method':r['method'],'x':r['noveltyMean'],'y':r['negativeRDockMean'],'dx':r['noveltyCI95'],'dy':r['negativeRDockCI95'],'symbol':expected_symbols[r['method']],'color':expected_colors[r['method']],'xColor':'#000000','yColor':'#000000'} for r in charts['novelty']]
-                    strokes=page.locator('#novelty-chart .errorbar path').evaluate_all('(els)=>els.map(el=>getComputedStyle(el).stroke)')
-                    assert len(strokes)==12 and all(color=='rgb(0, 0, 0)' for color in strokes)
+                    assert novelty==[{'method':r['method'],'x':r['noveltyMean'],'y':r['negativeRDockMean'],'dx':r['noveltyCI95'],'dy':r['negativeRDockCI95'],'symbol':expected_symbols[r['method']],'color':expected_colors[r['method']],'xColor':expected_colors[r['method']],'yColor':expected_colors[r['method']]} for r in charts['novelty']]
+                    strokes=page.locator('#novelty-chart .scatterlayer .trace').evaluate_all('(els)=>els.map(el=>[...el.querySelectorAll(".errorbar path")].map(path=>getComputedStyle(path).stroke))')
+                    assert strokes==[[rgb(expected_colors[r['method']])]*2 for r in charts['novelty']]
                     page.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').hover(force=True)
                     expect(page.locator('#novelty-readout')).to_contain_text('LFD')
                     expect(page.locator('#novelty-readout')).to_contain_text('89.00')
                     expect(page.locator('#novelty-readout')).to_contain_text('17.373')
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('95% CIs')
+                    label=page.locator('#novelty-axis-label');tip=page.locator('#novelty-metric-help')
+                    label.hover();expect(tip).to_be_visible()
+                    expect(tip).to_contain_text('Bemis–Murcko')
+                    expect(tip).to_contain_text('consistency-filtered training reference')
+                    expect(tip).to_contain_text('count only once')
+                    tip.hover();expect(tip).to_be_visible()
+                    page.mouse.move(1,1);expect(tip).to_be_hidden()
+                    label.focus();expect(tip).to_be_visible()
+                    page.keyboard.press('Escape');expect(tip).to_be_hidden()
+                    page.keyboard.press('Enter');expect(tip).to_be_visible()
+                    page.locator('#results-table-title').click();expect(tip).to_be_hidden()
                 else:
                     assert page.locator('#novelty-chart').count()==0
                 bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0]),baseline:t.customdata.map(v=>v[4])}))')
@@ -246,6 +261,11 @@ def main():
                     touch.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').tap(force=True)
                     expect(touch.locator('#novelty-readout')).to_contain_text('89.00')
                     expect(touch.locator('#novelty-readout')).to_contain_text('17.373')
+                    label=touch.locator('#novelty-axis-label');tip=touch.locator('#novelty-metric-help')
+                    label.tap();expect(tip).to_be_visible()
+                    bounds=tip.bounding_box()
+                    assert bounds['x']>=0 and bounds['x']+bounds['width']<=390
+                    label.tap();expect(tip).to_be_hidden()
             else:
                 assert touch.locator('#task-results-plots .js-plotly-plot').count()==0
                 expect(touch.locator('#task-results-plots')).to_be_hidden()
@@ -258,7 +278,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_black_cis':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
