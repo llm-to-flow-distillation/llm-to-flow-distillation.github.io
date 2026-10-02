@@ -28,7 +28,10 @@ def main():
         page.goto(args.url, wait_until='networkidle')
         assert ' '.join(page.locator('h1').inner_text().split()) == 'LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators'
         assert page.locator('[data-result-task]').count() == 5
-        assert page.locator('a[href*="paper.pdf"], .paper-button, #citation').count() == 0
+        assert page.locator('a[href*="paper.pdf"], #citation').count() == 0
+        expect(page.locator('button.paper-button')).to_be_disabled()
+        assert page.locator('.paper-button').get_attribute('href') is None
+        expect(page.locator('.paper-button')).to_have_text('arXiv')
         assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 4546')
         assert page.locator('.title-subtitle').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)') < page.locator('.title-main').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
         assert len(set(page.locator('.author-row > span').evaluate_all('(els) => els.map(el => getComputedStyle(el).fontSize)'))) == 1
@@ -115,7 +118,7 @@ def main():
                     assert 'not available' in page.locator('.trace-empty').inner_text()
                 assert page.locator('#tab-evidence, #panel-evidence').count() == 0
                 assert page.locator('a[href*="paper.pdf"]').count() == 0
-                rendered = page.locator('body').inner_text()
+                rendered = page.locator('body').inner_text().replace('arXiv','',1)
                 assert not re.search(r'\b(?:paper|appendix|preprint|arxiv|bibtex|table\s+\d|figure\s+\d|algorithm\s+\d)\b',rendered,re.I), (task['id'],stage['id'])
         print('All 23 stages, 64 recorded candidates and 28 placeholders, size-paired cards, searches, filters and Sources removal passed.')
         page.goto(args.url + '/#explorer?task=cpp&stage=g&tab=traces', wait_until='networkidle')
