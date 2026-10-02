@@ -165,7 +165,7 @@
     const task = tasks.find(t => t.id === params.get('task')) || tasks[0];
     state.task = task.id;
     state.stage = task.stages.some(s => s.id === params.get('stage')) ? params.get('stage') : task.stages[0].id;
-    state.tab = ['overview','traces','evidence'].includes(params.get('tab')) ? params.get('tab') : 'overview';
+    state.tab = ['overview','traces'].includes(params.get('tab')) ? params.get('tab') : 'overview';
     return true;
   }
   function updateHash() {
@@ -203,15 +203,6 @@
       .replace('The main text refers to the third rung as g2, while the appendix labels it g3. This explorer uses sequential g0/g1/g2 and records that numbering discrepancy.', 'Source records label the third intermediate stage inconsistently as g2 or g3. This explorer uses sequential g0/g1/g2.')
       .replace('The paper reports agreement across both judge passes.', 'Both judge passes agree.');
   }
-  function displayedRecord(value) {
-    if (Array.isArray(value)) return value.map(displayedRecord);
-    if (value && typeof value === 'object') {
-      return Object.fromEntries(Object.entries(value)
-        .filter(([key,item]) => !['paperPages','goalTextSource','title','summary'].includes(key) && !(key === 'source' && /paper|appendix/i.test(item)))
-        .map(([key,item]) => [key,displayedRecord(item)]));
-    }
-    return typeof value === 'string' ? displayContext(value) : value;
-  }
   function renderExplorer() {
     const task = currentTask();
     const stage = currentStage();
@@ -242,10 +233,9 @@
     } else {
       selectionBody = `<div class="selection-card"><span class="evidence-status">LLM goal selection · verbatim</span><h4>Why this subgoal?</h4><p class="selection-rationale goal-quotation"><q>${esc(selection.rationale)}</q></p>${selection.uncertainty ? `<div class="selection-limitations"><strong>LLM-stated limitations</strong><p class="goal-quotation"><q>${esc(selection.uncertainty)}</q></p></div>` : ''}${selection.bridge ? `<details class="selection-bridge"><summary>Connection to the final goal</summary><p class="goal-quotation"><q>${esc(selection.bridge)}</q></p>${selection.deferredRequirements?.length ? `<strong>Requirements deferred by the LLM</strong><ul>${selection.deferredRequirements.map(item => `<li>${esc(item)}</li>`).join('')}</ul>` : ''}</details>` : ''}</div>`;
     }
-    $('#panel-overview').innerHTML = `${selectionBody}<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal assessment. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div></div><div><div class="panel-label">Candidate judgments</div><div class="panel-description">${recorded ? 'Two positive and two negative candidates, with both judge passes.' : 'Two positive and two negative placeholder slots. Candidate evidence is pending.'}</div><button class="trace-open-button" id="open-stage-traces">${recorded ? 'Inspect the four candidates' : 'View placeholder slots'} <span aria-hidden="true">→</span></button></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))}</p>`;
+    $('#panel-overview').innerHTML = `${selectionBody}<div class="overview-grid"><div><div class="panel-label">Place in the curriculum</div><div class="panel-description">${stage.rounds ? `Updates ${start + 1}${stage.rounds > 1 ? `–${start + stage.rounds}` : ''} of ${total} in the reported trajectory.` : 'Final-goal assessment. No extra training update.'}</div><div class="round-track" role="img" aria-label="${stage.rounds} of ${total} training updates in this stage">${bars}</div></div><div><div class="panel-label">Candidate judgments</div><div class="panel-description">${recorded ? 'Two size-matched positive/negative pairs, with both judge passes.' : 'Two positive and two negative placeholder slots. Candidate evidence is pending.'}</div><button class="trace-open-button" id="open-stage-traces">${recorded ? 'Inspect the four candidates' : 'View placeholder slots'} <span aria-hidden="true">→</span></button></div></div><p class="context-note">${esc(displayContext(stage.context || task.shortCaveat))}</p>`;
     $('#open-stage-traces').addEventListener('click', () => {state.tab = 'traces'; updateHash(); renderTab(); $('#tab-traces').focus({preventScroll:true});});
     $('#trace-count').textContent = recorded || '4 slots';
-    $('#panel-evidence').innerHTML = `<div class="panel-label">Source lineage</div><p class="panel-description">${esc(displayContext(task.lineage))}</p><div class="source-links"><a href="data/tasks.json" target="_blank" rel="noopener">Public evidence JSON ↗</a></div><div class="panel-label">Interpretation & selection context</div><ul class="caveat-list">${task.caveats.map(c => `<li>${esc(displayContext(c))}</li>`).join('')}</ul><details><summary>Inspect this stage’s structured record <span aria-hidden="true">+</span></summary><pre class="evidence-json">${esc(JSON.stringify(displayedRecord(stage),null,2))}</pre></details>`;
     renderTraces();
     renderTab();
   }
@@ -265,8 +255,8 @@
       $('#trace-list').innerHTML = '<div class="trace-empty">No examples match this search and judgment filter. Clear the search or choose All judgments.</div>';
       return;
     }
-    const groups = ['POSITIVE','NEGATIVE','ABSTAIN'].map(label => ({label,items:traces.filter(trace => trace.label === label)})).filter(group => group.items.length);
-    $('#trace-list').innerHTML = `${stage.traces[0].status === 'placeholder' ? '<p class="placeholder-notice"><strong>Placeholder examples.</strong> Candidate structures, rationales, and uncertainties will appear here when the source traces are available.</p>' : ''}<div class="trace-columns ${groups.length === 1 ? 'single-group' : ''}">${groups.map(group => `<section class="trace-group" aria-label="${esc(group.label.toLowerCase())} examples"><h4 class="trace-group-heading ${esc(group.label.toLowerCase())}">${esc(group.label === 'POSITIVE' ? 'Positive examples' : group.label === 'NEGATIVE' ? 'Negative examples' : 'Abstentions')} <span>${group.items.length}</span></h4>${group.items.map(renderTraceCard).join('')}</section>`).join('')}</div>`;
+    const pairs = stage.tracePairs.map(pair => ({...pair,items:[pair.positiveId,pair.negativeId].map(id => traces.find(trace => trace.sampleId === id)).filter(Boolean)})).filter(pair => pair.items.length);
+    $('#trace-list').innerHTML = `${stage.traces[0].status === 'placeholder' ? '<p class="placeholder-notice"><strong>Placeholder examples.</strong> Candidate structures, rationales, and uncertainties will appear here when the source traces are available.</p>' : '<p class="trace-selection-note">Illustrative pairs selected for size diversity and clear, consistent goal-specific judgments.</p>'}${pairs.map(pair => `<section class="trace-pair" data-pair-id="${esc(pair.id)}" aria-label="${esc(pair.label)}"><div class="trace-pair-heading"><h4>${esc(pair.label)}</h4>${stage.traces[0].status === 'recorded' ? `<span>${pair.sizeUnit === 'aa' ? 'Matched length' : 'Comparable molecular weight'}</span>` : ''}</div><div class="trace-pair-grid ${pair.items.length === 1 ? 'single-candidate' : ''}">${pair.items.map(renderTraceCard).join('')}</div></section>`).join('')}`;
     $$('.trace-card').forEach(card => {
       const trace = traces.find(item => item.sampleId === card.dataset.sampleId);
       $('.copy-candidate', card)?.addEventListener('click', () => copy(trace.representation.value, 'Candidate copied'));

@@ -1,5 +1,5 @@
 {
-  "selection": "Two distinct stable-positive and two distinct stable-negative candidates per available stage. Previously illustrated candidates are retained when eligible, then archive order is used. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders and are not recorded judgments. Provider reasoning metadata is excluded.",
+  "selection": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders, not recorded judgments. Provider reasoning metadata is excluded.",
   "sources": [
     {
       "file": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",

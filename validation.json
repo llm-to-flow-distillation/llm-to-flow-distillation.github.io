@@ -2255,5 +2255,50 @@
     },
     "preserved": "All 23 verbatim goals, training-round counts, and original result/chart data.",
     "layout": "Desktop positive/negative columns stack on smaller screens. Mobile grid clipping and missing subscript glyphs corrected."
+  },
+  "sizeDiverseTracePairs": {
+    "date": "2026-10-02",
+    "baseCommit": "7e4febd8efa0105b66b43cd6f7f06354931ba99a",
+    "selection": "32 editorial illustrative pairs selected for explicit, consistent goal-specific explanations, stable labels in both passes, size diversity and comparable size within each pair. No downstream score ranking or scientific result changes.",
+    "peptidePairs": {
+      "count": 22,
+      "lengths": [
+        12,
+        38
+      ],
+      "matching": "exact within each pair"
+    },
+    "molecularPairs": {
+      "count": 10,
+      "matching": "less than 20 Da within each pair; two separated size ranges per stage"
+    },
+    "sourceValidation": "90 receipts, 64 candidate representations, 128 verbatim judgments and all pair sizes verified against source archives; deterministic import.",
+    "sourcesPanel": "removed; legacy evidence-tab links fall back to Goal rationale",
+    "checks": {
+      "status": "passed",
+      "stages": 23,
+      "recorded_candidates": 64,
+      "placeholder_slots": 28,
+      "reported_value_pairs": 66,
+      "viewports": [
+        360,
+        390,
+        768,
+        1200,
+        1280,
+        1440
+      ],
+      "contents_navigation": "passed",
+      "verbatim_goal_rationales": 13,
+      "verbatim_judge_outputs": 128,
+      "copy_representations": "passed",
+      "judge_pass_switching": "passed",
+      "placeholder_separation": "passed",
+      "size_matched_pairs": 32,
+      "source_tab": "removed",
+      "legacy_source_links": "fall back to goal rationale",
+      "browser_errors": [],
+      "failed_http_requests": []
+    }
   }
 }

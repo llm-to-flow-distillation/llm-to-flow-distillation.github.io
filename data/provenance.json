@@ -85,6 +85,8 @@
     ],
     "fields": "Only explicit structured goal explanations, final-output judgment rationales and critical_unknowns, candidate sequence/SMILES, and selected observed descriptors. Provider reasoning metadata is excluded.",
     "priorSummaries": "data/trace-summary-archive.json",
-    "importer": "scripts/import_traces.py"
+    "importer": "scripts/import_traces.py",
+    "pairSelection": "data/trace-pairs.json",
+    "selectionPolicy": "Editorial illustrative selection for consistent goal-specific explanations and size diversity; not a random sample, causal control, or validated activity ranking."
   }
 }

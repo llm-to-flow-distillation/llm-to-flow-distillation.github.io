@@ -47,12 +47,13 @@ def main():
     if not previous.exists():
         previous.write_text(json.dumps({'description': 'Previous illustrative paraphrases, superseded by verbatim archived judgments or explicitly marked placeholders.', 'tasks': {t['id']: {s['id']: s['traces'] for s in t['stages']} for t in data['tasks']}}, ensure_ascii=False, indent=2) + '\n')
 
-    prior_examples = json.loads(previous.read_text())['tasks']
+    curation = json.loads((ROOT / 'data/trace-pairs.json').read_text())
     for task in data['tasks']:
         for stage in task['stages']:
             if task['id'] in {'d2', 'ood'}:
                 stage['selection'] = {'status': 'placeholder', 'rationale': None, 'uncertainty': None}
-                stage['traces'] = [{'status': 'placeholder', 'label': label, 'sampleId': f'placeholder-{label.lower()}-{i}', 'representation': None, 'rationale': None, 'uncertainty': None} for label in ('POSITIVE', 'NEGATIVE') for i in (1, 2)]
+                stage['tracePairs'] = [{'id': f'pair-{i}', 'label': f'Example pair {i} · pending', 'positiveId': f'placeholder-positive-{i}', 'negativeId': f'placeholder-negative-{i}'} for i in (1, 2)]
+                stage['traces'] = [{'status': 'placeholder', 'label': label, 'pairId': f'pair-{i}', 'sampleId': f'placeholder-{label.lower()}-{i}', 'representation': None, 'rationale': None, 'uncertainty': None} for label in ('POSITIVE', 'NEGATIVE') for i in (1, 2)]
                 continue
             first_path = archive / stage['traces'][0]['source']
             first = read(first_path)
@@ -97,9 +98,11 @@ def main():
                 id_key, label_key = 'item_id', 'final_label'
             map2 = {row[id_key]: row for row in rows2}
             picked = []
-            # Keep previously shown examples, then use archive order. Never rank by activity.
-            old_ids = [t['sampleId'] for t in prior_examples[task['id']][stage['id']]]
-            ordered = sorted(enumerate(rows1), key=lambda pair: (0 if pair[1][id_key] in old_ids else 1, pair[0]))
+            stage['tracePairs'] = curation['tasks'][task['id']][stage['id']]
+            selected_ids = [pair[key] for pair in stage['tracePairs'] for key in ['positiveId', 'negativeId']]
+            assert len(set(selected_ids)) == 4
+            rows_by_id = {row[id_key]: row for row in rows1}
+            ordered = [(i, rows_by_id[candidate_id]) for i, candidate_id in enumerate(selected_ids)]
             for label in ('positive', 'negative'):
                 eligible = [row for _, row in ordered if row[label_key] == label and row[id_key] in map2 and map2[row[id_key]][label_key] == label and not row.get('override_reason') and not map2[row[id_key]].get('override_reason')]
                 assert len(eligible) >= 2, (task['id'], stage['id'], label)
@@ -121,14 +124,17 @@ def main():
                     passes = []
                     for pass_index, (judgment, path) in enumerate([(row, first_path), (map2[row[id_key]], second_path)], 1):
                         passes.append({'pass': pass_index, 'label': judgment[label_key].upper(), 'rationale': judgment['rationale'], 'uncertainty': judgment['critical_unknowns'], 'source': receipt(path)})
-                    picked.append({'status': 'recorded', 'label': label.upper(), 'sampleId': row[id_key], 'representation': {'kind': 'peptide' if peptide else 'smiles', 'value': value, 'source': receipt(pool_path)}, 'observables': observables, 'rationale': row['rationale'], 'uncertainty': row['critical_unknowns'], 'passes': passes, 'source': str(first_path.relative_to(archive)), 'sourceSha256': receipt(first_path)['sha256'], 'paraphrased': False, 'agreement': 'Same label in both recorded judge passes.'})
+                    pair = next(pair for pair in stage['tracePairs'] if row[id_key] in [pair['positiveId'], pair['negativeId']])
+                    size = candidate['length'] if peptide else candidate['card']['descriptors']['molecular_weight_da']
+                    assert size == pair['sizes'][0 if label == 'positive' else 1]
+                    picked.append({'status': 'recorded', 'pairId': pair['id'], 'label': label.upper(), 'sampleId': row[id_key], 'representation': {'kind': 'peptide' if peptide else 'smiles', 'value': value, 'source': receipt(pool_path)}, 'observables': observables, 'rationale': row['rationale'], 'uncertainty': row['critical_unknowns'], 'passes': passes, 'source': str(first_path.relative_to(archive)), 'sourceSha256': receipt(first_path)['sha256'], 'paraphrased': False, 'agreement': 'Same label in both recorded judge passes.'})
                     if len(selected_representations) == 2:
                         break
                 assert len(selected_representations) == 2
             stage['traces'] = picked
             print(task['id'], stage['id'], '4 recorded candidates')
     data['schemaVersion'] = 2
-    data['selectionNote'] = 'Two distinct stable-positive and two distinct stable-negative candidates per available stage. Previously illustrated candidates are retained when eligible, then archive order is used. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders and are not recorded judgments. Provider reasoning metadata is excluded.'
+    data['selectionNote'] = curation['selectionPolicy'] + ' Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders, not recorded judgments. Provider reasoning metadata is excluded.'
     data_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
     (ROOT / 'data/trace-sources.json').write_text(json.dumps({'selection': data['selectionNote'], 'sources': sorted(receipts.values(), key=lambda r: r['file'])}, ensure_ascii=False, indent=2) + '\n')
 

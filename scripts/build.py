@@ -36,6 +36,24 @@ def validate():
             if selection['status'] == 'recorded':
                 assert selection['rationale'] and selection['source']
             assert len(stage['traces']) == 4
+            assert len(stage['tracePairs']) == 2
+            by_id = {trace['sampleId']: trace for trace in stage['traces']}
+            paired_ids = []
+            for pair in stage['tracePairs']:
+                positive, negative = by_id[pair['positiveId']], by_id[pair['negativeId']]
+                assert positive['label'] == 'POSITIVE' and negative['label'] == 'NEGATIVE'
+                assert positive['pairId'] == negative['pairId'] == pair['id']
+                paired_ids.extend([pair['positiveId'], pair['negativeId']])
+                if selection['status'] != 'placeholder':
+                    assert pair['selectionReason'] and len(pair['sizes']) == 2
+                    if pair['sizeUnit'] == 'aa':
+                        assert pair['sizes'][0] == pair['sizes'][1]
+                        assert pair['sizes'] == [len(positive['representation']['value']), len(negative['representation']['value'])]
+                    else:
+                        assert pair['sizeUnit'] == 'Da' and abs(pair['sizes'][0] - pair['sizes'][1]) < 20
+            assert len(set(paired_ids)) == 4
+            if selection['status'] != 'placeholder':
+                assert max(stage['tracePairs'][0]['sizes']) < min(stage['tracePairs'][1]['sizes'])
             assert [t['label'] for t in stage['traces']].count('POSITIVE') == 2
             assert [t['label'] for t in stage['traces']].count('NEGATIVE') == 2
             for trace in stage['traces']:

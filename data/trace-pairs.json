@@ -1,0 +1,434 @@
+{
+  "schemaVersion": 1,
+  "selectionPolicy": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores.",
+  "reviewedFields": [
+    "candidate representation",
+    "recorded descriptors",
+    "both explicit judge rationales",
+    "both critical_unknowns fields"
+  ],
+  "tasks": {
+    "anticancer": {
+      "g0": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p0-l12-0005",
+          "negativeId": "p0-l12-0000",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes contrast the positive-charge criterion at the same sequence length."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p0-l38-0004",
+          "negativeId": "p0-l38-0011",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "A longer pair with an explicit charge-based distinction and stated folding uncertainties."
+        }
+      ],
+      "g1": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p1-t00-child-0018",
+          "negativeId": "p1-t00-child-0021",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative lacks the aromatic residues required at this stage; the positive includes them."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p1-t00-child-0008",
+          "negativeId": "p1-t00-child-0062",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The same aromatic-residue contrast at a longer sequence length."
+        }
+      ],
+      "g2": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p2-t01-child-0012",
+          "negativeId": "p2-t01-child-0018",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes identify compliance versus absence of the required aromatic residues."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p2-t01-child-0011",
+          "negativeId": "p2-t01-child-0017",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes cite the positive-charge prerequisite; no measured toxicity is inferred from the labels."
+        }
+      ],
+      "g3": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p4-t03-child-0012",
+          "negativeId": "p4-t03-child-0006",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative contains cysteine, directly contrary to this curriculum stage."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p4-t03-child-0035",
+          "negativeId": "p4-t03-child-0014",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Cysteine exclusion provides the same explicit criterion at the longer length."
+        }
+      ],
+      "g4": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p5-t04-child-0021",
+          "negativeId": "p5-t04-child-0003",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative contains a proline doublet and cysteine; both passes identify these explicit exclusions."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p5-t04-child-0002",
+          "negativeId": "p5-t04-child-0014",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The longer examples contrast criterion compliance with an explicit cysteine exclusion."
+        }
+      ],
+      "g5": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p6-t05-child-0006",
+          "negativeId": "p6-t05-child-0012",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative has an explicit charge-based failure; the positive explanations enumerate the operative criteria."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p6-t05-child-0014",
+          "negativeId": "p6-t05-child-0005",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative contains a recorded proline doublet; the positive has a single isolated proline."
+        }
+      ],
+      "g6": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p7-t06-child-0009",
+          "negativeId": "p7-t06-child-0003",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "A clear aromatic-residue criterion distinguishes the short examples in both passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p7-t06-child-0026",
+          "negativeId": "p7-t06-child-0068",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative has the explicitly identified five-lysine run; toxicity remains a model hypothesis, not an experimental finding."
+        }
+      ],
+      "g": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p13-t12-child-0072",
+          "negativeId": "p13-t12-child-0009",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes discuss the sequence profile and predicted developability; the label does not establish selectivity or safety."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p13-t12-child-0032",
+          "negativeId": "p13-t12-child-0002",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "A longer pair contrasting the recorded non-hemolysis and solubility bands, with empirical properties still unknown."
+        }
+      ]
+    },
+    "cpp": {
+      "g0": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p0-l12-0009",
+          "negativeId": "p0-l12-0005",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The explanations contrast a recognizable basic/hydrophobic segment with the recorded polar, acidic profile."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p0-l38-0002",
+          "negativeId": "p0-l38-0003",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes discuss sequence-level membrane-interaction features and acknowledge missing conformation evidence."
+        }
+      ],
+      "g1": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p3-t02-child-0036",
+          "negativeId": "p3-t02-child-0021",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The negative explanations identify a contiguous hydrophobic/aromatic segment; the positive retains predicted-safety context."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p3-t02-child-0017",
+          "negativeId": "p3-t02-child-0005",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The longer pair contrasts the recorded distributed-basic profile with a hydrophobic, net-neutral profile and low predicted non-hemolysis."
+        }
+      ],
+      "g": [
+        {
+          "id": "pair-1",
+          "label": "12 amino acids",
+          "positiveId": "p1-t00-child-0018",
+          "negativeId": "p1-t00-child-0033",
+          "sizes": [
+            12,
+            12
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "Both passes discuss the short-sequence profile and recorded non-hemolysis band; actual uptake remains unmeasured."
+        },
+        {
+          "id": "pair-2",
+          "label": "38 amino acids",
+          "positiveId": "p1-t00-child-0008",
+          "negativeId": "p1-t00-child-0017",
+          "sizes": [
+            38,
+            38
+          ],
+          "sizeUnit": "aa",
+          "selectionReason": "The longer pair retains the reported uptake/safety hypotheses and explicit uncertainties, without asserting measured efficacy."
+        }
+      ]
+    },
+    "gsk3b": {
+      "g0": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 266–269 Da",
+          "positiveId": "item-018",
+          "negativeId": "item-009",
+          "sizes": [
+            269.3,
+            266.341
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Similar molecular weights; the negative has zero aromatic rings despite having donors."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 419–428 Da",
+          "positiveId": "item-041",
+          "negativeId": "item-062",
+          "sizes": [
+            418.518,
+            427.551
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Larger, similar-weight structures; the negative lacks the explicitly required hydrogen-bond donor."
+        }
+      ],
+      "g1": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 270–277 Da",
+          "positiveId": "item-078",
+          "negativeId": "item-024",
+          "sizes": [
+            277.305,
+            270.288
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Both have donors and similar weights; the negative lacks the heteroaromatic ring required at this stage."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 421–422 Da",
+          "positiveId": "item-061",
+          "negativeId": "item-069",
+          "sizes": [
+            421.478,
+            421.522
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Nearly identical molecular weights; the same explicit heteroaromatic-ring requirement distinguishes the recorded explanations."
+        }
+      ],
+      "g2": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 259–276 Da",
+          "positiveId": "item-078",
+          "negativeId": "item-031",
+          "sizes": [
+            259.265,
+            276.343
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "The smaller negative fails the explicit donor-count requirement."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 400–408 Da",
+          "positiveId": "item-047",
+          "negativeId": "item-006",
+          "sizes": [
+            407.52,
+            400.442
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Similar-weight larger structures; both passes identify the explicitly excluded acylhydrazone-type linker in the negative."
+        }
+      ],
+      "g3": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 269–281 Da",
+          "positiveId": "item-054",
+          "negativeId": "item-007",
+          "sizes": [
+            269.304,
+            281.315
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "The smaller negative lacks the required hydrogen-bond donor."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 406–417 Da",
+          "positiveId": "item-011",
+          "negativeId": "item-013",
+          "sizes": [
+            406.471,
+            416.51
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Larger, similar-weight structures contrast the recorded non-fused arrangement with the excluded fused polyaromatic architecture; solubility remains unmeasured."
+        }
+      ],
+      "g": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 323–323 Da",
+          "positiveId": "item-049",
+          "negativeId": "item-011",
+          "sizes": [
+            323.385,
+            323.356
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Nearly identical molecular weights; the negative explanation identifies a specific reactive functionality, while the positive retains affinity/selectivity uncertainty."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 423–429 Da",
+          "positiveId": "item-078",
+          "negativeId": "item-026",
+          "sizes": [
+            422.539,
+            429.44
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Similar-weight larger structures contrast the recorded binding-motif hypothesis with an acylhydrazone stability concern; neither label establishes measured affinity."
+        }
+      ]
+    }
+  }
+}

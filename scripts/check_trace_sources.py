@@ -39,6 +39,14 @@ for task in json.loads((ROOT / 'data/tasks.json').read_text())['tasks']:
             counts['goal_rationales'] += 1
         elif selection['status'] == 'original-goal':
             counts['original_goals'] += 1
+        for pair in stage['tracePairs']:
+            for index, key in enumerate(['positiveId', 'negativeId']):
+                trace = next(t for t in stage['traces'] if t['sampleId'] == pair[key])
+                if trace['status'] == 'recorded':
+                    rep = trace['representation']
+                    original = pool(rep['source']['file'])[trace['sampleId']]
+                    size = original['length'] if rep['kind'] == 'peptide' else original['card']['descriptors']['molecular_weight_da']
+                    assert size == pair['sizes'][index]
         for trace in stage['traces']:
             if trace['status'] == 'placeholder':
                 assert task['id'] in {'d2','ood'}
