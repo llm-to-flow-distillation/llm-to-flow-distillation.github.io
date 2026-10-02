@@ -2429,5 +2429,50 @@
     },
     "preserved_data": "All task/trace/result JSON and image assets unchanged.",
     "url_navigation": "Legacy explorer links and results links select the matching task, stage and tab; invalid links fall back safely."
+  },
+  "method_refinement_revision": {
+    "date": "2026-10-02",
+    "layout": "Left-aligned title and prose, consistent subsection headings, compact algorithm header and subtle divider before full-width KL interpretation. Equivalent target expressions centered together on desktop and stacked on mobile.",
+    "layout_checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        901,
+        1024,
+        1280,
+        1440,
+        1920,
+        2560
+      ],
+      "heading_and_paragraph_alignment": "left",
+      "KL_paragraph": "full width",
+      "display_equations": "centered, responsive",
+      "algorithm_width": "at most 40% on desktop",
+      "overflow": false,
+      "katex_errors": 0,
+      "browser_errors": []
+    },
+    "interaction_checks": {
+      "status": "passed",
+      "viewports": [
+        360,
+        390,
+        768,
+        1024,
+        1280,
+        1440
+      ],
+      "pointer_hover": "passed",
+      "pinning": "passed",
+      "keyboard": "passed",
+      "touch": "passed",
+      "responsive_positioning": "passed",
+      "trace_smoke": "passed",
+      "browser_errors": [],
+      "failed_requests": []
+    },
+    "scientific_content": "Existing explanation, algorithm operations and objectives preserved; no result or trace data changes."
   }
 }

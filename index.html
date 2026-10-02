@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=805b011f7862">
+  <link rel="stylesheet" href="site.css?v=453c85f33a0d">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=3f22c732889b" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -53,6 +53,7 @@
       <h2 id="method-title">Method: LLM-to-Flow Distillation</h2>
       <div class="method-layout">
         <div class="method-content">
+          <h3>An adaptive curriculum</h3>
           <p>LFD aligns a pretrained flow <span class="math math-inline" data-tex="v_{\theta_0}">v<sub>θ₀</sub></span> with a natural-language goal <span class="math math-inline" data-tex="g">g</span> through an online LLM-generated curriculum. At each round, the teacher uses the current samples to choose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span> and judge candidates.</p>
           <p>Let <span class="math math-inline" data-tex="\Omega_{g_t}\subseteq\mathcal X">Ω<sub>gₜ</sub> ⊆ X</span> be the region satisfying the current subgoal. As the student improves, the curriculum tightens toward the original discovery goal:</p>
           <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
@@ -76,7 +77,11 @@
       <div class="method-interpretation" aria-labelledby="interpretation-title">
         <h3 id="interpretation-title">Each round is a KL-regularized step.</h3>
         <p>Assume the teacher’s preferences follow a Bradley–Terry model with an unobserved utility <span class="math math-inline" data-tex="f_{g_t}:\mathcal X\to\mathbb R">f<sub>gₜ</sub>: X → ℝ</span>. The standard DPO derivation gives two equivalent forms of the implicit target:</p>
-        <div class="math math-display implicit-target-equation" data-tex="\begin{gathered}p_t^\star \propto p_{\theta_t}\,e^{f_{g_t}/\beta},\\[.65em]p_t^\star =\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.\end{gathered}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β), equivalently p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
+        <div class="implicit-target-equation" role="group" aria-label="Equivalent forms of the implicit target">
+          <div class="math math-display implicit-target-density" data-tex="p_t^\star \propto p_{\theta_t}\,e^{f_{g_t}/\beta}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β)</div>
+          <span class="math math-inline target-equivalence" data-tex="\Longleftrightarrow">⇔</span>
+          <div class="math math-display implicit-target-objective" data-tex="p_t^\star =\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.">p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
+        </div>
         <p>Each subgoal thus induces an implicit reward and a target that balances higher utility against departure from the current generator, with <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controlling regularization. Across rounds, these targets define local steps along the curriculum toward <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span>.</p>
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
