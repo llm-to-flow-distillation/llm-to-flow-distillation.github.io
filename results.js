@@ -292,9 +292,10 @@
       const details=$('#task-results-details');
       const plots=$('#task-results-plots');
       details.classList.toggle('has-novelty',id==='gsk3b');
-      details.classList.toggle('has-comparison',id==='anticancer');
+      const pairedComparison=result?.table===1;
+      details.classList.toggle('has-comparison',pairedComparison);
       // Keep the same interactive plot node when switching between split and full-width layouts.
-      if (id==='anticancer') $('#results-values').after(plots);
+      if (pairedComparison) $('#results-values').after(plots);
       else details.before(plots);
       $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
       $('#task-results-title').textContent=goal.name;
