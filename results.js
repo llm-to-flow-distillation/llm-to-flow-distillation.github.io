@@ -25,18 +25,19 @@
       ...overrides
     };
   }
-  function draw(selector, traces, options, onInspect) {
-    const element = $(selector);
-    return Plotly.react(element,traces,options,config).then(() => {
-      if (element.removeAllListeners) {
-        element.removeAllListeners('plotly_hover');
-        element.removeAllListeners('plotly_click');
-      }
-      if (onInspect) {
-        const inspect = event => onInspect(event.points[0]);
-        element.on('plotly_hover',inspect);
-        element.on('plotly_click',inspect);
-      }
+  function draw(selector, traces, options) {
+    const element=$(selector);
+    return Plotly.react(element,traces,options,config).then(()=>{
+      element.removeAllListeners('plotly_click');
+      // Touch releases dismiss native hover labels; reopen the selected point after release.
+      element.on('plotly_click',event=>{
+        const point=event.points[0];
+        requestAnimationFrame(()=>{
+          if (element.isConnected && element._fullLayout) {
+            Plotly.Fx.hover(element,[{curveNumber:point.curveNumber,pointNumber:point.pointNumber}]);
+          }
+        });
+      });
     });
   }
   function interval(mean, spread, digits = 2) { return `${mean.toFixed(digits)} ± ${spread.toFixed(digits)}`; }
@@ -58,7 +59,7 @@
   }
   function scatterMarkup(result) {
     const peptide = result.table === 1;
-    return `<figure class="task-scatter"><h4>${peptide ? 'Activity and predicted toxicity' : 'Docking scores'}</h4>${legend(result.rows.map(row=>row.method))}<div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div><p id="comparison-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a marker to inspect its metric values.</p><figcaption>${peptide ? 'Activity increases to the right; predicted hemolysis decreases downward. Error bars show the reported ± uncertainty terms.' : 'GNINA affinity increases to the right; rDock decreases downward. Error bars show the reported ± uncertainty terms.'}</figcaption></figure>`;
+    return `<figure class="task-scatter"><h4>${peptide ? 'Activity and predicted toxicity' : 'Docking scores'}</h4><div class="result-plot-frame"><div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
   }
   function renderScatter(result) {
     const yIndex = result.table === 1 ? 1 : 2;
@@ -72,10 +73,7 @@
     return draw('#comparison-chart',traces,layout({
       xaxis:{fixedrange:true,title:{text:result.metrics[0].label+' ↑',standoff:18},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:result.metrics[yIndex].label+' ↓',standoff:16},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),point=>{
-      const row = result.rows[point.curveNumber];
-      $('#comparison-readout').innerHTML = `<strong>${esc(row.method)}</strong> · ${result.metrics.map((m,i)=>`${esc(m.label)}: ${interval(...row.values[i])}`).join(' · ')}`;
-    });
+    }));
   }
   function methodLabel(method) {
     return `<span class="table-method" style="color:${style(method).color}">${esc(method === 'LFD' ? 'LFD · ours' : method)}</span>`;
@@ -84,7 +82,6 @@
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
     $('#results-table-title').textContent = 'Numerical results';
     $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)}${i === 2 && result.table === 1 ? '' : '&nbsp;'+(m.direction === 'up' ? '↑' : '↓')}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
-    $('#results-table-note').textContent = 'These are computational evaluations. Values show means and reported ± uncertainty terms.';
   }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
@@ -93,11 +90,11 @@
   ];
   function dockingMarkup(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    return `${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}<figure class="task-docking"><h4>Docking improvement over pretrained</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvement bars"></div></div><p class="chart-scroll-hint">Scroll horizontally for all three scores.</p><p id="docking-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a bar to inspect its improvement and original score.</p><figcaption>Bars show |method score| − |pretrained score|; the zero line is the pretrained baseline. Positive values are better, negative values are worse. Units differ between metrics. ${esc(uncertainty.caption)}</figcaption></figure>`;
+    return `<figure class="task-docking"><h4>Docking improvement over pretrained</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>`;
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
-    return `<figure class="scaffold-novelty"><h4>Scaffold novelty</h4>${legend(rows.map(row=>row.method))}<div class="novelty-chart-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help"><button id="novelty-axis-label" class="metric-help-label" type="button" aria-expanded="false" aria-controls="novelty-metric-help" aria-describedby="novelty-metric-help">Novel scaffolds in top 100 ↑</button><div id="novelty-metric-help" class="metric-tooltip" role="tooltip" hidden><strong>What is scaffold novelty?</strong><p>A scaffold is a molecule’s core rings and connecting linkers after side-chain removal (Bemis–Murcko).</p><p>We count <b>distinct scaffolds absent from the consistency-filtered training reference</b>; duplicates count only once. Atom and bond types are retained; stereochemistry is ignored.</p><p>Higher values mean more previously unseen molecular cores.</p></div></div></div><p id="novelty-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a method to inspect its values and confidence intervals.</p><figcaption>Distinct novel scaffolds among the top 100 candidates; −rDock uses the top 5%. Error bars match each method’s color and show 95% CIs across five sampling seeds at fixed checkpoints.</figcaption><div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
+    return `<figure class="scaffold-novelty"><h4>Scaffold novelty</h4><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help"><button id="novelty-axis-label" class="metric-help-label" type="button" aria-expanded="false" aria-controls="novelty-metric-help" aria-describedby="novelty-metric-help">Novel scaffolds in top 100 ↑</button><div id="novelty-metric-help" class="metric-tooltip" role="tooltip" hidden><strong>What is scaffold novelty?</strong><p>A scaffold is a molecule’s core rings and connecting linkers after side-chain removal (Bemis–Murcko).</p><p>We count <b>distinct scaffolds absent from the consistency-filtered training reference</b>; duplicates count only once. Atom and bond types are retained; stereochemistry is ignored.</p><p>Higher values mean more previously unseen molecular cores.</p></div></div></div>${legend(rows.map(row=>row.method))}<div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -143,7 +140,6 @@
     const evidence = window.LFD_DATA.resultPanels.oodEvidence;
     $('#results-table-title').textContent = 'Reported discovery evidence';
     $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">${methodLabel('Pre-trained')}</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">${methodLabel('LFD')}</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
-    $('#results-table-note').textContent = evidence.caveat;
   }
   function setupNoveltyHelp() {
     const container = $('#task-scaffold-novelty');
@@ -200,6 +196,12 @@
     const panel=$('#task-results-panel');
     let active=goals[0].id;
     let generation=0;
+    document.addEventListener('pointerdown',()=>{
+      panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
+    });
+    document.addEventListener('keydown',event=>{
+      if (event.key==='Escape') panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
+    });
     const closeNoveltyHelp=setupNoveltyHelp();
     cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
     function render(id) {
@@ -316,7 +318,7 @@
       marker:{color:style(row.method).color},
       error_y:{type:'data',array:row.values.map(([,spread])=>spread),visible:true,color:'#000000',thickness:1.6,width:4},
       customdata:row.values.map(([mean,spread],index)=>[mean,spread,dockingMetrics[index].label,dockingMetrics[index].unit,baseline.values[index][0],Math.abs(mean)]),
-      hovertemplate:`<b>${esc(row.method)} · %{customdata[2]}</b><br>Δ vs. pretrained: %{y:+.2f}%{customdata[3]}<br>Original score: %{customdata[0]:.2f}%{customdata[3]}<br>Absolute score: %{customdata[5]:.2f}%{customdata[3]}<br>Pretrained score: %{customdata[4]:.2f}%{customdata[3]}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
+      hovertemplate:`<b>${esc(row.method)} · %{customdata[2]}</b><br>Δ |score| vs. pretrained: %{y:+.2f}%{customdata[3]}<br>Original score: %{customdata[0]:.2f}%{customdata[3]}<br>Absolute score: %{customdata[5]:.2f}%{customdata[3]}<br>Pretrained score: %{customdata[4]:.2f}%{customdata[3]}<br>${esc(uncertainty.label)}: ± %{customdata[1]:.2f}<extra></extra>`
     }));
     const lower=Math.min(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)-spread)));
     const upper=Math.max(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)+spread)));
@@ -325,12 +327,7 @@
       barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
       xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
       yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
-    }),point=>{
-      const row=methods[point.curveNumber],index=point.pointIndex;
-      const [mean,spread]=row.values[index],metric=dockingMetrics[index];
-      const improvement=delta(mean,index);
-      $('#docking-readout').innerHTML=`<strong>${esc(row.method)} · ${metric.label}</strong> · Δ vs. pretrained: ${improvement>=0 ? '+' : ''}${improvement.toFixed(2)}${metric.unit} · Original score: ${interval(mean,spread)}${metric.unit} · Pretrained score: ${baseline.values[index][0].toFixed(2)}${metric.unit} · ${esc(uncertainty.label)}`;
-    });
+    }));
   }
   function renderNovelty() {
     const rows=window.LFD_DATA.charts.novelty;
@@ -345,10 +342,7 @@
       margin:{l:62,r:16,t:14,b:62},
       xaxis:{fixedrange:true,title:{text:''},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:'−rDock (top 5%) ↑',standoff:12},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),point=>{
-      const row=rows[point.curveNumber];
-      $('#novelty-readout').innerHTML=`<strong>${esc(row.method)}</strong> · Novel scaffolds: ${interval(row.noveltyMean,row.noveltyCI95)} · −rDock (top 5%): ${interval(row.negativeRDockMean,row.negativeRDockCI95,3)} · 95% CIs`;
-    });
+    }));
   }
   window.LFD_RESULTS = {init};
 })();

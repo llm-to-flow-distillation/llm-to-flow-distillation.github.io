@@ -64,7 +64,7 @@ def main():
             assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
             expect(page.locator(f'.generator-legend [data-generator="{task["generator"]}"]')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
-            assert page.locator('.proxy-context').count() == 0
+            assert page.locator('.proxy-context,.chart-readout,#results-table-note,.task-scatter figcaption,.task-docking figcaption,.scaffold-novelty figcaption').count() == 0
             assert page.locator('.observable-context p').inner_text() == goal['observableSummary']
             obs=page.locator('.observable-context').bounding_box()
             if goal['id'] in ('d2','gsk3b'):
@@ -128,9 +128,9 @@ def main():
                     strokes=page.locator('#novelty-chart .scatterlayer .trace').evaluate_all('(els)=>els.map(el=>[...el.querySelectorAll(".errorbar path")].map(path=>getComputedStyle(path).stroke))')
                     assert strokes==[[rgb(expected_colors[r['method']])]*2 for r in charts['novelty']]
                     page.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').hover(force=True)
-                    expect(page.locator('#novelty-readout')).to_contain_text('LFD')
-                    expect(page.locator('#novelty-readout')).to_contain_text('89.00')
-                    expect(page.locator('#novelty-readout')).to_contain_text('17.373')
+                    expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('LFD')
+                    expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('89.00')
+                    expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('17.373')
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('95% CIs')
                     label=page.locator('#novelty-axis-label');tip=page.locator('#novelty-metric-help')
                     label.hover();expect(tip).to_be_visible()
@@ -156,21 +156,19 @@ def main():
                 legend=page.locator('#task-results-plots [data-legend-method]').evaluate_all('(els)=>els.map(el=>({method:el.dataset.legendMethod,symbol:el.querySelector("svg").dataset.markerSymbol,color:el.querySelector("svg").style.color}))')
                 assert all(row['symbol']=='bar' for row in legend)
                 assert [row['method'] for row in legend]==[r['method'] for r in methods]
-                expect(page.locator('.task-docking figcaption')).to_contain_text('|method score| − |pretrained score|')
-                expect(page.locator('.task-docking figcaption')).to_contain_text('fixed reference')
+                expect(page.locator('#docking-chart')).to_have_attribute('aria-label',f"Interactive {result['name']} docking improvements: absolute method score minus absolute pretrained score")
                 for index,metric in enumerate(result['metrics']):
                     bar=page.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
                     bar.hover(force=True)
-                    expect(page.locator('#docking-readout')).to_contain_text('LFD')
-                    expect(page.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
+                    expect(page.locator('#docking-chart .hoverlayer')).to_contain_text('LFD')
                     expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
-                    expect(page.locator('#docking-readout')).to_contain_text(f'{bars[-1]["y"][index]:+.2f}')
+                    expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{bars[-1]["y"][index]:+.2f}')
                     expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{baseline["values"][index][0]:.2f}')
                 # A worse score must remain below zero rather than becoming an absolute delta.
                 method,index=('DPO',0) if result['id']=='d2' else ('Guidance',2)
                 curve=next(i for i,row in enumerate(methods) if row['method']==method)
                 page.locator('#docking-chart .barlayer .trace').nth(curve).locator('.point path').nth(index).hover(force=True)
-                expect(page.locator('#docking-readout')).to_contain_text(f'{bars[curve]["y"][index]:.2f}')
+                expect(page.locator('#docking-chart .hoverlayer')).to_contain_text(f'{bars[curve]["y"][index]:.2f}')
                 assert bars[curve]['y'][index]<0
                 continue
             assert page.locator('#task-results-plots .js-plotly-plot').count()==1
@@ -182,7 +180,7 @@ def main():
             assert {r['method']:r['symbol'] for r in legend} == {r['method']:expected_symbols[r['method']] for r in result['rows']}
             page.mouse.move(5,5)
             page.locator('#comparison-chart .scatterlayer .trace').last.locator('.point').hover(force=True)
-            expect(page.locator('#comparison-readout')).to_contain_text('LFD')
+            expect(page.locator('#comparison-chart .hoverlayer')).to_contain_text('LFD')
             for metric_index,metric in enumerate(result['metrics']):
                 expect(page.locator('#comparison-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][metric_index][0]:.2f}')
         select('ood')
@@ -229,6 +227,10 @@ def main():
                 page.wait_for_timeout(250)
                 assert page.evaluate('document.documentElement.scrollWidth')<=width,(width,task)
                 assert page.locator('.js-plotly-plot').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'),(width,task)
+                for figure in page.locator('.task-scatter,.task-docking,.scaffold-novelty').all():
+                    chart=figure.locator('.interactive-chart').bounding_box()
+                    legend=figure.locator('.plot-key').bounding_box()
+                    assert legend['y']>=chart['y']+chart['height'],(width,task,chart,legend)
                 if task in ('d2','gsk3b'):
                     figure=page.locator('.task-molecule');expect(figure).to_be_visible()
                     obs=page.locator('.observable-context').bounding_box()
@@ -239,6 +241,9 @@ def main():
                     if width>=1200:
                         assert plot['x']>=table['x']+table['width']+20,(width,table,plot)
                         assert abs(plot['y']-table['y'])<1
+                        assert abs(plot['height']-table['height'])<2,(width,table,plot)
+                        content=page.locator('#results-table').bounding_box();legend=page.locator('.task-scatter .plot-key').bounding_box()
+                        assert abs(content['y']+content['height']-legend['y']-legend['height'])<2,(width,content,legend)
                         assert page.locator('#results-values .table-scroll').evaluate('(el)=>el.scrollWidth<=el.clientWidth+1'),width
                     else:
                         assert plot['y']>=table['y']+table['height']+19,(width,table,plot)
@@ -247,11 +252,18 @@ def main():
                     if width>=1200:
                         assert novelty['x']>=table['x']+table['width']+20,(width,table,novelty)
                         assert abs(novelty['y']-table['y'])<1
+                        assert abs(novelty['height']-table['height'])<2,(width,table,novelty)
+                        content=page.locator('#results-table').bounding_box();legend=page.locator('.scaffold-novelty .plot-key').bounding_box()
+                        assert abs(content['y']+content['height']-legend['y']-legend['height'])<2,(width,content,legend)
                         assert page.locator('#results-values .table-scroll').evaluate('(el)=>el.scrollWidth<=el.clientWidth+1'),width
                     else:
                         assert novelty['y']>=table['y']+table['height']+19,(width,table,novelty)
                 else:
                     assert page.locator('#novelty-chart').count()==0
+                if width>=1440:
+                    for legend in page.locator('.plot-key').all():
+                        tops=legend.locator('[data-legend-method]').evaluate_all('(els)=>els.map(el=>el.getBoundingClientRect().top)')
+                        assert max(tops)-min(tops)<1,(width,task,tops)
                 if width in [390,2227]:
                     page.locator('#task-results-panel').screenshot(path=str(out/f'{task}-{width}.png'))
             if width>=1280:
@@ -269,21 +281,23 @@ def main():
             expect(touch.locator('[data-curriculum-stage="g1"]')).to_have_attribute('aria-selected','true')
             if task in ('anticancer','cpp'):
                 touch.locator('#comparison-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
-                expect(touch.locator('#comparison-readout')).to_contain_text('53.54' if task=='anticancer' else '69.06')
-                expect(touch.locator('#comparison-readout')).to_contain_text('42.48' if task=='anticancer' else '37.02')
+                expect(touch.locator('#comparison-chart .hoverlayer')).to_contain_text('53.54' if task=='anticancer' else '69.06')
+                expect(touch.locator('#comparison-chart .hoverlayer')).to_contain_text('42.48' if task=='anticancer' else '37.02')
+                touch.locator('.task-scatter h4').tap()
+                expect(touch.locator('#comparison-chart .hoverlayer')).to_have_text('')
             elif task in ('d2','gsk3b'):
                 result=next(r for r in results if r['id']==task)
                 for index in range(3):
                     bar=touch.locator('#docking-chart .barlayer .trace').last.locator('.point path').nth(index)
                     bar.scroll_into_view_if_needed();bar.tap(force=True)
-                    expect(touch.locator('#docking-readout')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
+                    expect(touch.locator('#docking-chart .hoverlayer')).to_contain_text(f'{result["rows"][-1]["values"][index][0]:.2f}')
                     baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
                     delta=abs(result['rows'][-1]['values'][index][0])-abs(baseline['values'][index][0])
-                    expect(touch.locator('#docking-readout')).to_contain_text(f'{delta:+.2f}')
+                    expect(touch.locator('#docking-chart .hoverlayer')).to_contain_text(f'{delta:+.2f}')
                 if task=='gsk3b':
                     touch.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').tap(force=True)
-                    expect(touch.locator('#novelty-readout')).to_contain_text('89.00')
-                    expect(touch.locator('#novelty-readout')).to_contain_text('17.373')
+                    expect(touch.locator('#novelty-chart .hoverlayer')).to_contain_text('89.00')
+                    expect(touch.locator('#novelty-chart .hoverlayer')).to_contain_text('17.373')
                     label=touch.locator('#novelty-axis-label');tip=touch.locator('#novelty-metric-help')
                     label.tap();expect(tip).to_be_visible()
                     bounds=tip.bounding_box()
@@ -301,7 +315,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
