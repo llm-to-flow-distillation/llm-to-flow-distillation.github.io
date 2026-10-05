@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=ee2d9b63d2ce">
+  <link rel="stylesheet" href="site.css?v=c5fcf1b444b6">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=a88fdda3b983" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -124,8 +124,6 @@
         </div>
         <div id="task-results-evidence" class="task-results-evidence"></div>
       </div>
-      <details class="limitations"><summary>Evidence, limitations, and what comes next <span aria-hidden="true">+</span></summary><p>These experiments use in silico evaluations. LLM explanations are hypotheses, and held-out predictors or docking functions remain imperfect proxies for real-world outcomes. Some reported peptide checkpoints were chosen through exploratory continuations; the task-specific evidence panels preserve those selection details. CPP comparisons use one training seed and unequal optimization budgets, and the reward and evaluator share historical labels. Integrating experimental feedback is future work.</p></details>
-      <p class="explorer-note">Teacher judgments are model assessments. The reported activity and docking evaluations are computational; experimental efficacy, safety, and binding remain unverified.</p>
     </section>
 
   </main>
@@ -143,7 +141,7 @@
       <div id="trace-list" aria-live="polite"></div>
     </div>
   </template>
-  <footer class="wrap"><span>LLM-to-Flow Distillation · 2026</span><a href="data/provenance.json">Evidence provenance</a></footer>
+  <footer class="wrap"><span>LLM-to-Flow Distillation · 2026</span></footer>
   <div id="toast" role="status" aria-live="polite"></div>
   <noscript><div class="noscript">The method and evaluation notes are available without JavaScript. Enable JavaScript to use the algorithm explanations, trace explorer, and interactive result charts, or <a href="data/tasks.json">download the recorded task evidence</a>.</div></noscript>
 </body>
