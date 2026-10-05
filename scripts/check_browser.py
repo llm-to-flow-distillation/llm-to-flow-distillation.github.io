@@ -32,7 +32,8 @@ def main():
         expect(page.locator('button.paper-button')).to_be_disabled()
         assert page.locator('.paper-button').get_attribute('href') is None
         expect(page.locator('.paper-button')).to_have_text('arXiv')
-        assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 4546')
+        expect(page.locator('.hero-figure img')).to_have_attribute('src', 'assets/flow_adaptation.gif')
+        assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 2400 && img.naturalHeight === 679')
         assert page.locator('.title-subtitle').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)') < page.locator('.title-main').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
         assert len(set(page.locator('.author-row > span').evaluate_all('(els) => els.map(el => getComputedStyle(el).fontSize)'))) == 1
         expect(page.locator('#contents')).not_to_be_visible()
