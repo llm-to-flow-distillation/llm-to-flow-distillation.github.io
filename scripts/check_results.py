@@ -38,7 +38,8 @@ def main():
         assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])>0)')
         assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
         for task in goals:
-            assert page.locator(f'#result-goal-{task["id"]}').inner_text() == task['goal']
+            assert page.locator(f'#result-name-{task["id"]}').inner_text() == task['name']
+        assert page.locator('.result-goal, .card-generator, .goal-number, .proxy-context, #result-generator').count() == 0
         def select(task):
             page.locator(f'[data-result-task="{task}"]').click()
             page.wait_for_function('(id)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===id',arg=task)
@@ -52,20 +53,17 @@ def main():
             select(goal['id'])
             card = page.locator(f'[data-result-task="{goal["id"]}"]')
             expect(card).to_have_attribute('data-generator', task['generator'])
-            assert card.locator('.goal-card-state').evaluate('(el)=>getComputedStyle(el).fontWeight') == '600'
-            assert card.locator('.goal-number').evaluate('(el)=>getComputedStyle(el).fontWeight') == '700'
-            assert card.locator('.goal-card-state').evaluate('(el)=>getComputedStyle(el).backgroundColor') != 'rgba(0, 0, 0, 0)'
+            assert card.locator('.result-task-name').evaluate('(el)=>getComputedStyle(el).fontWeight') == '700'
+            expect(card.locator('.goal-card-state')).to_have_text('✓')
             assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
-            assert card.locator('.goal-number').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)') >= 22
-            expect(page.locator('#result-generator')).to_contain_text(task['generator'])
+            expect(page.locator(f'.generator-legend [data-generator="{task["generator"]}"]')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
-            assert page.locator('.proxy-context p').inner_text() == goal['proxy'].replace('The paper reports that these baselines fail to find a hit.','These baselines did not find a full-goal hit.')
-            proxy=page.locator('.proxy-context').bounding_box()
+            assert page.locator('.proxy-context').count() == 0
+            assert page.locator('.observable-context p').inner_text() == goal['observableSummary']
             obs=page.locator('.observable-context').bounding_box()
-            assert obs['y']>proxy['y']+proxy['height'] and abs(obs['x']-proxy['x'])<1
             if goal['id'] in ('d2','gsk3b'):
                 figure=page.locator('.task-molecule');expect(figure).to_be_visible()
-                assert figure.bounding_box()['x']>proxy['x']+proxy['width']
+                assert figure.bounding_box()['x']>obs['x']+obs['width']
                 img=figure.locator('img');img.scroll_into_view_if_needed()
                 page.wait_for_function('document.querySelector(".task-molecule img").complete && document.querySelector(".task-molecule img").naturalWidth>0')
             page.locator('.observable-details summary').click()
@@ -221,9 +219,8 @@ def main():
                 assert page.locator('.js-plotly-plot').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'),(width,task)
                 if task in ('d2','gsk3b'):
                     figure=page.locator('.task-molecule');expect(figure).to_be_visible()
-                    proxy=page.locator('.proxy-context').bounding_box();obs=page.locator('.observable-context').bounding_box()
-                    assert obs['y']>proxy['y']+proxy['height']
-                    if width>900:assert figure.bounding_box()['x']>proxy['x']+proxy['width']
+                    obs=page.locator('.observable-context').bounding_box()
+                    if width>900:assert figure.bounding_box()['x']>obs['x']+obs['width']
                     else:assert figure.bounding_box()['y']>obs['y']+obs['height']
                 if task=='gsk3b':
                     table=page.locator('#results-values').bounding_box();novelty=page.locator('#task-scaffold-novelty').bounding_box()
@@ -284,7 +281,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','paper_goals':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','compact_title_cards':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

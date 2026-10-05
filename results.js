@@ -112,7 +112,7 @@
   }
   function renderTaskContext(goal) {
     const example=molecularExample(goal);
-    $('#task-result-context').innerHTML=`<div class="task-context-grid ${example ? 'context-with-molecule' : ''}"><div class="task-context-copy"><div class="proxy-context"><h4>Direct proxy baselines</h4><p>${esc(goal.proxy.replace('The paper reports that these baselines fail to find a hit.','These baselines did not find a full-goal hit.'))}</p></div><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div>${example}</div>`;
+    $('#task-result-context').innerHTML=`<div class="task-context-grid ${example ? 'context-with-molecule' : ''}"><div class="observable-context"><h4>What the LLM sees</h4><p>${esc(goal.observableSummary)}</p><details class="observable-details"><summary>Observable list <span>${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div>${example}</div>`;
   }
   function curriculumLabel(stage) {
     return stage.id==='g' ? stage.rounds===0 ? 'Final assessment' : 'Final goal' : 'g'+stage.id.slice(1);
@@ -201,7 +201,7 @@
     let active=goals[0].id;
     let generation=0;
     const closeNoveltyHelp=setupNoveltyHelp();
-    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="result-goal-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-card-heading"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span class="goal-card-state" aria-hidden="true">${index===0 ? 'Selected' : '↗'}</span></span><span class="card-generator">${esc(goal.generator)} · ${esc(goal.domain.toLowerCase())}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span id="result-goal-${esc(goal.id)}" class="result-goal">${esc(goal.goal)}</span></button>`).join('');
+    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
     function render(id) {
       closeNoveltyHelp();
       active=id;
@@ -218,15 +218,13 @@
         card.setAttribute('aria-selected',String(selected));
         card.tabIndex=selected ? 0 : -1;
         card.classList.toggle('is-selected',selected);
-        card.querySelector('.goal-card-state').textContent=selected ? 'Selected' : '↗';
+        card.querySelector('.goal-card-state').textContent=selected ? '✓' : '';
       });
       // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
       $('#task-results-details').classList.toggle('has-novelty',id==='gsk3b');
       $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
       $('#task-results-title').textContent=goal.name;
-      $('#result-generator').dataset.generator=goal.generator;
-      $('#result-generator').textContent=goal.generator+' · '+goal.domain.toLowerCase();
       $('#task-result-description').textContent=goal.description;
       $('#result-discovery').innerHTML='';
       if (!result) renderDiscoverySummary();
