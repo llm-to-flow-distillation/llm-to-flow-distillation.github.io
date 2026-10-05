@@ -531,20 +531,33 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .metric-policy { font-size: 12px; font-weight: 500; color: var(--goal-strong); }
 .task-context-grid { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; margin-bottom: 18px; }
 .task-context-grid.context-with-molecule { grid-template-columns: minmax(0,1.3fr) minmax(0,.8fr); }
-.observable-context { min-width: 0; }
+.observable-context { min-width: 0; container-type: inline-size; }
 .task-molecule { min-width: 0; margin: 0; align-self: center; }
 .task-molecule a, .task-molecule img { display: block; }
 .task-molecule img { width: 100%; max-height: 210px; object-fit: contain; }
 .task-molecule figcaption { margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
-.task-context-grid h4 { margin: 0 0 8px; font-size: 14px; }
-.task-context-grid p { font-size: 13px; line-height: 1.8; margin: 0; color: #535b67; }
-.observable-details { margin-top: 10px; }
-.observable-details summary { padding: 10px 0; font-size: 12px; }
-.observable-details summary > span { font-size: 11px; color: #586370; }
-.observable-details summary > span > span { margin-left: 8px; }
+/* One compact disclosure row; the complete input list opens below it. */
+.observable-details { margin: 0; }
+.observable-details summary { justify-content: flex-start; gap: 12px; min-height: 44px; padding: 0; white-space: nowrap; }
+.observable-details summary > span { color: #586370; font-size: 12px; line-height: 1.4; }
+.observable-details summary .observable-heading { font-size: 14px; font-weight: 700; color: var(--ink); }
+.observable-details summary .observable-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--goal-border); border-radius: 7px; background: var(--goal-surface); color: var(--goal-strong); font-size: 11px; }
+.observable-details summary:hover .observable-toggle { border-color: var(--goal-accent); }
 .observable-details[open] > summary > span { transform: none; }
-.observable-details summary > span > span { display: inline-block; }
-.observable-details[open] > summary > span > span { transform: rotate(45deg); }
+.observable-toggle > span { display: inline-block; }
+.observable-details[open] .observable-toggle > span { transform: rotate(45deg); }
+@container (max-width: 360px) {
+  .observable-details summary { gap: 8px; }
+  .observable-details summary .observable-heading { font-size: 12px; }
+  .observable-details summary .observable-list-label { font-size: 10.5px; }
+  .observable-details summary .observable-toggle { font-size: 10px; gap: 5px; padding-inline: 6px; }
+}
+@container (max-width: 300px) {
+  .observable-details summary { gap: 4px; }
+  .observable-details summary .observable-heading { font-size: 11px; }
+  .observable-details summary .observable-list-label { font-size: 10px; }
+  .observable-details summary .observable-toggle { gap: 3px; padding-inline: 4px; }
+}
 .observable-details ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 24px; list-style: disc; margin: 14px 0 0; padding-left: 17px; }
 .observable-details li { padding: 0; color: #535b67; font-size: 12px; line-height: 1.65; }
 .result-curriculum { margin: 0 0 20px; padding: 16px 18px; border: 1px solid var(--goal-border); border-radius: 12px; background: var(--goal-surface); }

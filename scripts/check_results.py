@@ -65,7 +65,9 @@ def main():
             expect(page.locator(f'.generator-legend [data-generator="{task["generator"]}"]')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
             assert page.locator('.proxy-context,.chart-readout,#results-table-note,.task-scatter figcaption,.task-docking figcaption,.scaffold-novelty figcaption').count() == 0
-            assert page.locator('.observable-context p').inner_text() == goal['observableSummary']
+            expect(page.locator('.observable-heading')).to_have_text('What does the LLM see?')
+            expect(page.locator('.observable-toggle')).to_contain_text(f'{len(goal["observables"])} inputs')
+            assert page.locator('.observable-context p').count() == 0
             obs=page.locator('.observable-context').bounding_box()
             if goal['id'] in ('d2','gsk3b'):
                 figure=page.locator('.task-molecule');expect(figure).to_be_visible()
