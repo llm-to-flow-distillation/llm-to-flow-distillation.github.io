@@ -58,7 +58,7 @@
   }
   function scatterMarkup(result) {
     const peptide = result.table === 1;
-    return `${legend(result.rows.map(row=>row.method))}<figure class="task-scatter"><h4>${peptide ? 'Activity and predicted toxicity' : 'Docking scores'}</h4><div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div><p id="comparison-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a marker to inspect its metric values.</p><figcaption>${peptide ? 'Activity increases to the right; predicted hemolysis decreases downward. Error bars show the reported ± uncertainty terms.' : 'GNINA affinity increases to the right; rDock decreases downward. Error bars show the reported ± uncertainty terms.'}</figcaption></figure>`;
+    return `<figure class="task-scatter"><h4>${peptide ? 'Activity and predicted toxicity' : 'Docking scores'}</h4>${legend(result.rows.map(row=>row.method))}<div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div><p id="comparison-readout" class="chart-readout" role="status" aria-live="polite">Hover or tap a marker to inspect its metric values.</p><figcaption>${peptide ? 'Activity increases to the right; predicted hemolysis decreases downward. Error bars show the reported ± uncertainty terms.' : 'GNINA affinity increases to the right; rDock decreases downward. Error bars show the reported ± uncertainty terms.'}</figcaption></figure>`;
   }
   function renderScatter(result) {
     const yIndex = result.table === 1 ? 1 : 2;
@@ -83,7 +83,7 @@
   function renderTable(result) {
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
     $('#results-table-title').textContent = 'Numerical results';
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)} ${i === 2 && result.table === 1 ? '' : m.direction === 'up' ? '↑' : '↓'}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)}${i === 2 && result.table === 1 ? '' : '&nbsp;'+(m.direction === 'up' ? '↑' : '↓')}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
     $('#results-table-note').textContent = 'These are computational evaluations. Values show means and reported ± uncertainty terms.';
   }
   const dockingMetrics = [
@@ -201,7 +201,7 @@
     let active=goals[0].id;
     let generation=0;
     const closeNoveltyHelp=setupNoveltyHelp();
-    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
+    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
     function render(id) {
       closeNoveltyHelp();
       active=id;
@@ -222,15 +222,21 @@
       });
       // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
-      $('#task-results-details').classList.toggle('has-novelty',id==='gsk3b');
+      const details=$('#task-results-details');
+      const plots=$('#task-results-plots');
+      details.classList.toggle('has-novelty',id==='gsk3b');
+      details.classList.toggle('has-comparison',id==='anticancer');
+      // Keep the same interactive plot node when switching between split and full-width layouts.
+      if (id==='anticancer') $('#results-values').after(plots);
+      else details.before(plots);
       $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
       $('#task-results-title').textContent=goal.name;
-      $('#task-result-description').textContent=goal.description;
+      $('#task-result-description').innerHTML=`<q>${esc(task.stages.find(stage=>stage.id==='g').exactGoal)}</q>`;
       $('#result-discovery').innerHTML='';
       if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
       renderCurriculum(task);
-      $('#result-source').textContent=`GOAL ${goal.number}`;
+      $('#result-source').textContent=`Goal ${goal.number}`;
       if (result && result.table===2) {
         $('#task-results-plots').innerHTML=dockingMarkup(result);
         $('#task-results-evidence').innerHTML='';
