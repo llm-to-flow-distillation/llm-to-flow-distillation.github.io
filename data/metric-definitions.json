@@ -1,0 +1,161 @@
+{
+  "verified": "2026-10-05",
+  "source": "assets/paper.pdf",
+  "notes": "Definitions follow the evaluation setup and citations in the supplied paper. The original Bemis–Murcko reference supplements the named scaffold definition. Predictor percentages are mean scores, not biological hit rates. The prior-distance description deliberately does not assume an unreported divergence formula.",
+  "references": {
+    "anticp": {
+      "label": "Agrawal et al. (2021)",
+      "title": "AntiCP 2.0: an updated model for predicting anticancer peptides",
+      "url": "https://doi.org/10.1093/bib/bbaa153"
+    },
+    "hemopi": {
+      "label": "Rathore et al. (2025)",
+      "title": "Prediction of hemolytic peptides and their hemolytic concentration",
+      "url": "https://doi.org/10.1038/s42003-025-07615-w"
+    },
+    "plmcpp": {
+      "label": "Kumar et al. (2025)",
+      "title": "pLM4CPPs: Protein Language Model-Based Predictor for Cell Penetrating Peptides",
+      "url": "https://doi.org/10.1021/acs.jcim.4c01338"
+    },
+    "prior": {
+      "label": "Dai et al. (2025)",
+      "title": "De Novo Design of High-Performance Sec-type Signal Peptide via a Hybrid Deep Learning Architecture",
+      "url": "https://doi.org/10.1021/jacsau.5c00757"
+    },
+    "gnina": {
+      "label": "McNutt et al. (2021)",
+      "title": "GNINA 1.0: molecular docking with deep learning",
+      "url": "https://doi.org/10.1186/s13321-021-00522-2"
+    },
+    "vina": {
+      "label": "Trott & Olson (2010)",
+      "title": "AutoDock Vina: improving the speed and accuracy of docking with a new scoring function, efficient optimization, and multithreading",
+      "url": "https://doi.org/10.1002/jcc.21334"
+    },
+    "rdock": {
+      "label": "Ruiz-Carmona et al. (2014)",
+      "title": "rDock: A Fast, Versatile and Open Source Program for Docking Ligands to Proteins and Nucleic Acids",
+      "url": "https://doi.org/10.1371/journal.pcbi.1003571"
+    },
+    "scaffold": {
+      "label": "Bemis & Murcko (1996)",
+      "title": "The Properties of Known Drugs. 1. Molecular Frameworks",
+      "url": "https://doi.org/10.1021/jm9602928"
+    }
+  },
+  "metrics": {
+    "anticp": {
+      "title": "AntiCP2-alt.",
+      "text": "Mean anticancer prediction score from the alternate AntiCP 2.0 model, expressed as a percentage. Higher scores indicate stronger predicted anticancer potential.",
+      "references": [
+        "anticp"
+      ],
+      "sourcePages": [
+        7,
+        11
+      ]
+    },
+    "hemopi": {
+      "title": "HemoPI2",
+      "text": "Mean predicted hemolysis score from the HemoPI2 random-forest classifier, expressed as a percentage. Lower scores indicate less predicted red-blood-cell lysis.",
+      "references": [
+        "hemopi"
+      ],
+      "sourcePages": [
+        7,
+        14
+      ]
+    },
+    "plmcpp": {
+      "title": "pLM4CPPs",
+      "text": "Mean cell-penetration prediction score from pLM4CPPs, an ESM2-based peptide classifier, expressed as a percentage. Higher scores indicate stronger predicted cell-penetrating potential.",
+      "references": [
+        "plmcpp"
+      ],
+      "sourcePages": [
+        8,
+        13,
+        34
+      ]
+    },
+    "prior": {
+      "title": "Distance from prior",
+      "text": "Difference in amino-acid composition between generated peptides and the pretrained reference. Larger values indicate a greater shift from the prior, not an activity score.",
+      "references": [
+        "prior"
+      ],
+      "sourcePages": [
+        7,
+        11
+      ]
+    },
+    "gnina": {
+      "title": "GNINA CNNaffinity",
+      "text": "GNINA’s neural-network estimate of ligand–receptor binding affinity in pK units, a negative-log concentration scale. Higher scores indicate stronger predicted binding.",
+      "references": [
+        "gnina"
+      ],
+      "sourcePages": [
+        8,
+        14
+      ]
+    },
+    "vina": {
+      "title": "AutoDock Vina",
+      "text": "AutoDock Vina’s empirical docking score, reported in kcal/mol. More negative values indicate more favorable predicted binding.",
+      "references": [
+        "vina"
+      ],
+      "sourcePages": [
+        8,
+        15
+      ]
+    },
+    "rdock": {
+      "title": "rDock",
+      "text": "rDock’s scoring function ranks how well a ligand fits and interacts with the receptor. Lower (more negative) scores are more favorable.",
+      "references": [
+        "rdock"
+      ],
+      "sourcePages": [
+        8,
+        14
+      ]
+    },
+    "rdock-top": {
+      "title": "−rDock (top 5%)",
+      "text": "Mean sign-reversed rDock score among the top 5% of eligible molecules. Higher values indicate better docking within this selected group.",
+      "references": [
+        "rdock"
+      ],
+      "sourcePages": [
+        9,
+        34
+      ]
+    },
+    "novelty": {
+      "title": "Scaffold novelty",
+      "text": "Distinct Bemis–Murcko scaffolds—rings and connecting linkers after side-chain removal—among the top 100 candidates that are absent from the consistency-filtered training reference. Duplicates count only once; atom and bond types are retained, and stereochemistry is ignored.",
+      "references": [
+        "scaffold"
+      ],
+      "sourcePages": [
+        9,
+        34
+      ]
+    },
+    "docking-delta": {
+      "title": "Docking improvement",
+      "text": "Bars show each method’s absolute score minus the pretrained model’s absolute score, separately for each metric. Positive values indicate improvement; error bars retain the method’s reported uncertainty with the pretrained mean fixed.",
+      "references": [
+        "gnina",
+        "vina",
+        "rdock"
+      ],
+      "sourcePages": [
+        8
+      ]
+    }
+  }
+}

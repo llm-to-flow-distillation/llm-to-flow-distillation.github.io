@@ -113,7 +113,7 @@ def main():
                 values=page.locator('#results-table tbody tr').nth(index).locator('td').all_text_contents()
                 assert values == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']], (result['id'],index,values)
             assert page.locator('#results-table thead th').first.evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)')>=13
-            assert page.locator('#results-table-title').evaluate('(el)=>parseFloat(getComputedStyle(el).fontSize)')>=20
+            assert page.locator('#results-table-title,.task-scatter h4,.task-docking h4,.scaffold-novelty h4').count()==0
             if result['table']==2:
                 baseline=next(row for row in result['rows'] if row['method']=='Pre-trained')
                 methods=[row for row in result['rows'] if row is not baseline]
@@ -132,7 +132,7 @@ def main():
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('89.00')
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('17.373')
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('95% CIs')
-                    label=page.locator('#novelty-axis-label');tip=page.locator('#novelty-metric-help')
+                    label=page.locator('#novelty-axis-label');tip=page.locator('#metric-help-popover')
                     label.hover();expect(tip).to_be_visible()
                     expect(tip).to_contain_text('Bemis–Murcko')
                     expect(tip).to_contain_text('consistency-filtered training reference')
@@ -142,7 +142,7 @@ def main():
                     label.focus();expect(tip).to_be_visible()
                     page.keyboard.press('Escape');expect(tip).to_be_hidden()
                     page.keyboard.press('Enter');expect(tip).to_be_visible()
-                    page.locator('#results-table-title').click();expect(tip).to_be_hidden()
+                    page.locator('#results-table tbody th').first.click();expect(tip).to_be_hidden()
                 else:
                     assert page.locator('#novelty-chart').count()==0
                 bars=page.locator('#docking-chart').evaluate('(plot)=>plot.data.map(t=>({type:t.type,method:t.name,x:t.x,y:t.y,error:t.error_y.array,color:t.marker.color,errorColor:t.error_y.color,original:t.customdata.map(v=>v[0]),baseline:t.customdata.map(v=>v[4])}))')
@@ -283,7 +283,7 @@ def main():
                 touch.locator('#comparison-chart .scatterlayer .trace').last.locator('.point').tap(force=True)
                 expect(touch.locator('#comparison-chart .hoverlayer')).to_contain_text('53.54' if task=='anticancer' else '69.06')
                 expect(touch.locator('#comparison-chart .hoverlayer')).to_contain_text('42.48' if task=='anticancer' else '37.02')
-                touch.locator('.task-scatter h4').tap()
+                touch.locator('.task-scatter .plot-key').tap()
                 expect(touch.locator('#comparison-chart .hoverlayer')).to_have_text('')
             elif task in ('d2','gsk3b'):
                 result=next(r for r in results if r['id']==task)
@@ -298,7 +298,7 @@ def main():
                     touch.locator('#novelty-chart .scatterlayer .trace').nth(1).locator('.point').tap(force=True)
                     expect(touch.locator('#novelty-chart .hoverlayer')).to_contain_text('89.00')
                     expect(touch.locator('#novelty-chart .hoverlayer')).to_contain_text('17.373')
-                    label=touch.locator('#novelty-axis-label');tip=touch.locator('#novelty-metric-help')
+                    label=touch.locator('#novelty-axis-label');tip=touch.locator('#metric-help-popover')
                     label.tap();expect(tip).to_be_visible()
                     bounds=tip.bounding_box()
                     assert bounds['x']>=0 and bounds['x']+bounds['width']<=390
@@ -315,7 +315,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

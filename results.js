@@ -25,10 +25,33 @@
       ...overrides
     };
   }
-  function draw(selector, traces, options) {
+  function metricKeys(result) {
+    return result.table===1 ? [result.id==='anticancer' ? 'anticp' : 'plmcpp','hemopi','prior'] : ['gnina','vina','rdock'];
+  }
+  function metricLabel(key, label, id) {
+    return `<button ${id ? `id="${id}"` : ''} type="button" class="metric-help-label" data-metric="${key}" aria-haspopup="dialog" aria-expanded="false" aria-controls="metric-help-popover">${esc(label)}</button>`;
+  }
+  function decorateMetricAxes(element, definitions) {
+    for (const [selector,key] of definitions) {
+      element.querySelectorAll(selector).forEach(label=>{
+        label.dataset.metric=key;
+        label.classList.add('metric-svg-label');
+        label.setAttribute('role','button');
+        label.setAttribute('tabindex','0');
+        label.setAttribute('aria-haspopup','dialog');
+        label.setAttribute('aria-expanded','false');
+        label.setAttribute('aria-controls','metric-help-popover');
+        label.setAttribute('aria-label',label.textContent+' — metric definition');
+      });
+    }
+  }
+  function draw(selector, traces, options, definitions=[]) {
     const element=$(selector);
     return Plotly.react(element,traces,options,config).then(()=>{
       element.removeAllListeners('plotly_click');
+      element.removeAllListeners('plotly_afterplot');
+      decorateMetricAxes(element,definitions);
+      element.on('plotly_afterplot',()=>decorateMetricAxes(element,definitions));
       // Touch releases dismiss native hover labels; reopen the selected point after release.
       element.on('plotly_click',event=>{
         const point=event.points[0];
@@ -59,7 +82,7 @@
   }
   function scatterMarkup(result) {
     const peptide = result.table === 1;
-    return `<figure class="task-scatter"><h4>${peptide ? 'Activity and predicted toxicity' : 'Docking scores'}</h4><div class="result-plot-frame"><div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
+    return `<figure class="task-scatter"><div class="result-plot-frame"><div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
   }
   function renderScatter(result) {
     const yIndex = result.table === 1 ? 1 : 2;
@@ -73,15 +96,14 @@
     return draw('#comparison-chart',traces,layout({
       xaxis:{fixedrange:true,title:{text:result.metrics[0].label+' ↑',standoff:18},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:result.metrics[yIndex].label+' ↓',standoff:16},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }));
+    }),[['.xtitle',metricKeys(result)[0]],['.ytitle',metricKeys(result)[yIndex]]]);
   }
   function methodLabel(method) {
     return `<span class="table-method" style="color:${style(method).color}">${esc(method === 'LFD' ? 'LFD · ours' : method)}</span>`;
   }
   function renderTable(result) {
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
-    $('#results-table-title').textContent = 'Numerical results';
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${esc(m.label)}${i === 2 && result.table === 1 ? '' : '&nbsp;'+(m.direction === 'up' ? '↑' : '↓')}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${metricLabel(metricKeys(result)[i],m.label+(i === 2 && result.table === 1 ? '' : '\u00a0'+(m.direction === 'up' ? '↑' : '↓')))}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
   }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
@@ -90,11 +112,11 @@
   ];
   function dockingMarkup(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    return `<figure class="task-docking"><h4>Docking improvement over pretrained</h4><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>`;
+    return `<figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>`;
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
-    return `<figure class="scaffold-novelty"><h4>Scaffold novelty</h4><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help"><button id="novelty-axis-label" class="metric-help-label" type="button" aria-expanded="false" aria-controls="novelty-metric-help" aria-describedby="novelty-metric-help">Novel scaffolds in top 100 ↑</button><div id="novelty-metric-help" class="metric-tooltip" role="tooltip" hidden><strong>What is scaffold novelty?</strong><p>A scaffold is a molecule’s core rings and connecting linkers after side-chain removal (Bemis–Murcko).</p><p>We count <b>distinct scaffolds absent from the consistency-filtered training reference</b>; duplicates count only once. Atom and bond types are retained; stereochemistry is ignored.</p><p>Higher values mean more previously unseen molecular cores.</p></div></div></div>${legend(rows.map(row=>row.method))}<div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
+    return `<figure class="scaffold-novelty"><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help">${metricLabel('novelty','Novel scaffolds in top 100 ↑','novelty-axis-label')}</div></div>${legend(rows.map(row=>row.method))}<div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -138,55 +160,98 @@
   }
   function renderOODTable() {
     const evidence = window.LFD_DATA.resultPanels.oodEvidence;
-    $('#results-table-title').textContent = 'Reported discovery evidence';
     $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">${methodLabel('Pre-trained')}</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">${methodLabel('LFD')}</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
   }
-  function setupNoveltyHelp() {
-    const container = $('#task-scaffold-novelty');
-    let pinned = false, closeTimer;
-    function open() {
+  function setupMetricHelp() {
+    const container=$('#task-results-panel');
+    const popup=document.createElement('div');
+    popup.id='metric-help-popover';
+    popup.className='metric-tooltip';
+    popup.setAttribute('role','dialog');
+    popup.setAttribute('aria-modal','false');
+    popup.setAttribute('aria-labelledby','metric-help-title');
+    popup.hidden=true;
+    document.body.append(popup);
+    let active=null, pinned=false, closeTimer;
+    function position() {
+      if (!active || popup.hidden) return;
+      const rect=active.getBoundingClientRect(), box=popup.getBoundingClientRect();
+      const left=Math.max(12,Math.min(rect.left+(rect.width-box.width)/2,innerWidth-box.width-12));
+      const top=rect.top>=box.height+20 ? rect.top-box.height-8 : Math.min(rect.bottom+8,innerHeight-box.height-12);
+      popup.style.left=left+'px';
+      popup.style.top=Math.max(12,top)+'px';
+    }
+    function open(label) {
       clearTimeout(closeTimer);
-      const label = $('#novelty-axis-label'), tooltip = $('#novelty-metric-help');
-      if (!label || !tooltip) return;
-      tooltip.hidden = false;
+      if (active!==label) {
+        if (active) active.setAttribute('aria-expanded','false');
+        pinned=false;
+        active=label;
+        const data=window.LFD_DATA.metricHelp, metric=data.metrics[label.dataset.metric];
+        popup.innerHTML=`<strong id="metric-help-title">${esc(metric.title)}</strong><p>${esc(metric.text)}</p><div class="metric-citations">${metric.references.map(key=>{const ref=data.references[key];return `<a href="${esc(ref.url)}" title="${esc(ref.title)}" target="_blank" rel="noopener">${esc(ref.label)} ↗</a>`;}).join('')}</div>`;
+      }
+      popup.hidden=false;
       label.setAttribute('aria-expanded','true');
+      position();
     }
     function close() {
       clearTimeout(closeTimer);
-      pinned = false;
-      const label = $('#novelty-axis-label'), tooltip = $('#novelty-metric-help');
-      if (tooltip) tooltip.hidden = true;
-      if (label) label.setAttribute('aria-expanded','false');
+      if (active) active.setAttribute('aria-expanded','false');
+      active=null;
+      pinned=false;
+      popup.hidden=true;
     }
     function scheduleClose() {
       clearTimeout(closeTimer);
-      closeTimer = setTimeout(() => {
-        const help = container.querySelector('.novelty-axis-help');
-        if (!pinned && help && !help.matches(':hover') && !help.contains(document.activeElement)) close();
+      closeTimer=setTimeout(()=>{
+        if (!pinned && active && !active.matches(':hover') && document.activeElement!==active && !popup.matches(':hover') && !popup.contains(document.activeElement)) close();
       },180);
     }
-    container.addEventListener('pointerover',event => {
-      if (event.pointerType === 'mouse' && event.target.closest('.novelty-axis-help')) open();
+    container.addEventListener('pointerover',event=>{
+      const label=event.target.closest('[data-metric]');
+      if (label && event.pointerType==='mouse') open(label);
     });
-    container.addEventListener('pointerout',event => {
-      const help = event.target.closest('.novelty-axis-help');
-      if (help && !help.contains(event.relatedTarget)) scheduleClose();
+    container.addEventListener('pointerout',event=>{
+      if (event.target.closest('[data-metric]')) scheduleClose();
     });
-    container.addEventListener('focusin',event => {
-      if (event.target.id === 'novelty-axis-label') open();
+    container.addEventListener('focusin',event=>{
+      const label=event.target.closest('[data-metric]');
+      if (label) open(label);
     });
     container.addEventListener('focusout',scheduleClose);
-    container.addEventListener('click',event => {
-      if (!event.target.closest('#novelty-axis-label')) return;
-      if (pinned) close();
-      else {pinned = true; open();}
+    container.addEventListener('click',event=>{
+      const label=event.target.closest('[data-metric]');
+      if (!label) return;
+      if (active===label && pinned) close();
+      else {open(label);pinned=true;}
     });
-    document.addEventListener('keydown',event => {
-      if (event.key === 'Escape') close();
+    popup.addEventListener('pointerenter',()=>clearTimeout(closeTimer));
+    popup.addEventListener('pointerleave',scheduleClose);
+    popup.addEventListener('focusout',scheduleClose);
+    document.addEventListener('pointerdown',event=>{
+      if (!event.target.closest('[data-metric]') && !popup.contains(event.target)) close();
     });
-    document.addEventListener('pointerdown',event => {
-      if (!event.target.closest('.novelty-axis-help')) close();
+    document.addEventListener('keydown',event=>{
+      const label=event.target.closest('[data-metric]');
+      if (event.key==='Escape') {
+        const trigger=active;
+        if (popup.contains(document.activeElement) && trigger) trigger.focus();
+        close();
+      } else if (label && label.tagName.toLowerCase()!=='button' && (event.key==='Enter' || event.key===' ')) {
+        event.preventDefault();
+        if (active===label && pinned) close();
+        else {open(label);pinned=true;}
+      } else if (event.key==='Tab' && active && !popup.hidden) {
+        const links=[...popup.querySelectorAll('a')];
+        if (!event.shiftKey && document.activeElement===active) {event.preventDefault();links[0].focus();}
+        else if (event.shiftKey && document.activeElement===links[0]) {event.preventDefault();active.focus();}
+        else if (!event.shiftKey && document.activeElement===links.at(-1)) {
+          const trigger=active;trigger.focus();close();
+        }
+      }
     });
+    window.addEventListener('resize',close);
+    document.addEventListener('scroll',event=>{if (!popup.contains(event.target)) close();},true);
     return close;
   }
   function init(results) {
@@ -202,10 +267,10 @@
     document.addEventListener('keydown',event=>{
       if (event.key==='Escape') panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
     });
-    const closeNoveltyHelp=setupNoveltyHelp();
+    const closeMetricHelp=setupMetricHelp();
     cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
     function render(id) {
-      closeNoveltyHelp();
+      closeMetricHelp();
       active=id;
       const current=++generation;
       const goal=goals.find(task=>task.id===id);
@@ -327,7 +392,7 @@
       barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
       xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
       yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
-    }));
+    }),[['.xtick:nth-of-type(1) text','gnina'],['.xtick:nth-of-type(2) text','vina'],['.xtick:nth-of-type(3) text','rdock'],['.ytitle','docking-delta']]);
   }
   function renderNovelty() {
     const rows=window.LFD_DATA.charts.novelty;
@@ -342,7 +407,7 @@
       margin:{l:62,r:16,t:14,b:62},
       xaxis:{fixedrange:true,title:{text:''},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:'−rDock (top 5%) ↑',standoff:12},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }));
+    }),[['.ytitle','rdock-top']]);
   }
   window.LFD_RESULTS = {init};
 })();
