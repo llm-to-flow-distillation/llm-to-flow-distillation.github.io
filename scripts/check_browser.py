@@ -32,8 +32,10 @@ def main():
         expect(page.locator('button.paper-button')).to_be_disabled()
         assert page.locator('.paper-button').get_attribute('href') is None
         expect(page.locator('.paper-button')).to_have_text('arXiv')
-        expect(page.locator('.hero-figure img')).to_have_attribute('src', 'assets/flow_adaptation.gif')
-        assert page.locator('.hero-figure img').evaluate('(img) => img.complete && img.naturalWidth === 2400 && img.naturalHeight === 679')
+        expect(page.locator('.hero-figure video source')).to_have_attribute('src', 'assets/flow_adaptation_smooth.mp4')
+        expect(page.locator('.hero-figure video')).to_have_js_property('videoWidth', 2154)
+        expect(page.locator('.hero-figure video')).to_have_js_property('videoHeight', 612)
+        assert page.locator('.hero-figure video').evaluate('(video)=>video.autoplay && video.muted && video.loop && video.playsInline')
         assert page.locator('.title-subtitle').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)') < page.locator('.title-main').evaluate('(el) => parseFloat(getComputedStyle(el).fontSize)')
         assert len(set(page.locator('.author-row > span').evaluate_all('(els) => els.map(el => getComputedStyle(el).fontSize)'))) == 1
         expect(page.locator('#contents')).not_to_be_visible()

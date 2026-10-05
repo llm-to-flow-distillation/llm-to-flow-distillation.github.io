@@ -73,8 +73,8 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 
 /* The authors' original figure stays uncropped at every screen size. */
 .hero-figure { margin: 50px 0 0; }
-.hero-figure > a, .hero-figure img { display: block; }
-.hero-figure img { width: 100%; height: auto; }
+.hero-figure > a, .hero-figure img, .hero-figure video { display: block; }
+.hero-figure img, .hero-figure video { width: 100%; height: auto; }
 
 /* Scroll-aware contents rail; stays outside the reading column. */
 .contents-nav { position: fixed; z-index: 30; left: max(32px, calc((100vw - 1120px) / 2 - 224px)); top: 50%; width: 184px; transform: translate(-8px, -50%); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s, transform .2s, visibility .2s; }
