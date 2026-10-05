@@ -310,7 +310,7 @@ def main():
                 expect(touch.locator('#task-results-plots')).to_be_hidden()
                 touch.locator('[data-curriculum-stage="g"]').tap()
                 expect(touch.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
-                expect(touch.locator('#result-curriculum-preview .curriculum-preview-links > span')).to_contain_text('Assessment only')
+                expect(touch.locator('#result-curriculum-preview .curriculum-rounds')).to_contain_text('Assessment only')
         page.goto((root/'index.html').as_uri(),wait_until='load')
         page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask === "anticancer"')
         expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)

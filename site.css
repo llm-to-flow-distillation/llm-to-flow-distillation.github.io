@@ -570,8 +570,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-tabs button[aria-selected="true"] { background: var(--goal-accent); border-color: var(--goal-accent); color: #fff; }
 .curriculum-preview { padding: 4px 0 2px; }
 .curriculum-preview > p { margin: 8px 0 12px; font-size: 14px; line-height: 1.75; }
-.curriculum-preview-links { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 5px 15px; font-size: 11px; }
-.curriculum-preview-links > span { color: #5c6570; }
+.curriculum-rounds { font-size: 11px; font-style: normal; color: #5c6570; }
 .curriculum-traces { margin-top: 14px; scroll-margin-top: 80px; }
 .curriculum-traces > summary { display: inline-flex; gap: 24px; min-height: 48px; max-width: 100%; padding: 12px 18px; border: 1px solid var(--goal-accent); border-radius: 10px; background: var(--goal-accent); color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; box-shadow: 0 3px 9px #26384b18; cursor: pointer; transition: background .16s, border-color .16s; }
 .curriculum-traces > summary > span { color: inherit; flex-shrink: 0; }

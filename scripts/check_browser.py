@@ -63,7 +63,9 @@ def main():
                 assert page.locator('#result-curriculum-preview > h4').count()==0
                 assert page.locator('#result-curriculum-preview > p q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
                 assert page.locator('#result-curriculum-preview > p q').inner_text() == stage['exactGoal']
-                assert 'verbatim' in page.locator('.curriculum-preview-links').inner_text()
+                assert page.locator('.curriculum-preview-links').count()==0
+                rounds='Assessment only' if stage['rounds']==0 else f"{stage['rounds']} training {'round' if stage['rounds']==1 else 'rounds'}"
+                expect(page.locator('.goal-quotation > .curriculum-rounds')).to_have_text('· '+rounds)
                 page.locator('#tab-overview').click()
                 selection = stage['selection']
                 if selection['status'] == 'recorded':

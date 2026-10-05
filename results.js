@@ -149,7 +149,7 @@
     const expanded=preview.querySelector('.curriculum-traces')?.open || false;
     preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
     const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
-    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q></p><div class="curriculum-preview-links"><span>${stage.id==='g' ? 'Original goal · verbatim' : 'LLM subgoal · verbatim'} · ${esc(rounds)}</span></div><details class="curriculum-traces" ${expanded ? 'open' : ''}><summary>Explore LLM traces <span aria-hidden="true">+</span></summary><div class="inline-trace-view"></div></details>`;
+    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q> <span class="curriculum-rounds">· ${esc(rounds)}</span></p><details class="curriculum-traces" ${expanded ? 'open' : ''}><summary>Explore LLM traces <span aria-hidden="true">+</span></summary><div class="inline-trace-view"></div></details>`;
     window.LFD_TRACES.mount(preview.querySelector('.curriculum-traces'),task.id,id);
   }
   function renderCurriculum(task) {
