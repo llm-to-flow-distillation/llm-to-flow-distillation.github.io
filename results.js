@@ -112,7 +112,7 @@
   ];
   function dockingMarkup(result) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    return `<figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>`;
+    return `<div class="molecular-results"><figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>${molecularExample(result)}</div>`;
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
@@ -130,8 +130,7 @@
     $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
-    const example=molecularExample(goal);
-    $('#task-result-context').innerHTML=`<div class="task-context-grid ${example ? 'context-with-molecule' : ''}"><div class="observable-context"><details class="observable-details"><summary><span class="observable-heading">What does the LLM see?</span><span class="observable-list-label">Observable list</span><span class="observable-toggle">${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div>${example}</div>`;
+    $('#task-result-context').innerHTML=`<div class="task-context-grid"><div class="observable-context"><details class="observable-details"><summary><span class="observable-heading">What does the LLM see?</span><span class="observable-list-label">Observable list</span><span class="observable-toggle">${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div>`;
   }
   function curriculumLabel(stage) {
     return stage.id==='g' ? stage.rounds===0 ? 'Final assessment' : 'Final goal' : 'g'+stage.id.slice(1);

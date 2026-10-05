@@ -530,12 +530,11 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 /* Results share the generator colors, while chart markers continue to identify methods. */
 .metric-policy { font-size: 12px; font-weight: 500; color: var(--goal-strong); }
 .task-context-grid { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; margin-bottom: 18px; }
-.task-context-grid.context-with-molecule { grid-template-columns: minmax(0,1.3fr) minmax(0,.8fr); }
 .observable-context { min-width: 0; container-type: inline-size; }
 .task-molecule { min-width: 0; margin: 0; align-self: center; }
 .task-molecule a, .task-molecule img { display: block; }
-.task-molecule img { width: 100%; max-height: 210px; object-fit: contain; }
-.task-molecule figcaption { margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
+.task-molecule img { width: 100%; height: auto; max-height: 280px; object-fit: contain; }
+.task-molecule figcaption { text-align: center; margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
 /* One compact disclosure row; the complete input list opens below it. */
 .observable-details { margin: 0; }
 .observable-details summary { justify-content: flex-start; gap: 12px; min-height: 44px; padding: 0; white-space: nowrap; }
@@ -590,18 +589,19 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 #results-table tr.ours { background: var(--goal-surface); }
 #results-table tr.ours th { color: var(--goal-strong); box-shadow: inset 3px 0 var(--goal-accent); }
 #results-table .best .table-mean { font-weight: 700; color: var(--goal-strong); }
-.discovery-summary { display: grid; grid-template-columns: .9fr 1.1fr; gap: 32px; padding: 0 0 28px; align-items: center; }
+.discovery-summary { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,360px); gap: 32px; padding: 0 0 28px; align-items: center; }
 .discovery-prior { padding: 0 0 20px; border-bottom: 1px solid var(--goal-border); }
 .discovery-zero { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; font-size: 58px; font-weight: 600; letter-spacing: -1.8px; line-height: 1.3; color: var(--goal-strong); font-variant-numeric: tabular-nums; }
 .discovery-zero > span { font-size: 26px; font-weight: 400; letter-spacing: -.5px; }
 .discovery-comparison p { font-size: 14px; margin: 3px 0 0; color: #535e67; }
 .discovery-hit { padding-top: 20px; }
 .discovery-hit strong { display: block; margin-top: 7px; font-size: 27px; font-weight: 600; color: var(--goal-strong); letter-spacing: -.5px; line-height: 1.4; }
-.goal5-hit { margin: 0; padding: 0; }
+.goal5-hit { width: 100%; max-width: 360px; justify-self: end; margin: 0; padding: 0; }
+.goal5-hit img { width: 100%; height: auto; }
 .goal5-hit a, .goal5-hit img { display: block; }
 .goal5-hit figcaption { font-size: 11px; text-align: center; color: #566572; }
 @media (max-width: 900px) {
-  .task-context-grid, .task-context-grid.context-with-molecule { grid-template-columns: 1fr; gap: 22px; }
+  .task-context-grid { grid-template-columns: 1fr; gap: 22px; }
   .task-molecule { width: 100%; max-width: 640px; justify-self: center; }
 }
 @media (max-width: 600px) {
@@ -609,6 +609,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .context-source { padding-inline: 0; }
   .result-curriculum { margin-inline: 0; padding: 14px 12px; }
   .discovery-summary { grid-template-columns: 1fr; padding: 0 0 24px; gap: 24px; }
+  .goal5-hit { max-width: 280px; justify-self: center; }
   .discovery-zero { font-size: 48px; }
   .discovery-zero > span { font-size: 23px; }
   .discovery-hit strong { font-size: 25px; }
@@ -621,13 +622,17 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 }
 
 /* Grouped docking bars share the existing method colors and reported uncertainties. */
-.task-docking { margin: 0; }
+.molecular-results { display: grid; grid-template-columns: minmax(0,1fr); align-items: center; gap: 24px; }
+.task-docking { min-width: 0; margin: 0; }
+.molecular-results .task-molecule { width: 100%; max-width: 480px; justify-self: center; }
 .docking-chart-scroll { overflow-x: auto; overflow-y: hidden; }
 .docking-bar-chart { min-width: 640px; height: 385px; }
 
 /* Share the table's natural height with the neighboring plot and its lower legend. */
-.has-comparison .plot-key, .scaffold-novelty .plot-key { gap: 5px 8px; font-size: 10.5px; }
+.has-comparison .plot-key, .scaffold-novelty .plot-key, .molecular-results .plot-key { gap: 5px 8px; font-size: 10.5px; }
 @media (min-width: 1200px) {
+  .molecular-results { grid-template-columns: minmax(0,1.6fr) minmax(0,1fr); }
+  .molecular-results .docking-bar-chart { min-width: 0; }
   .has-comparison .results-values, .has-novelty .results-values { display: flex; flex-direction: column; }
   .has-comparison .table-scroll, .has-novelty .table-scroll { flex: 1; }
   .has-comparison #results-table, .has-novelty #results-table { height: 100%; }

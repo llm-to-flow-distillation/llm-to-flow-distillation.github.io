@@ -71,7 +71,8 @@ def main():
             obs=page.locator('.observable-context').bounding_box()
             if goal['id'] in ('d2','gsk3b'):
                 figure=page.locator('.task-molecule');expect(figure).to_be_visible()
-                assert figure.bounding_box()['x']>obs['x']+obs['width']
+                plot=page.locator('.task-docking').bounding_box()
+                assert figure.bounding_box()['x']>plot['x']+plot['width']
                 img=figure.locator('img');img.scroll_into_view_if_needed()
                 page.wait_for_function('document.querySelector(".task-molecule img").complete && document.querySelector(".task-molecule img").naturalWidth>0')
             page.locator('.observable-details summary').click()
@@ -135,6 +136,8 @@ def main():
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('17.373')
                     expect(page.locator('#novelty-chart .hoverlayer')).to_contain_text('95% CIs')
                     label=page.locator('#novelty-axis-label');tip=page.locator('#metric-help-popover')
+                    label.scroll_into_view_if_needed()
+                    page.wait_for_timeout(150)  # Scroll dismissal must settle before hovering the metric.
                     label.hover();expect(tip).to_be_visible()
                     expect(tip).to_contain_text('Bemis–Murcko')
                     expect(tip).to_contain_text('consistency-filtered training reference')
@@ -235,9 +238,13 @@ def main():
                     assert legend['y']>=chart['y']+chart['height'],(width,task,chart,legend)
                 if task in ('d2','gsk3b'):
                     figure=page.locator('.task-molecule');expect(figure).to_be_visible()
-                    obs=page.locator('.observable-context').bounding_box()
-                    if width>900:assert figure.bounding_box()['x']>obs['x']+obs['width']
-                    else:assert figure.bounding_box()['y']>obs['y']+obs['height']
+                    plot=page.locator('.task-docking').bounding_box()
+                    if width>=1200:assert figure.bounding_box()['x']>=plot['x']+plot['width']+23
+                    else:assert figure.bounding_box()['y']>=plot['y']+plot['height']+23
+                if task=='ood':
+                    context=page.locator('#task-result-context').bounding_box();discovery=page.locator('#result-discovery').bounding_box()
+                    assert context['y']+context['height']<=discovery['y']
+                    assert page.locator('.goal5-hit img').bounding_box()['width']<=(280 if width<=600 else 360)
                 if task in ('anticancer','cpp'):
                     table=page.locator('#results-values').bounding_box();plot=page.locator('#task-results-plots').bounding_box()
                     if width>=1200:
@@ -317,7 +324,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_context_layout':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_barplot_layout':'passed','goal5_observables_first':'passed','goal5_compact_figure':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

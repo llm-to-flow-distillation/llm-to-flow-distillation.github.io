@@ -30,6 +30,8 @@ def main():
                 for label in labels.all():
                     key=label.get_attribute('data-metric');seen.add(key)
                     label.scroll_into_view_if_needed()
+                    page.wait_for_timeout(150)  # Let scroll-triggered popup dismissal finish.
+                    if width==1440:page.mouse.move(1,1)
                     # Reset pointer/focus before exercising each independent control.
                     page.keyboard.press('Escape')
                     page.locator('#task-results-panel').evaluate('(el)=>el.focus({preventScroll:true})')
