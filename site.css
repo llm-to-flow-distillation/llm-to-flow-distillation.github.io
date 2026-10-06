@@ -116,7 +116,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
 .method-content p { margin-bottom: 18px; }
 .method-content p:last-child { margin-bottom: 0; }
-.method-goal-equation, .method-preference-equation, .method-curriculum .curriculum-equation { margin-block: 20px; padding-block: 6px; }
+.method-goal-equation, .method-preference-equation, .method-dpo-equation, .method-curriculum .curriculum-equation { margin-block: 20px; padding-block: 6px; }
 .method-content strong, .method-curriculum strong { font-weight: 600; }
 .paragraph-title { margin-right: .35em; }
 .method-definition { padding: 0; border: 0; border-bottom: 1px dotted #829abc; border-radius: 0; background: transparent; color: inherit; font-weight: 600; line-height: inherit; }

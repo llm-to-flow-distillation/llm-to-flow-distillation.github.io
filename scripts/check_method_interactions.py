@@ -82,7 +82,7 @@ def main():
                     range.selectNodeContents(document.querySelector(selector));
                     return [...range.getClientRects()].map(r=>({x:r.x,y:r.y,right:r.right,bottom:r.bottom})); };
                 return {content:box('.method-content'), algorithm:box('.algorithm-box'),
-                    first:lines('.method-content > p:first-child'), last:lines('.method-content > p:last-child')};
+                    first:lines('.method-content > p:first-child'), last:lines('.method-content > .method-update')};
             }""")
             content, algorithm = layout['content'], layout['algorithm']
             if width > 900:
@@ -99,7 +99,7 @@ def main():
             assert page.locator('.method-content h3, .method-curriculum h3').count() == 0
             expect(page.locator('p > #curriculum-title')).to_have_text('Connection with curriculum learning.')
             assert r'\mathcal D_t' not in page.locator('.method-preference-equation').get_attribute('data-tex')
-            expect(page.locator('.method-content > p:last-child [data-tex]').first).to_have_attribute(
+            expect(page.locator('.method-content > .method-update [data-tex]').first).to_have_attribute(
                 'data-tex', r'\mathcal D_t=\mathcal P_t\times\mathcal N_t')
             assert page.evaluate('document.documentElement.scrollWidth') <= width
             assert page.locator('.algorithm-row').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
