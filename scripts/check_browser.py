@@ -59,7 +59,6 @@ def main():
             page.locator(f'[data-result-task="{task["id"]}"]').click()
             assert page.locator(f'#result-name-{task["id"]}').inner_text() == task['name']
             expect(page.locator('.curriculum-traces')).not_to_have_attribute('open','')
-            page.locator('.curriculum-traces > summary').click()
             expect(page.locator('#tab-overview')).to_be_visible()
             for stage in task['stages']:
                 page.locator(f'[data-curriculum-stage="{stage["id"]}"]').click()
@@ -146,9 +145,8 @@ def main():
         assert page.locator('#explorer, .task-sidebar, .contents-list a[href="#explorer"]').count() == 0
         expect(page.locator('#task-results-panel')).not_to_be_visible()
         page.locator('[data-result-task="anticancer"]').click()
-        assert page.locator('.inline-trace-view').inner_html() == ''
-        summary=page.locator('.curriculum-traces > summary')
-        summary.focus();page.keyboard.press('Enter')
+        expect(page.locator('#panel-overview')).to_be_visible()
+        expect(page.locator('#goal-results-content')).to_be_hidden()
         expect(page.locator('#tab-overview')).to_be_visible()
         page.locator('#tab-traces').click()
         page.locator('#trace-search').fill('no-such-judgment-xyz')
@@ -159,21 +157,24 @@ def main():
         page.locator('#task-result-curriculum').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#results')
         assert page.evaluate('location.hash') == '#results?task=anticancer&stage=g1&tab=traces'
-        summary.focus();page.keyboard.press('Space')
-        expect(page.locator('#tab-traces')).not_to_be_visible()
-        page.wait_for_function('location.hash === "#results"')
-        page.keyboard.press('Enter')
-        expect(page.locator('#tab-traces')).to_be_visible()
+        # Results are independently expandable and retain the active trace tab.
+        toggle=page.locator('#goal-results-toggle')
+        toggle.focus();page.keyboard.press('Enter')
+        expect(page.locator('#goal-results-content')).to_be_visible()
+        toggle.focus();page.keyboard.press('Space')
+        expect(page.locator('#goal-results-content')).to_be_hidden()
+        expect(page.locator('#panel-traces')).to_be_visible()
         page.goto(args.url+'/#results?task=gsk3b&stage=g2&tab=traces',wait_until='networkidle')
         expect(page.locator('[data-result-task="gsk3b"]')).to_have_attribute('aria-expanded','true')
         expect(page.locator('[data-curriculum-stage="g2"]')).to_have_attribute('aria-selected','true')
         expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
-        assert page.locator('.curriculum-traces').evaluate('(el)=>el.open')
+        expect(page.locator('.curriculum-traces')).to_be_visible()
         ids=page.locator('[id]').evaluate_all('(els)=>els.map(el=>el.id)')
         assert len(ids)==len(set(ids)), 'Duplicate IDs after mounting traces'
         table_values = json.loads((root / 'data/results.json').read_text())
         for result in table_values:
             page.locator(f'[data-result-task="{result["id"]}"]').click()
+            page.locator('#goal-results-toggle').click()
             for index,row in enumerate(result['rows']):
                 rendered = page.locator('#results-table tbody tr').nth(index)
                 assert row['method'] in rendered.inner_text()
@@ -185,7 +186,6 @@ def main():
             assert page.evaluate('document.documentElement.scrollWidth') <= width, f'Overflow at {width}px'
             for task in data['tasks']:
                 page.locator(f'[data-result-task="{task["id"]}"]').click()
-                page.locator('.curriculum-traces > summary').click()
                 page.locator('#tab-traces').click()
                 assert page.locator('.inline-trace-view').evaluate('(el) => el.scrollWidth <= el.clientWidth + 1'), f'Clipped explorer at {width}px'
                 assert page.locator('.trace-card').evaluate_all('(els) => els.every(el => el.scrollWidth <= el.clientWidth + 1)'), f'Clipped candidate at {width}px'
@@ -210,7 +210,6 @@ def main():
                 page.wait_for_function("[...document.images].every(img => img.complete && img.naturalWidth > 0)")
                 page.screenshot(path=str(out / f'preview-{width}.png'),full_page=True)
                 page.locator('[data-result-task="anticancer"]').click()
-                page.locator('.curriculum-traces > summary').click()
                 page.locator('#tab-traces').click()
                 page.locator('.inline-trace-view').screenshot(path=str(out / f'explorer-{width}.png'))
         page.goto((root/'index.html').as_uri(),wait_until='load')
@@ -222,7 +221,7 @@ def main():
         assert not failed_requests, failed_requests
         browser.close()
     print('Responsive widths 360/390/768/1200/1280/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
-    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','overview_progress_and_footer':'removed','inline_disclosure':'passed','lazy_mount':'passed','legacy_trace_links':'open matching inline stage','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
+    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','overview_progress_and_footer':'removed','rationale_visible_by_default':'passed','results_disclosure':'passed','legacy_trace_links':'open matching inline stage','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
 
 
 if __name__ == '__main__':

@@ -130,12 +130,18 @@
     $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
-    $('#task-result-context').innerHTML=`<div class="task-context-grid"><div class="observable-context"><details class="observable-details"><summary><span class="observable-heading">What does the LLM see?</span><span class="observable-list-label">Observable list</span><span class="observable-toggle">${goal.observables.length} inputs <span aria-hidden="true">+</span></span></summary><ul>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul></details></div></div>`;
+    $('#task-result-context').innerHTML=`<div class="section-heading-row"><h4 id="llm-inputs-title" class="goal-section-title">LLM inputs</h4><button type="button" class="observable-toggle" aria-expanded="false" aria-controls="observable-list">Observable list<span class="disclosure-icon" aria-hidden="true"></span></button></div><ul id="observable-list" class="observable-list" hidden>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`;
+    const toggle=$('.observable-toggle');
+    toggle.addEventListener('click',()=>{
+      const expanded=toggle.getAttribute('aria-expanded')!=='true';
+      toggle.setAttribute('aria-expanded',String(expanded));
+      $('#observable-list').hidden=!expanded;
+    });
   }
   function curriculumLabel(stage) {
     return stage.id==='g' ? stage.rounds===0 ? 'Final assessment' : 'Final goal' : 'g'+stage.id.slice(1);
   }
-  function showCurriculumStage(task, id) {
+  function showCurriculumStage(task, id, resetTab=false) {
     const stage=task.stages.find(item=>item.id===id);
     const controls=$('#task-result-curriculum');
     controls.dataset.selectedStage=id;
@@ -145,17 +151,16 @@
       button.tabIndex=selected ? 0 : -1;
     });
     const preview=$('#result-curriculum-preview');
-    const expanded=preview.querySelector('.curriculum-traces')?.open || false;
     preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
     const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
-    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q> <span class="curriculum-rounds">· ${esc(rounds)}</span></p><details class="curriculum-traces" ${expanded ? 'open' : ''}><summary>Explore LLM traces <span aria-hidden="true">+</span></summary><div class="inline-trace-view"></div></details>`;
-    window.LFD_TRACES.mount(preview.querySelector('.curriculum-traces'),task.id,id);
+    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q> <span class="curriculum-rounds">· ${esc(rounds)}</span></p><div class="curriculum-traces"><div class="inline-trace-view"></div></div>`;
+    window.LFD_TRACES.mount(preview.querySelector('.curriculum-traces'),task.id,id,resetTab);
   }
   function renderCurriculum(task) {
     const target=$('#task-result-curriculum');
     target.dataset.curriculumTask=task.id;
-    target.innerHTML=`<div class="curriculum-heading"><h4>Explore the subgoals</h4><span>${task.stages.filter(stage=>stage.id!=='g').length} intermediate subgoals</span></div><div class="curriculum-tabs" role="tablist" aria-label="${esc(task.name)} curriculum">${task.stages.map((stage,index)=>`<button id="curriculum-${task.id}-${stage.id}" type="button" role="tab" data-curriculum-stage="${stage.id}" aria-selected="${index===0}" aria-controls="result-curriculum-preview" aria-label="${esc(stage.id==='g' ? curriculumLabel(stage) : 'Subgoal '+stage.id.slice(1))}" tabindex="${index===0 ? 0 : -1}">${stage.id==='g' ? esc(curriculumLabel(stage)) : 'g<sub>'+esc(stage.id.slice(1))+'</sub>'}</button>`).join('')}</div><div id="result-curriculum-preview" class="curriculum-preview" role="tabpanel" aria-labelledby="curriculum-${task.id}-${task.stages[0].id}"></div>`;
-    showCurriculumStage(task,task.stages[0].id);
+    target.innerHTML=`<h4 id="goal-curriculum-title" class="goal-section-title">Sub-goals and LLM traces</h4><div class="curriculum-tabs" role="tablist" aria-label="${esc(task.name)} curriculum">${task.stages.map((stage,index)=>`<button id="curriculum-${task.id}-${stage.id}" type="button" role="tab" data-curriculum-stage="${stage.id}" aria-selected="${index===0}" aria-controls="result-curriculum-preview" aria-label="${esc(stage.id==='g' ? curriculumLabel(stage) : 'Subgoal '+stage.id.slice(1))}" tabindex="${index===0 ? 0 : -1}">${stage.id==='g' ? esc(curriculumLabel(stage)) : 'g<sub>'+esc(stage.id.slice(1))+'</sub>'}</button>`).join('')}</div><div id="result-curriculum-preview" class="curriculum-preview" role="tabpanel" aria-labelledby="curriculum-${task.id}-${task.stages[0].id}"></div>`;
+    showCurriculumStage(task,task.stages[0].id,true);
   }
   function setupMetricHelp() {
     const container=$('#task-results-panel');
@@ -266,7 +271,7 @@
     cards.innerHTML=goals.map(goal=>{
       const task=data.tasks.find(task=>task.id===goal.id);
       const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
-      return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true">+</span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
+      return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
     }).join('');
     function closeGoal() {
       closeMetricHelp();
@@ -275,12 +280,9 @@
       if (button) {
         button.setAttribute('aria-expanded','false');
         button.classList.remove('is-selected');
-        button.querySelector('.goal-card-state').textContent='+';
         button.closest('.goal-accordion').classList.remove('is-open');
         $('#goal-content-'+active).hidden=true;
       }
-      const traces=panel.querySelector('.curriculum-traces');
-      if (traces) traces.open=false;
       panel.hidden=true;
       active=null;
       if (/^#results\?/.test(location.hash)) history.replaceState(null,'','#results');
@@ -297,6 +299,8 @@
       panel.dataset.selectedTask=id;
       panel.dataset.generator=goal.generator;
       delete panel.dataset.plotReadyTask;
+      $('#goal-results-content').hidden=true;
+      $('#goal-results-toggle').setAttribute('aria-expanded','false');
       panel.setAttribute('aria-labelledby','result-card-'+id);
       cards.querySelectorAll('[data-result-task]').forEach(card=>{
         const selected=card.dataset.resultTask===id;
@@ -304,7 +308,6 @@
         card.closest('.goal-accordion').classList.toggle('is-open',selected);
         $('#goal-content-'+card.dataset.resultTask).hidden=!selected;
         card.classList.toggle('is-selected',selected);
-        card.querySelector('.goal-card-state').textContent=selected ? '−' : '+';
       });
       // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
@@ -328,20 +331,34 @@
         renderTable(result);
       } else if (id==='ood') {
         $('#task-results-plots').innerHTML='';
-        $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#results?task=ood&stage=g&tab=traces">Explore final-goal traces ↗</a></div>';
+        $('#task-results-evidence').innerHTML='';
         $('#results-table').innerHTML='';
       } else {
         $('#task-results-plots').innerHTML=scatterMarkup(result);
         $('#task-results-evidence').innerHTML='';
         renderTable(result);
       }
-      fonts.then(()=>{
-        if (current!==generation) return;
-        const work=id==='ood' ? null : result.table===2 ? renderDockingBars(result) : renderScatter(result);
-        const plots=[work];
-        if (id==='gsk3b') plots.push(renderNovelty());
-        return Promise.all(plots).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
-      });
+      let plotsStarted=false;
+      $('#goal-results-toggle').onclick=()=>{
+        const toggle=$('#goal-results-toggle');
+        const expanded=toggle.getAttribute('aria-expanded')!=='true';
+        toggle.setAttribute('aria-expanded',String(expanded));
+        $('#goal-results-content').hidden=!expanded;
+        closeMetricHelp();
+        if (!expanded) return;
+        if (plotsStarted) {
+          panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Plots.resize(plot));
+          return;
+        }
+        plotsStarted=true;
+        fonts.then(()=>{
+          if (current!==generation) return;
+          const work=id==='ood' ? null : result.table===2 ? renderDockingBars(result) : renderScatter(result);
+          const plots=[work];
+          if (id==='gsk3b') plots.push(renderNovelty());
+          return Promise.all(plots).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
+        });
+      };
     }
     $('#task-result-curriculum').addEventListener('click',event=>{
       const button=event.target.closest('[data-curriculum-stage]');

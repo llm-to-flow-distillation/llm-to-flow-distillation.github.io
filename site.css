@@ -458,7 +458,12 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .result-task-name { font-size: 19px; line-height: 1.4; font-weight: 700; }
 .goal-prompt { display: block; margin-top: 10px; color: #565c66; font-size: 14px; font-weight: 400; line-height: 1.8; }
 .goal-prompt strong { font-weight: 600; }
-.goal-card-state { position: absolute; right: 20px; top: 21px; display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--goal-border); border-radius: 50%; font-size: 21px; line-height: 1; color: var(--goal-accent); background: #ffffff80; }
+.goal-card-state { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border: 1px solid var(--goal-border); border-radius: 50%; color: var(--goal-accent); background: #ffffff80; }
+.goal-card-state::before, .goal-card-state::after, .disclosure-icon::before, .disclosure-icon::after { content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 12px; height: 2px; background: currentColor; border-radius: 1px; }
+.goal-card-state::after, .disclosure-icon::after { width: 2px; height: 12px; }
+[aria-expanded="true"] > .goal-card-state::after, [aria-expanded="true"] > .disclosure-icon::after { display: none; }
+.disclosure-icon { position: relative; display: inline-block; flex: 0 0 18px; width: 18px; height: 18px; }
+
 .goal-content { border-top: 1px solid var(--goal-border); border-radius: 0 0 13px 13px; overflow: hidden; }
 @media (max-width: 600px) {
   .goal-accordions { gap: 12px; }
@@ -467,7 +472,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .goal-number { font-size: 23px; }
   .result-task-name { font-size: 17px; }
   .goal-prompt { font-size: 13px; line-height: 1.7; margin-top: 8px; }
-  .goal-card-state { right: 13px; top: 18px; }
+  .goal-card-state { right: 13px; }
 }
 
 .results-explorer { padding: 18px 24px 22px; background: #fff; overflow: hidden; }
@@ -536,34 +541,20 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .task-molecule a, .task-molecule img { display: block; }
 .task-molecule img { width: 100%; height: auto; max-height: 280px; object-fit: contain; }
 .task-molecule figcaption { text-align: center; margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
-/* One compact disclosure row; the complete input list opens below it. */
-.observable-details { margin: 0; }
-.observable-details summary { justify-content: flex-start; gap: 12px; min-height: 44px; padding: 0; white-space: nowrap; }
-.observable-details summary > span { color: #586370; font-size: 12px; line-height: 1.4; }
-.observable-details summary .observable-heading { font-size: 14px; font-weight: 700; color: var(--ink); }
-.observable-details summary .observable-toggle { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--goal-border); border-radius: 7px; background: var(--goal-surface); color: var(--goal-strong); font-size: 11px; }
-.observable-details summary:hover .observable-toggle { border-color: var(--goal-accent); }
-.observable-details[open] > summary > span { transform: none; }
-.observable-toggle > span { display: inline-block; }
-.observable-details[open] .observable-toggle > span { transform: rotate(45deg); }
-@container (max-width: 360px) {
-  .observable-details summary { gap: 8px; }
-  .observable-details summary .observable-heading { font-size: 12px; }
-  .observable-details summary .observable-list-label { font-size: 10.5px; }
-  .observable-details summary .observable-toggle { font-size: 10px; gap: 5px; padding-inline: 6px; }
-}
-@container (max-width: 300px) {
-  .observable-details summary { gap: 4px; }
-  .observable-details summary .observable-heading { font-size: 11px; }
-  .observable-details summary .observable-list-label { font-size: 10px; }
-  .observable-details summary .observable-toggle { gap: 3px; padding-inline: 4px; }
-}
-.observable-details ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 24px; list-style: disc; margin: 14px 0 0; padding-left: 17px; }
-.observable-details li { padding: 0; color: #535b67; font-size: 12px; line-height: 1.65; }
-.result-curriculum { margin: 0 0 20px; padding: 16px 18px; border: 1px solid var(--goal-border); border-radius: 12px; background: var(--goal-surface); }
-.curriculum-heading { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 7px 18px; }
-.curriculum-heading h4 { font-size: 17px; margin: 0; color: var(--goal-strong); }
-.curriculum-heading > span { font-size: 11px; color: #606875; }
+/* Three peer sections, with only inputs and numerical results disclosed. */
+.goal-section { margin: 0; padding: 22px 0; border: 0; border-radius: 0; background: none; }
+.goal-section + .goal-section { border-top: 1px solid var(--line); }
+.goal-section-title { margin: 0; font-size: 17px; line-height: 1.5; font-weight: 650; color: var(--ink); }
+.section-heading-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
+.observable-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; border: 0; background: none; color: var(--goal-strong); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--goal-border); }
+.observable-toggle:hover { text-decoration-color: currentColor; }
+.observable-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 7px 24px; margin: 14px 0 0; padding-left: 17px; color: #535b67; font-size: 12px; line-height: 1.65; }
+.observable-list[hidden], #goal-results-content[hidden] { display: none; }
+#goal-results-toggle { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; padding: 0; min-height: 36px; border: 0; background: none; font: inherit; color: inherit; text-align: left; }
+#goal-results-toggle:hover { color: var(--goal-strong); }
+#goal-results-content { padding-top: 18px; }
+#goal-results-content > .results-details { border-top: 0; }
+.result-curriculum { margin: 0; padding: 22px 0; border-radius: 0; background: none; }
 .curriculum-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 8px; }
 .curriculum-tabs button { min-height: 38px; min-width: 46px; padding: 7px 13px; border: 1px solid var(--goal-border); border-radius: 8px; background: #fff; font-size: 13px; color: var(--goal-strong); }
 .curriculum-tabs sub { font-size: .75em; line-height: 0; }
@@ -572,14 +563,10 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-preview > p { margin: 8px 0 12px; font-size: 14px; line-height: 1.75; }
 .curriculum-rounds { font-size: 11px; font-style: normal; color: #5c6570; }
 .curriculum-traces { margin-top: 14px; scroll-margin-top: 80px; }
-.curriculum-traces > summary { display: inline-flex; gap: 24px; min-height: 48px; max-width: 100%; padding: 12px 18px; border: 1px solid var(--goal-accent); border-radius: 10px; background: var(--goal-accent); color: #fff; font-size: 15px; font-weight: 600; line-height: 1.4; box-shadow: 0 3px 9px #26384b18; cursor: pointer; transition: background .16s, border-color .16s; }
-.curriculum-traces > summary > span { color: inherit; flex-shrink: 0; }
-.curriculum-traces > summary:hover { background: var(--goal-strong); border-color: var(--goal-strong); }
-.curriculum-traces > summary:focus-visible { outline-color: var(--goal-accent); }
 .curriculum-traces .explorer-tabs { margin-top: 14px; }
 .curriculum-traces .explorer-tabs button { font-size: 13px; }
 .curriculum-traces .explorer-tabs button[aria-selected=true] { color: var(--goal-strong); border-bottom-color: var(--goal-accent); }
-.curriculum-traces .selection-card { background: var(--goal-surface); border-color: var(--goal-border); }
+.curriculum-traces .selection-card { background: none; border: 0; border-radius: 0; padding: 8px 0 0; }
 .curriculum-traces .selection-card h4 { color: var(--goal-strong); }
 .inline-trace-view { min-width: 0; }
 #results-table th, #results-table td { padding-block: 13px; }
@@ -608,7 +595,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 @media (max-width: 600px) {
   .task-context-grid { padding-inline: 0; }
   .context-source { padding-inline: 0; }
-  .result-curriculum { margin-inline: 0; padding: 14px 12px; }
+  .goal-section, .result-curriculum { padding: 18px 0; }
   .discovery-summary { grid-template-columns: 1fr; padding: 0 0 24px; gap: 24px; }
   .goal5-hit { max-width: 280px; justify-self: center; }
   .discovery-zero { font-size: 48px; }
@@ -619,7 +606,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 /* Keep the task heading and discovery content readable within the results panel. */
 #result-discovery:empty { display: none; }
 @media (max-width: 600px) {
-  .observable-details ul { grid-template-columns: 1fr; }
+  .observable-list { grid-template-columns: 1fr; }
 }
 
 /* Grouped docking bars share the existing method colors and reported uncertainties. */

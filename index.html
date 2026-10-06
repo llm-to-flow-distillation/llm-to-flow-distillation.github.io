@@ -15,12 +15,12 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=b24ba97a02d0">
+  <link rel="stylesheet" href="site.css?v=a2bb627613fa">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
-  <script src="results.js?v=4e601d75d228" defer></script>
-  <script src="site.js?v=454213a24eeb" defer></script>
+  <script src="results.js?v=2419f7a0ebd5" defer></script>
+  <script src="site.js?v=217f7ac098ec" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -118,8 +118,11 @@
       <div class="generator-legend" aria-label="Starting generators"><span>Starting generators</span><span class="generator-label" data-generator="PepDFM">PepDFM <span>· peptides</span></span><span class="generator-label" data-generator="FlowMol3">FlowMol3 <span>· molecules</span></span></div>
       <div id="result-cards" class="goal-accordions" aria-label="Discovery experiments"></div>
       <div id="task-results-panel" class="results-explorer" role="region" tabindex="-1" hidden>
-        <div id="task-result-context"></div>
-        <section id="task-result-curriculum" class="result-curriculum" aria-label="Recorded curriculum"></section>
+        <section id="task-result-context" class="goal-section" aria-labelledby="llm-inputs-title"></section>
+        <section id="task-result-curriculum" class="result-curriculum goal-section" aria-labelledby="goal-curriculum-title"></section>
+        <section class="goal-section results-section-content" aria-labelledby="goal-results-title">
+          <h4 id="goal-results-title" class="goal-section-title"><button id="goal-results-toggle" type="button" aria-expanded="false" aria-controls="goal-results-content">Results<span class="disclosure-icon" aria-hidden="true"></span></button></h4>
+          <div id="goal-results-content" hidden>
         <div id="result-discovery"></div>
         <div id="task-results-plots"></div>
         <div id="task-results-details" class="results-details">
@@ -127,6 +130,8 @@
           <div id="task-scaffold-novelty"></div>
         </div>
         <div id="task-results-evidence" class="task-results-evidence"></div>
+          </div>
+        </section>
       </div>
     </section>
 

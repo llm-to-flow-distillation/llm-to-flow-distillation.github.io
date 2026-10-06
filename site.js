@@ -172,7 +172,7 @@
     };
   }
   function updateHash() {
-    const hash = traceDisclosure?.open ? '#results?' + new URLSearchParams(state) : '#results';
+    const hash = traceDisclosure?.isConnected ? '#results?' + new URLSearchParams(state) : '#results';
     history.replaceState(null, '', hash);
   }
   function renderExplorer() {
@@ -253,23 +253,16 @@
     renderExplorer();
   }
   window.LFD_TRACES = {
-    mount(disclosure,task,stage) {
+    mount(disclosure,task,stage,resetTab=false) {
       traceDisclosure = disclosure;
       state.task = task;
       state.stage = stage;
-      if (!disclosure.open) state.tab = 'overview';
-      disclosure.addEventListener('toggle', () => {
-        // A previous subgoal's queued toggle must never affect the new view.
-        if (disclosure !== traceDisclosure || !disclosure.isConnected) return;
-        if (disclosure.open) populateTraces();
-        updateHash();
-      });
-      if (disclosure.open) {populateTraces();updateHash();}
-      else if (/^#results\?/.test(location.hash)) updateHash();
+      if (resetTab) state.tab = 'overview';
+      populateTraces();
+      updateHash();
     },
     open(tab='overview') {
       state.tab = tab;
-      traceDisclosure.open = true;
       populateTraces();
       renderTab();
       updateHash();

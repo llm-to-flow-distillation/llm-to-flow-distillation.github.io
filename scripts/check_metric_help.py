@@ -24,6 +24,7 @@ def main():
             tip=page.locator('#metric-help-popover')
             for task in ['anticancer','cpp','d2','gsk3b']:
                 page.locator(f'[data-result-task="{task}"]').click()
+                page.locator('#goal-results-toggle').click()
                 page.wait_for_function('(id)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===id',arg=task)
                 assert page.locator('#results-table-title,.task-scatter h4,.scaffold-novelty h4,.task-docking h4').count()==0
                 labels=page.locator('#task-results-panel [data-metric]')
@@ -61,6 +62,7 @@ def main():
                 labels.first.click();expect(tip).to_be_visible()
                 page.locator('[data-result-task="ood"]').click();expect(tip).to_be_hidden()
             page.locator('[data-result-task="anticancer"]').click()
+            page.locator('#goal-results-toggle').click()
             page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask==="anticancer"')
             axis=page.locator('#comparison-chart .xtitle')
             axis.scroll_into_view_if_needed();axis.click();expect(tip).to_be_visible()
