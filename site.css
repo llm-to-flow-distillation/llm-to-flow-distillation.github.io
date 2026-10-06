@@ -110,7 +110,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
 /* The method prose wraps around the floating algorithm and continues below it. */
 .method-section, .results-section { border-top: 2px solid #9aa6b5; }
-.method-section { margin-top: 64px; }
+.method-band { display: flow-root; margin-top: 64px; background: #f6f6f6; }
 .method-section > h2 { text-align: left; text-wrap: balance; }
 .method-layout { display: flow-root; margin-top: 32px; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
@@ -177,7 +177,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
   .dpo-equation-space { display: none; }
 }
 @media (max-width: 430px) {
-  .method-section { margin-top: 40px; }
+  .method-band { margin-top: 40px; }
   .algorithm-box { border-radius: 14px; }
   .algorithm-box h3 { border-radius: 13px 13px 0 0; }
   .algorithm-loop .algorithm-line { padding-left: .5em; }
