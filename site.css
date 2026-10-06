@@ -117,6 +117,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-content p { margin-bottom: 18px; }
 .method-content p:last-child { margin-bottom: 0; }
 .method-goal-equation, .method-preference-equation, .method-dpo-equation, .method-curriculum .curriculum-equation { margin-block: 20px; padding-block: 6px; }
+.method-dpo-equation { display: flex; justify-content: center; align-items: baseline; }
 .method-content strong, .method-curriculum strong { font-weight: 600; }
 .paragraph-title { margin-right: .35em; }
 .method-definition { padding: 0; border: 0; border-bottom: 1px dotted #829abc; border-radius: 0; background: transparent; color: inherit; font-weight: 600; line-height: inherit; }
@@ -168,6 +169,10 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 }
 @media (max-width: 760px) {
   .method-curriculum { margin-top: 28px; }
+}
+@media (max-width: 680px) {
+  .method-dpo-equation { flex-direction: column; align-items: center; gap: 14px; }
+  .dpo-equation-space { display: none; }
 }
 @media (max-width: 430px) {
   .method-section { margin-top: 40px; }
