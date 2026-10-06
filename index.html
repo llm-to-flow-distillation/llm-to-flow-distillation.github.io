@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=bace7a33e462">
+  <link rel="stylesheet" href="site.css?v=57d1cba130d5">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -54,11 +54,11 @@
       <h2 id="method-title">Method: LLM-to-Flow Distillation</h2>
       <div class="method-layout">
         <div class="method-content">
-          <h3>An adaptive curriculum</h3>
-          <p>LFD aligns a pretrained flow <span class="math math-inline" data-tex="v_{\theta_0}">v<sub>θ₀</sub></span> with a natural-language goal <span class="math math-inline" data-tex="g">g</span> through an online LLM-generated curriculum. At each round, the teacher uses the current samples to choose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span> and judge candidates.</p>
-          <p>Let <span class="math math-inline" data-tex="\Omega_{g_t}\subseteq\mathcal X">Ω<sub>gₜ</sub> ⊆ X</span> be the region satisfying the current subgoal. As the student improves, the curriculum tightens toward the original discovery goal:</p>
-          <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
-          <p>The resulting preferences update the flow. New samples inform the next subgoal, so the curriculum adapts to the generator’s capabilities.</p>
+          <h3>Iterative DPO with LLM feedback</h3>
+          <p>LFD fine-tunes a pretrained flow with <strong>iterative Direct Preference Optimization (DPO)</strong> on LLM-generated preferences. The challenge is <strong>reachability</strong>: the starting generator may rarely produce designs satisfying the natural-language goal <span class="math math-inline" data-tex="g">g</span>. Let <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> be the region of designs satisfying <span class="math math-inline" data-tex="g">g</span>. Our aim is:</p>
+          <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
+          <p>At each round, the teacher sees fresh samples through their observables <span class="math math-inline" data-tex="\mathcal O(x)">O(x)</span>. We ask for <strong>positive, negative, or abstain</strong> judgments under the current subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>, together with a rationale and sources of uncertainty. Positive–negative pairs form the DPO preferences; abstained candidates are excluded.</p>
+          <p>DPO updates the flow using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen reference. We then draw fresh samples and repeat, so the feedback follows the generator’s evolving capabilities.</p>
         </div>
         <div class="algorithm-box" aria-labelledby="algorithm-title">
           <h3 id="algorithm-title"><span>Algorithm</span><span class="algorithm-name">LLM-to-Flow Distillation (LFD)</span></h3>
@@ -75,15 +75,11 @@
           </ol>
         </div>
       </div>
-      <div class="method-interpretation" aria-labelledby="interpretation-title">
-        <h3 id="interpretation-title">Each round is a KL-regularized step.</h3>
-        <p>Assume the teacher’s preferences follow a Bradley–Terry model with an unobserved utility <span class="math math-inline" data-tex="f_{g_t}:\mathcal X\to\mathbb R">f<sub>gₜ</sub>: X → ℝ</span>. The standard DPO derivation gives two equivalent forms of the implicit target:</p>
-        <div class="implicit-target-equation" role="group" aria-label="Equivalent forms of the implicit target">
-          <div class="math math-display implicit-target-density" data-tex="p_t^\star \propto p_{\theta_t}\,e^{f_{g_t}/\beta}">p<sub>t</sub><sup>⋆</sup> ∝ p<sub>θₜ</sub> exp(f<sub>gₜ</sub>/β)</div>
-          <span class="math math-inline target-equivalence" data-tex="\Longleftrightarrow">⇔</span>
-          <div class="math math-display implicit-target-objective" data-tex="p_t^\star =\underset{q}{\operatorname{arg\,max}}\,\bigl\{\mathbb E_q[f_{g_t}]-\beta\,\mathrm{KL}(q\|p_{\theta_t})\bigr\}.">p<sub>t</sub><sup>⋆</sup> = arg max<sub>q</sub> {E<sub>q</sub>[f<sub>gₜ</sub>] − β KL(q ‖ p<sub>θₜ</sub>)}.</div>
-        </div>
-        <p>Each subgoal thus induces an implicit reward and a target that balances higher utility against departure from the current generator, with <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controlling regularization. Across rounds, these targets define local steps along the curriculum toward <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span>.</p>
+      <div class="method-curriculum" aria-labelledby="curriculum-title">
+        <h3 id="curriculum-title">Curriculum learning through reachable regions</h3>
+        <p>The teacher first chooses a broad, attainable relaxation <span class="math math-inline" data-tex="g_0">g<sub>0</sub></span> that yields both positive and negative examples. As the generator improves, the teacher tightens the subgoals online. Each subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span> defines a region <span class="math math-inline" data-tex="\Omega_{g_t}\subseteq\mathcal X">Ω<sub>gₜ</sub> ⊆ X</span>, creating a curriculum toward the final discovery region:</p>
+        <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
+        <p>The original goal <span class="math math-inline" data-tex="g">g</span> stays fixed; the intermediate goals adapt to what the generator can currently produce.</p>
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
         <div class="function-popover-heading"><h3 id="function-detail-title">Function details</h3><button id="close-function-details" type="button" aria-label="Close function details">×</button></div>
@@ -98,7 +94,7 @@
           <p>Use the original goal, previous subgoal, and current sample observables to propose an attainable relaxation.</p><div class="math math-display" data-tex="g_t\gets\operatorname{SetGoal}\bigl(g,g_{t-1},\mathcal O(X_t)\bigr)">g<sub>t</sub> ← SetGoal(g, g<sub>t−1</sub>, O(X<sub>t</sub>))</div><p>Accept the subgoal only when the teacher identifies enough positive and negative candidates for a useful learning signal. As the student improves, the teacher tightens the goal online.</p>
         </div>
         <div data-function-panel="judge" hidden>
-          <p>Under the accepted subgoal, label each candidate positive, negative, or abstained:</p><div class="math math-display" data-tex="\ell_t(x)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x) ∈ {+, −, ∅}</div><p>The positive set <span class="math math-inline" data-tex="\mathcal P_t">P<sub>t</sub></span> and negative set <span class="math math-inline" data-tex="\mathcal N_t">N<sub>t</sub></span> induce preference pairs:</p><div class="math math-display" data-tex="\mathcal D_t=\mathcal P_t\times\mathcal N_t">D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub></div><p>Abstained candidates are excluded. One labeling pass provides the preferences, without asking the teacher to compare every pair.</p>
+          <p>For each candidate, request a positive, negative, or abstain judgment under the current subgoal, with a rationale and sources of uncertainty:</p><div class="math math-display" data-tex="\ell_t(x)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x) ∈ {+, −, ∅}</div><p>The positive set <span class="math math-inline" data-tex="\mathcal P_t">P<sub>t</sub></span> and negative set <span class="math math-inline" data-tex="\mathcal N_t">N<sub>t</sub></span> induce preference pairs:</p><div class="math math-display" data-tex="\mathcal D_t=\mathcal P_t\times\mathcal N_t">D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub></div><p>In the experiments, two independent judgment passes must agree on a positive or negative label. Abstained and inconsistent candidates are excluded from preference training. The feedback is categorical; uncertainty is described in words.</p>
         </div>
         <div data-function-panel="minimize" hidden>
           <p>For a preference pair <span class="math math-inline" data-tex="(x^+,x^-)\sim\mathcal D_t">(x⁺, x⁻) ∼ D<sub>t</sub></span>, measure how its relative likelihood changes from the current generator:</p><div class="math math-display" data-tex="\Delta_t^\theta=\log\frac{p_\theta(x^+)}{p_{\theta_t}(x^+)}-\log\frac{p_\theta(x^-)}{p_{\theta_t}(x^-)}">Δ<sub>t</sub><sup>θ</sup> = log[p<sub>θ</sub>(x⁺)/p<sub>θₜ</sub>(x⁺)] − log[p<sub>θ</sub>(x⁻)/p<sub>θₜ</sub>(x⁻)]</div><p>Minimize the teacher-induced DPO objective:</p><div class="math math-display" data-tex="\mathcal L_t(\theta,\mathcal D_t)=-\mathbb E_{\mathcal D_t}\log\sigma\bigl(\beta\Delta_t^\theta\bigr)">L<sub>t</sub>(θ, D<sub>t</sub>) = −E<sub>Dₜ</sub> log σ(βΔ<sub>t</sub><sup>θ</sup>)</div><p><span class="math math-inline" data-tex="\sigma">σ</span> is the logistic function; <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controls regularization. Keep the reference <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> fixed during this round.</p><div class="math math-display" data-tex="\theta_t\xrightarrow{\text{optimize }\widetilde{\mathcal L}_t}\theta_{t+1}">θ<sub>t</sub> → optimize the surrogate loss → θ<sub>t+1</sub></div><p>Start from <span class="math math-inline" data-tex="\theta_t">θ<sub>t</sub></span> and take optimizer steps on the <strong>denoising-loss surrogate</strong>, since terminal log-densities are intractable. Return the updated parameters, then resample for the next round.</p>
