@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=57d1cba130d5">
+  <link rel="stylesheet" href="site.css?v=f444551c5f8a">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -55,24 +55,11 @@
       <div class="method-layout">
         <div class="method-content">
           <h3>Iterative DPO with LLM feedback</h3>
-          <p>LLM-to-Flow Distillation (LFD) <strong>iteratively<strong> adapts a pretrained scientific generator (the student, e.g., a flow model) with Direct Preference Optimization (DPO) on LLM-generated preferences.  
-            As the pretrained model may rarely produce designs satisfying the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher (i.e., the LLM) also propose online and based on the generator state, intermediate sub-goals on which it can provide judgements $\ell_t(x_i)\in\{+,-,\varnothing\}$ for all currently generated samples $x_i$, where $\varnothing$ denotes abstention and the positive are enough to do DPO on all the pairs We define the positive and negative sets as
-\begin{equation}
-\mathcal P_t=\{x_i\in X_t:\ell_t(x_i)=+\},
-\qquad
-\mathcal N_t=\{x_i\in X_t:\ell_t(x_i)=-\}.
-\label{eq:llm-judge-sets}
-\end{equation}
-\looseness -1 These sets (abstained candidates are ignored) induces the preference datasets:
-\begin{equation}
-\label{eq:preference-set}
-\mathcal{D}_t = \{(x^+,x^-):x^+\in \mathcal P_t,\;x^-\in \mathcal N_t\},
-\end{equation}.
-            
-            Let <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> be the region of designs satisfying <span class="math math-inline" data-tex="g">g</span>. Our aim is:</p>
-          <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
-          <p>At each round, the teacher sees fresh samples through their observables <span class="math math-inline" data-tex="\mathcal O(x)">O(x)</span>. We ask for <strong>positive, negative, or abstain</strong> judgments under the current subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>, together with a rationale and sources of uncertainty. Positive–negative pairs form the DPO preferences; abstained candidates are excluded.</p>
-          <p>DPO updates the flow using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen reference. We then draw fresh samples and repeat, so the feedback follows the generator’s evolving capabilities.</p>
+          <p>LLM-to-Flow Distillation (LFD) <strong>iteratively adapts a pretrained scientific generator</strong> (the student) with Direct Preference Optimization (DPO) on preferences produced by an LLM teacher.</p>
+          <p>At round <span class="math math-inline" data-tex="t">t</span>, the teacher uses observables <span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> of the current sample batch <span class="math math-inline" data-tex="X_t">X<sub>t</sub></span> to propose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. For each candidate, it returns a <strong>positive, negative, or abstain</strong> judgment <span class="math math-inline" data-tex="\ell_t(x_i)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x<sub>i</sub>) ∈ {+, −, ∅}</span>, together with a rationale and sources of uncertainty.</p>
+          <p>Excluding abstentions, the positive and negative sets induce the preference dataset:</p>
+          <div class="math math-display method-preference-equation" data-tex="\begin{aligned}\mathcal P_t&amp;=\{x_i\in X_t:\ell_t(x_i)=+\},\\\mathcal N_t&amp;=\{x_i\in X_t:\ell_t(x_i)=-\},\\\mathcal D_t&amp;=\mathcal P_t\times\mathcal N_t.\end{aligned}">P<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = +},<br>N<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = −},<br>D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub>.</div>
+          <p>All positive–negative pairs in <span class="math math-inline" data-tex="\mathcal D_t">D<sub>t</sub></span> train the student, using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen DPO reference. We then draw fresh samples and repeat.</p>
         </div>
         <div class="algorithm-box" aria-labelledby="algorithm-title">
           <h3 id="algorithm-title"><span>Algorithm</span><span class="algorithm-name">LLM-to-Flow Distillation (LFD)</span></h3>
@@ -91,7 +78,9 @@
       </div>
       <div class="method-curriculum" aria-labelledby="curriculum-title">
         <h3 id="curriculum-title">Curriculum learning through reachable regions</h3>
-        <p>The teacher first chooses a broad, attainable relaxation <span class="math math-inline" data-tex="g_0">g<sub>0</sub></span> that yields both positive and negative examples. As the generator improves, the teacher tightens the subgoals online. Each subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span> defines a region <span class="math math-inline" data-tex="\Omega_{g_t}\subseteq\mathcal X">Ω<sub>gₜ</sub> ⊆ X</span>, creating a curriculum toward the final discovery region:</p>
+        <p>The challenge is <strong>reachability</strong>: the starting generator may rarely produce designs satisfying the natural-language goal <span class="math math-inline" data-tex="g">g</span>. Let <span class="math math-inline" data-tex="\Omega_g\subseteq\mathcal X">Ω<sub>g</sub> ⊆ X</span> be the region of designs satisfying this goal. We aim to increase the probability of reaching it:</p>
+        <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
+        <p>The teacher starts with a broad, attainable relaxation <span class="math math-inline" data-tex="g_0">g<sub>0</sub></span>, chosen to yield enough positive and negative examples for DPO. As the student improves, the teacher tightens the subgoals online. Their corresponding regions form a curriculum toward the original goal:</p>
         <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
         <p>The original goal <span class="math math-inline" data-tex="g">g</span> stays fixed; the intermediate goals adapt to what the generator can currently produce.</p>
       </div>

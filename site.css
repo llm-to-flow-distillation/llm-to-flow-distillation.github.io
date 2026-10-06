@@ -117,8 +117,8 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-content h3, .method-curriculum h3 { margin-bottom: 14px; font-size: 19px; font-weight: 600; letter-spacing: -.25px; }
 .method-content p { margin-bottom: 18px; }
 .method-content p:last-child { margin-bottom: 0; }
-.method-goal-equation, .method-curriculum .curriculum-equation { margin-block: 20px; padding-block: 6px; }
-.method-content strong { font-weight: 600; }
+.method-goal-equation, .method-preference-equation, .method-curriculum .curriculum-equation { margin-block: 20px; padding-block: 6px; }
+.method-content strong, .method-curriculum strong { font-weight: 600; }
 .math-inline { white-space: nowrap; }
 .method-section .katex { font-size: 1.1em; color: inherit; }
 .math-display { text-align: center; max-width: 100%; margin: 26px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
