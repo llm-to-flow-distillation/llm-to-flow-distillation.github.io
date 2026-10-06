@@ -118,7 +118,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-preference-equation, .method-dpo-equation { margin-block: 20px; padding-block: 6px; }
 .method-dpo-equation { display: flex; justify-content: center; align-items: baseline; }
 .method-content strong, .method-curriculum strong { font-weight: 600; }
-.method-definition { padding: 0; border: 0; border-bottom: 1px dotted #829abc; border-radius: 0; background: transparent; color: inherit; font-weight: 600; line-height: inherit; }
+.method-definition { padding: 0; border: 0; border-bottom: 1px dotted #829abc; border-radius: 0; background: transparent; color: inherit; font-weight: 400; line-height: inherit; }
 .method-definition:hover, .method-definition[aria-expanded="true"] { color: #294f80; border-bottom-style: solid; }
 .math-inline { white-space: nowrap; }
 .method-section .katex { font-size: 1.1em; color: inherit; }
