@@ -57,7 +57,7 @@ def main():
         print('Compact hero, uploaded figure, clickable contents, section tracking and focus passed.')
         for task in data['tasks']:
             page.locator(f'[data-result-task="{task["id"]}"]').click()
-            assert page.locator('#task-results-title').inner_text() == task['name']
+            assert page.locator(f'#result-name-{task["id"]}').inner_text() == task['name']
             expect(page.locator('.curriculum-traces')).not_to_have_attribute('open','')
             page.locator('.curriculum-traces > summary').click()
             expect(page.locator('#tab-overview')).to_be_visible()
@@ -127,7 +127,7 @@ def main():
                 assert not re.search(r'\b(?:paper|appendix|preprint|arxiv|bibtex|table\s+\d|figure\s+\d|algorithm\s+\d)\b',rendered,re.I), (task['id'],stage['id'])
         print('All 23 stages, 64 recorded candidates and 28 placeholders, size-paired cards, searches, filters and Sources removal passed.')
         page.goto(args.url + '/#explorer?task=cpp&stage=g&tab=traces', wait_until='networkidle')
-        assert page.locator('#task-results-title').inner_text() == 'Cell penetration'
+        assert page.locator('#result-name-cpp').inner_text() == 'Peptide design for cell penetration'
         assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
         page.reload(wait_until='networkidle')
         assert page.locator('[data-curriculum-stage="g"]').get_attribute('aria-selected') == 'true'
@@ -139,11 +139,13 @@ def main():
         assert page.locator('#tab-overview').get_attribute('aria-selected') == 'true'
         assert page.locator('[data-curriculum-stage="g1"]').get_attribute('aria-selected') == 'true'
         page.goto(args.url + '/#explorer?task=invalid&stage=invalid&tab=invalid',wait_until='networkidle')
-        assert page.locator('[data-result-task="anticancer"]').get_attribute('aria-selected') == 'true'
+        assert page.locator('[data-result-task="anticancer"]').get_attribute('aria-expanded') == 'true'
         assert page.locator('[data-curriculum-stage="g0"]').get_attribute('aria-selected') == 'true'
         # Inline disclosure supports native keyboard activation and survives stage changes.
         page.goto(args.url,wait_until='networkidle')
         assert page.locator('#explorer, .task-sidebar, .contents-list a[href="#explorer"]').count() == 0
+        expect(page.locator('#task-results-panel')).not_to_be_visible()
+        page.locator('[data-result-task="anticancer"]').click()
         assert page.locator('.inline-trace-view').inner_html() == ''
         summary=page.locator('.curriculum-traces > summary')
         summary.focus();page.keyboard.press('Enter')
@@ -154,6 +156,7 @@ def main():
         expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
         expect(page.locator('#trace-search')).to_have_value('')
         expect(page.locator('.trace-card')).to_have_count(4)
+        page.locator('#task-result-curriculum').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#results')
         assert page.evaluate('location.hash') == '#results?task=anticancer&stage=g1&tab=traces'
         summary.focus();page.keyboard.press('Space')
@@ -162,7 +165,7 @@ def main():
         page.keyboard.press('Enter')
         expect(page.locator('#tab-traces')).to_be_visible()
         page.goto(args.url+'/#results?task=gsk3b&stage=g2&tab=traces',wait_until='networkidle')
-        expect(page.locator('[data-result-task="gsk3b"]')).to_have_attribute('aria-selected','true')
+        expect(page.locator('[data-result-task="gsk3b"]')).to_have_attribute('aria-expanded','true')
         expect(page.locator('[data-curriculum-stage="g2"]')).to_have_attribute('aria-selected','true')
         expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
         assert page.locator('.curriculum-traces').evaluate('(el)=>el.open')
@@ -206,11 +209,14 @@ def main():
                 page.evaluate("document.querySelectorAll('img').forEach(img => img.loading = 'eager')")
                 page.wait_for_function("[...document.images].every(img => img.complete && img.naturalWidth > 0)")
                 page.screenshot(path=str(out / f'preview-{width}.png'),full_page=True)
+                page.locator('[data-result-task="anticancer"]').click()
                 page.locator('.curriculum-traces > summary').click()
                 page.locator('#tab-traces').click()
                 page.locator('.inline-trace-view').screenshot(path=str(out / f'explorer-{width}.png'))
         page.goto((root/'index.html').as_uri(),wait_until='load')
         assert page.locator('[data-result-task]').count() == 5
+        expect(page.locator('#task-results-panel')).not_to_be_visible()
+        page.locator('[data-result-task="anticancer"]').click()
         assert page.locator('#results-table tbody tr').count() == 5
         assert not errors, errors
         assert not failed_requests, failed_requests

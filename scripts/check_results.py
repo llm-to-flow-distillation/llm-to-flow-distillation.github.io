@@ -31,20 +31,23 @@ def main():
         page.on('pageerror', lambda error: errors.append(str(error)))
         page.on('response', lambda response: failures.append(response.url) if response.status >= 400 else None)
         page.goto(args.url + '/#results', wait_until='networkidle')
-        expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
+        expect(page.locator('#result-cards [data-result-task]')).to_have_count(5)
         assert 'Compare methods' not in page.locator('body').inner_text()
         assert 'Plot data and uncertainty' not in page.locator('body').inner_text()
         assert page.locator('.goal-preview').count() == 0
-        assert page.locator('#task-results-panel').evaluate('(el)=>["borderLeftWidth","borderRightWidth","borderBottomWidth","borderRadius"].every(key=>parseFloat(getComputedStyle(el)[key])>0)')
+        expect(page.locator('#task-results-panel')).to_be_hidden()
+        expect(page.locator('#result-cards [aria-expanded="true"]')).to_have_count(0)
+        assert page.locator('.goal-accordion').evaluate_all('(els)=>els.every(el=>parseFloat(getComputedStyle(el).borderRadius)>0)')
         assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
         for task in goals:
             assert page.locator(f'#result-name-{task["id"]}').inner_text() == task['name']
         assert page.locator('.result-goal, .card-generator, .proxy-context, #result-generator').count() == 0
         def select(task):
-            page.locator(f'[data-result-task="{task}"]').click()
+            button=page.locator(f'[data-result-task="{task}"]')
+            if button.get_attribute('aria-expanded')!='true': button.click()
             page.wait_for_function('(id)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===id',arg=task)
-            expect(page.locator('#result-cards [aria-selected="true"]')).to_have_count(1)
-            expect(page.locator(f'[data-result-task="{task}"]')).to_have_attribute('aria-selected','true')
+            expect(page.locator('#result-cards [aria-expanded="true"]')).to_have_count(1)
+            expect(page.locator(f'[data-result-task="{task}"]')).to_have_attribute('aria-expanded','true')
             expect(page.locator('#task-results-panel')).to_have_attribute('aria-labelledby','result-card-'+task)
         # Each colored goal owns its appendix context and all recorded curriculum stages.
         inspected_stages = 0
@@ -54,12 +57,14 @@ def main():
             card = page.locator(f'[data-result-task="{goal["id"]}"]')
             expect(card).to_have_attribute('data-generator', task['generator'])
             assert card.locator('.result-task-name').evaluate('(el)=>getComputedStyle(el).fontWeight') == '700'
-            expect(card.locator('.goal-card-state')).to_have_text('✓')
+            expect(card.locator('.goal-card-state')).to_have_text('−')
             expect(card.locator('.goal-number')).to_have_text(f'Goal {goal["number"]}')
             assert card.evaluate('(el)=>parseFloat(getComputedStyle(el.querySelector(".goal-number")).fontSize)>parseFloat(getComputedStyle(el.querySelector(".result-task-name")).fontSize)')
+            expect(card.locator('.goal-prompt strong')).to_have_text('Discovery prompt:')
+            assert page.locator('#task-results-panel').evaluate('(el)=>el.parentElement.id')=='goal-content-'+goal['id']
             original_goal=next(stage['exactGoal'] for stage in task['stages'] if stage['id']=='g')
-            expect(page.locator('#task-result-description q')).to_have_text(original_goal)
-            assert page.locator('#task-result-description q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
+            expect(card.locator('.goal-prompt q')).to_have_text(original_goal)
+            assert card.locator('.goal-prompt q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
             assert page.locator('#task-result-curriculum').evaluate('(el)=>{const s=getComputedStyle(el);return parseFloat(s.borderWidth)>0 && parseFloat(s.borderRadius)>0 && s.backgroundColor!=="rgba(0, 0, 0, 0)"}')
             assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
             expect(page.locator(f'.generator-legend [data-generator="{task["generator"]}"]')).to_contain_text(task['generator'])
@@ -91,7 +96,7 @@ def main():
             page.locator('.curriculum-traces > summary').click()
             expect(page.locator('#tab-overview')).to_be_visible()
             page.locator('#tab-traces').click()
-            expect(page.locator(f'[data-result-task="{task["id"]}"]')).to_have_attribute('aria-selected','true')
+            expect(page.locator(f'[data-result-task="{task["id"]}"]')).to_have_attribute('aria-expanded','true')
             expect(page.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
             expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
             assert page.locator('#task-results-panel .trace-card').count() == len(task['stages'][-1]['traces'])
@@ -208,12 +213,16 @@ def main():
         curriculum=page.locator('#task-result-curriculum').bounding_box();discovery=page.locator('#result-discovery').bounding_box()
         assert curriculum['y']+curriculum['height']<=discovery['y']
         page.locator('.curriculum-traces > summary').click()
-        # Tab semantics and standard arrow/Home/End navigation retain focus on the card.
+        # Accordion arrow/Home/End navigation changes focus; Enter opens the focused row.
         select('anticancer')
         page.locator('[data-result-task="anticancer"]').focus()
         page.keyboard.press('ArrowRight')
         expect(page.locator('[data-result-task="cpp"]')).to_be_focused()
-        expect(page.locator('[data-result-task="cpp"]')).to_have_attribute('aria-selected','true')
+        expect(page.locator('[data-result-task="cpp"]')).to_have_attribute('aria-expanded','false')
+        page.keyboard.press('Enter')
+        expect(page.locator('[data-result-task="cpp"]')).to_have_attribute('aria-expanded','true')
+        page.keyboard.press('Enter')
+        expect(page.locator('#task-results-panel')).to_be_hidden()
         page.keyboard.press('End')
         expect(page.locator('[data-result-task="ood"]')).to_be_focused()
         page.keyboard.press('Home')
@@ -226,11 +235,8 @@ def main():
         for width in widths:
             page.set_viewport_size({'width':width,'height':1165})
             cards=page.locator('.result-card').evaluate_all('(els)=>els.map(el=>el.getBoundingClientRect().toJSON())')
-            if width>600:
-                assert cards[0]['y']==cards[1]['y']
-                assert cards[2]['y']==cards[3]['y']==cards[4]['y']
-                assert cards[2]['y']>cards[0]['bottom']
-                assert max(card['height'] for card in cards)<=116,(width,cards)
+            assert all(abs(card['width']-cards[0]['width'])<1 for card in cards)
+            assert all(cards[i+1]['y']>=cards[i]['bottom'] for i in range(4))
             for task in ['anticancer','cpp','d2','gsk3b','ood']:
                 select(task)
                 page.wait_for_timeout(250)
@@ -326,12 +332,13 @@ def main():
                 expect(touch.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
                 expect(touch.locator('#result-curriculum-preview .curriculum-rounds')).to_contain_text('Assessment only')
         page.goto((root/'index.html').as_uri(),wait_until='load')
+        page.locator('[data-result-task="anticancer"]').click()
         page.wait_for_function('document.querySelector("#task-results-panel").dataset.plotReadyTask === "anticancer"')
-        expect(page.locator('#result-cards [role="tab"]')).to_have_count(5)
+        expect(page.locator('#result-cards [data-result-task]')).to_have_count(5)
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_barplot_layout':'passed','goal5_observables_first':'passed','goal5_summary_below_traces':'passed','goal5_table':'removed','goal5_compact_figure':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_barplot_layout':'passed','goal5_observables_first':'passed','goal5_summary_below_traces':'passed','goal5_table':'removed','goal5_compact_figure':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','full_width_goal_accordions':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

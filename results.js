@@ -254,7 +254,7 @@
     const goals=data.resultPanels.tasks;
     const cards=$('#result-cards');
     const panel=$('#task-results-panel');
-    let active=goals[0].id;
+    let active=null;
     let generation=0;
     document.addEventListener('pointerdown',()=>{
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
@@ -263,7 +263,28 @@
       if (event.key==='Escape') panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
     });
     const closeMetricHelp=setupMetricHelp();
-    cards.innerHTML=goals.map((goal,index)=>`<button id="result-card-${esc(goal.id)}" class="result-card" role="tab" aria-selected="${index===0}" aria-controls="task-results-panel" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" tabindex="${index===0 ? 0 : -1}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><strong id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</strong><span class="goal-card-state" aria-hidden="true">${index===0 ? '✓' : ''}</span></button>`).join('');
+    cards.innerHTML=goals.map(goal=>{
+      const task=data.tasks.find(task=>task.id===goal.id);
+      const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
+      return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true">+</span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
+    }).join('');
+    function closeGoal() {
+      closeMetricHelp();
+      ++generation;
+      const button=$('#result-card-'+active);
+      if (button) {
+        button.setAttribute('aria-expanded','false');
+        button.classList.remove('is-selected');
+        button.querySelector('.goal-card-state').textContent='+';
+        button.closest('.goal-accordion').classList.remove('is-open');
+        $('#goal-content-'+active).hidden=true;
+      }
+      const traces=panel.querySelector('.curriculum-traces');
+      if (traces) traces.open=false;
+      panel.hidden=true;
+      active=null;
+      if (/^#results\?/.test(location.hash)) history.replaceState(null,'','#results');
+    }
     function render(id) {
       closeMetricHelp();
       active=id;
@@ -271,16 +292,19 @@
       const goal=goals.find(task=>task.id===id);
       const task=data.tasks.find(task=>task.id===id);
       const result=results.find(result=>result.id===id);
+      panel.hidden=false;
+      $('#goal-content-'+id).append(panel);
       panel.dataset.selectedTask=id;
       panel.dataset.generator=goal.generator;
       delete panel.dataset.plotReadyTask;
       panel.setAttribute('aria-labelledby','result-card-'+id);
       cards.querySelectorAll('[data-result-task]').forEach(card=>{
         const selected=card.dataset.resultTask===id;
-        card.setAttribute('aria-selected',String(selected));
-        card.tabIndex=selected ? 0 : -1;
+        card.setAttribute('aria-expanded',String(selected));
+        card.closest('.goal-accordion').classList.toggle('is-open',selected);
+        $('#goal-content-'+card.dataset.resultTask).hidden=!selected;
         card.classList.toggle('is-selected',selected);
-        card.querySelector('.goal-card-state').textContent=selected ? '✓' : '';
+        card.querySelector('.goal-card-state').textContent=selected ? '−' : '+';
       });
       // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
@@ -294,13 +318,10 @@
       if (pairedComparison) $('#results-values').after(plots);
       else details.before(plots);
       $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
-      $('#task-results-title').textContent=goal.name;
-      $('#task-result-description').innerHTML=`<strong>Discovery goal:</strong> <q>${esc(task.stages.find(stage=>stage.id==='g').exactGoal)}</q>`;
       $('#result-discovery').innerHTML='';
       if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
       renderCurriculum(task);
-      $('#result-source').textContent=`Goal ${goal.number}`;
       if (result && result.table===2) {
         $('#task-results-plots').innerHTML=dockingMarkup(result);
         $('#task-results-evidence').innerHTML='';
@@ -344,10 +365,18 @@
     });
     cards.addEventListener('click',event=>{
       const card=event.target.closest('[data-result-task]');
-      if (card) render(card.dataset.resultTask);
+      if (!card) return;
+      if (active===card.dataset.resultTask) closeGoal();
+      else render(card.dataset.resultTask);
+      // Collapsing a long preceding task must not strand the clicked row above the viewport.
+      requestAnimationFrame(()=>{
+        if (card.getBoundingClientRect().top<0) card.scrollIntoView({block:'start',behavior:'instant'});
+      });
     });
     cards.addEventListener('keydown',event=>{
-      const index=goals.findIndex(task=>task.id===active);
+      const card=event.target.closest('[data-result-task]');
+      if (!card) return;
+      const index=goals.findIndex(task=>task.id===card.dataset.resultTask);
       let next;
       if (event.key==='ArrowRight' || event.key==='ArrowDown') next=(index+1)%goals.length;
       if (event.key==='ArrowLeft' || event.key==='ArrowUp') next=(index+goals.length-1)%goals.length;
@@ -355,12 +384,10 @@
       if (event.key==='End') next=goals.length-1;
       if (next==null) return;
       event.preventDefault();
-      render(goals[next].id);
       const nextCard=$('#result-card-'+goals[next].id);
       nextCard.focus({preventScroll:true});
       nextCard.scrollIntoView({block:'nearest',inline:'nearest',behavior:'instant'});
     });
-    render(active);
     return {
       showTraces(taskId,stageId,tab) {
         if (active!==taskId) render(taskId);
