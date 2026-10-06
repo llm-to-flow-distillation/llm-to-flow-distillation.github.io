@@ -295,7 +295,7 @@
       else details.before(plots);
       $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
       $('#task-results-title').textContent=goal.name;
-      $('#task-result-description').innerHTML=`<q>${esc(task.stages.find(stage=>stage.id==='g').exactGoal)}</q>`;
+      $('#task-result-description').innerHTML=`<strong>Discovery goal:</strong> <q>${esc(task.stages.find(stage=>stage.id==='g').exactGoal)}</q>`;
       $('#result-discovery').innerHTML='';
       if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
