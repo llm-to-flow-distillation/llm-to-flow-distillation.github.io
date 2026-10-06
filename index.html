@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=a1bdbab19e36">
+  <link rel="stylesheet" href="site.css?v=dfcdf83e763c">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -78,15 +78,13 @@
             <span class="math dpo-equation-space" data-tex="\quad" aria-hidden="true">　</span>
             <span class="math" data-tex="\displaystyle\mathcal L_t(\theta,\mathcal D_t)=-\mathbb E_{\mathcal D_t}\log\sigma\bigl(\beta\Delta_t^\theta\bigr).">L<sub>t</sub>(θ, D<sub>t</sub>) = −E<sub>Dₜ</sub> log σ(βΔ<sub>t</sub><sup>θ</sup>).</span>
           </div>
-          <p>Here, <span class="math math-inline" data-tex="\sigma">σ</span> is the logistic function and <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controls regularization. Since terminal log-densities are intractable, we optimize a surrogate based on denoising-loss differences between the student and frozen reference. Starting from <span class="math math-inline" data-tex="\theta_t">θ<sub>t</sub></span>, optimizer steps yield <span class="math math-inline" data-tex="\theta_{t+1}">θ<sub>t+1</sub></span>; we then draw fresh samples and repeat.</p>
+          <p>Here, <span class="math math-inline" data-tex="\sigma">σ</span> is the logistic function and <span class="math math-inline" data-tex="\beta&gt;0">β &gt; 0</span> controls regularization. In practice, we implement DPO through denoising losses, encouraging the student to better predict positive candidates relative to negative ones, compared with the frozen reference. Starting from <span class="math math-inline" data-tex="\theta_t">θ<sub>t</sub></span>, optimizer steps yield <span class="math math-inline" data-tex="\theta_{t+1}">θ<sub>t+1</sub></span>; we then draw fresh samples and repeat.</p>
         </div>
       </div>
       <div class="method-curriculum" aria-labelledby="curriculum-title">
-        <p><strong id="curriculum-title" class="paragraph-title">Connection with curriculum learning.</strong> Let <span class="math math-inline" data-tex="\Omega_g\subseteq\mathcal X">Ω<sub>g</sub> ⊆ X</span> be the region of designs satisfying the original goal <span class="math math-inline" data-tex="g">g</span>. We aim to increase the probability of reaching it:</p>
-        <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
-        <p>Starting from a broad, attainable relaxation <span class="math math-inline" data-tex="g_0">g<sub>0</sub></span>, the teacher tightens the subgoals online as the student improves. Their corresponding regions form a curriculum toward the original goal:</p>
+        <p><strong id="curriculum-title" class="paragraph-title">Reachability and curriculum learning.</strong> Let <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> be the region satisfying the final goal <span class="math math-inline" data-tex="g">g</span>. When the pretrained generator rarely reaches it, the teacher starts with a broad, learnable subgoal and tightens it as the student improves:</p>
         <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
-        <p>The original goal <span class="math math-inline" data-tex="g">g</span> stays fixed; the intermediate goals adapt to what the generator can currently produce.</p>
+        <p>Each <span class="math math-inline" data-tex="\Omega_{g_t}">Ω<sub>gₜ</sub></span> contains designs satisfying subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. The final goal stays fixed; the curriculum adapts online to the generator’s capabilities.</p>
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
         <div class="function-popover-heading"><h3 id="function-detail-title">Function details</h3><button id="close-function-details" type="button" aria-label="Close function details">×</button></div>
