@@ -198,7 +198,7 @@ def main():
                 expect(page.locator('.contents-toggle')).to_be_focused()
                 page.locator('.contents-toggle').click()
                 page.locator('.contents-list a[href="#results"]').click()
-                expect(page.locator('.contents-current')).to_have_text('Results')
+                expect(page.locator('.contents-current')).to_have_text('Experiments')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 assert page.evaluate('document.documentElement.scrollWidth') <= width
             if width in [390,1440]:

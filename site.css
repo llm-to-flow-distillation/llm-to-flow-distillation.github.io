@@ -445,7 +445,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .algorithm-box h3, .algorithm-code { font-size: 16px; }
   .algorithm-inputs { font-size: 15px; }
 }
-.results-intro { width: 100%; max-width: none; margin: 14px 0; }
 [data-generator="PepDFM"] { --goal-accent: #345d86; --goal-surface: #f1f6fc; --goal-border: #cdddef; --goal-strong: #284b70; --goal-selected: #e4eefb; }
 [data-generator="FlowMol3"] { --goal-accent: #216d62; --goal-surface: #eef8f4; --goal-border: #c8e3d8; --goal-strong: #1b584f; --goal-selected: #e0f2e9; }
 .generator-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0; font-size: 13px; }
