@@ -449,14 +449,17 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .generator-label { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border: 1px solid var(--goal-border); border-radius: 20px; background: var(--goal-surface); color: var(--goal-strong); font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
 .generator-label > span { font-weight: 400; }
 .result-cards { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 16px 0 20px; }
-.result-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; grid-column: span 2; min-width: 0; min-height: 92px; text-align: left; padding: 14px 28px 14px 16px; border: 1px solid var(--goal-border); border-radius: 10px; background: var(--goal-surface); transition: border-color .18s, box-shadow .18s, background-color .18s; }
+.result-card { container-type: inline-size; position: relative; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 4px; grid-column: span 2; min-width: 0; min-height: 92px; text-align: left; padding: 14px 28px 14px 16px; border: 1px solid var(--goal-border); border-radius: 10px; background: var(--goal-surface); transition: border-color .18s, box-shadow .18s, background-color .18s; }
 .result-card:nth-child(-n+2) { grid-column: span 3; }
 .result-card .goal-number { font-size: 23px; line-height: 1.2; font-weight: 700; color: var(--goal-strong); }
 .result-card:hover { border-color: var(--goal-accent); }
 .result-card.is-selected { border-color: var(--goal-accent); background: var(--goal-selected); box-shadow: inset 0 0 0 2px var(--goal-accent); }
 .result-card.is-selected .result-task-name { font-weight: 700; }
 .goal-card-state { position: absolute; top: 7px; right: 8px; color: var(--goal-accent); font-size: 13px; font-weight: 700; line-height: 1; }
-.result-task-name { display: block; font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--goal-strong); }
+.result-task-name { display: block; font-size: 13px; font-weight: 600; line-height: 1.15; color: var(--goal-strong); }
+@container (max-width: 210px) {
+  .result-task-name { font-size: 11px; }
+}
 .results-explorer { margin-top: 0; padding: 0 24px 22px; border: 1px solid var(--goal-border); border-top: 4px solid var(--goal-accent); border-radius: 14px; background: #fff; overflow: hidden; box-shadow: 0 8px 28px #26384b08; }
 .results-toolbar { background: var(--goal-surface); display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 12px; margin-inline: -24px; padding: 18px 24px 8px; }
 .results-toolbar h3 { margin: 0; font-size: 19px; font-weight: 700; color: var(--goal-strong); }
@@ -515,6 +518,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .result-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .result-card, .result-card:nth-child(-n+2) { grid-column: auto; padding: 12px 24px 12px 12px; }
   .result-card:last-child { grid-column: 1 / -1; min-height: 80px; }
+  .result-card:last-child .result-task-name { font-size: 11px; line-height: 1; }
   .results-explorer { padding: 0 18px 20px; border-radius: 14px; }
   .results-toolbar { margin-inline: -18px; padding: 16px 18px 6px; }
   .results-toolbar h3 { font-size: 18px; }

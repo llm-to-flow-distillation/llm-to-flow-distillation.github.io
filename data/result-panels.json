@@ -3,7 +3,7 @@
     {
       "id": "anticancer",
       "number": 1,
-      "name": "Selective anticancer activity",
+      "name": "Peptide design for selective anticancer activity",
       "goal": "Generate peptides with promising anticancer activity while maintaining low toxicity toward healthy cells.",
       "paperPage": 6,
       "generator": "PepDFM",
@@ -37,7 +37,7 @@
     {
       "id": "cpp",
       "number": 2,
-      "name": "Cell penetration",
+      "name": "Peptide design for cell penetration",
       "goal": "Generate peptides with promising mammalian-cell-penetrating activity while minimizing toxicity to mammalian cells.",
       "paperPage": 8,
       "generator": "PepDFM",
@@ -71,7 +71,7 @@
     {
       "id": "d2",
       "number": 3,
-      "name": "Dopamine D2 receptor",
+      "name": "Small molecule design for dopamine D2 binding",
       "goal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
       "paperPage": 8,
       "generator": "FlowMol3",
@@ -107,7 +107,7 @@
     {
       "id": "gsk3b",
       "number": 4,
-      "name": "GSK3β binding",
+      "name": "Small molecule design for GSK3β binding",
       "goal": "Generate promising drug-like small molecules for binding the ATP pocket of glycogen synthase kinase-3 beta (GSK3β), while maintaining reasonable aqueous solubility and chemically plausible structures.",
       "paperPage": 9,
       "generator": "FlowMol3",
@@ -143,7 +143,7 @@
     {
       "id": "ood",
       "number": 5,
-      "name": "Constrained molecular design",
+      "name": "Small molecule design with specified ring motifs",
       "goal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign that contain a six-membered aza-aromatic ring bearing a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen, and a distinct fully saturated ring containing a free secondary amine.",
       "paperPage": 9,
       "generator": "FlowMol3",

@@ -1,7 +1,7 @@
 [
   {
     "id": "anticancer",
-    "name": "Anticancer activity",
+    "name": "Peptide design for selective anticancer activity",
     "table": 1,
     "metricShort": "AntiCP2-alt. ↑",
     "unit": "%",
@@ -109,7 +109,7 @@
   },
   {
     "id": "cpp",
-    "name": "Cell penetration",
+    "name": "Peptide design for cell penetration",
     "table": 1,
     "metricShort": "pLM4CPPs ↑",
     "unit": "%",
@@ -217,7 +217,7 @@
   },
   {
     "id": "d2",
-    "name": "Dopamine D2",
+    "name": "Small molecule design for dopamine D2 binding",
     "table": 2,
     "metricShort": "GNINA CNNaffinity ↑",
     "unit": "pK",
@@ -342,7 +342,7 @@
   },
   {
     "id": "gsk3b",
-    "name": "GSK3β binding",
+    "name": "Small molecule design for GSK3β binding",
     "table": 2,
     "metricShort": "GNINA CNNaffinity ↑",
     "unit": "pK",

@@ -2245,7 +2245,7 @@
           ]
         }
       ],
-      "name": "Selective anticancer activity",
+      "name": "Peptide design for selective anticancer activity",
       "generator": "PepDFM",
       "category": "Therapeutic peptides",
       "goal": "Generate peptides with promising anticancer activity while maintaining low toxicity toward healthy cells.",
@@ -3099,7 +3099,7 @@
           ]
         }
       ],
-      "name": "Cell penetration",
+      "name": "Peptide design for cell penetration",
       "generator": "PepDFM",
       "category": "Therapeutic peptides",
       "goal": "Generate peptides with promising mammalian-cell-penetrating activity while minimizing toxicity to mammalian cells.",
@@ -3334,7 +3334,7 @@
           ]
         }
       ],
-      "name": "Dopamine D2 receptor",
+      "name": "Small molecule design for dopamine D2 binding",
       "generator": "FlowMol3",
       "category": "Small molecules",
       "goal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
@@ -4765,7 +4765,7 @@
           ]
         }
       ],
-      "name": "GSK3β binding",
+      "name": "Small molecule design for GSK3β binding",
       "generator": "FlowMol3",
       "category": "Small molecules",
       "goal": "Generate promising drug-like small molecules for binding the ATP pocket of glycogen synthase kinase-3 beta (GSK3β), while maintaining reasonable aqueous solubility and chemically plausible structures.",
@@ -5077,7 +5077,7 @@
           ]
         }
       ],
-      "name": "Constrained molecular design",
+      "name": "Small molecule design with specified ring motifs",
       "generator": "FlowMol3",
       "category": "Small molecules",
       "goal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign with a specified aza-aromatic ring and a distinct saturated ring containing a free secondary amine.",
