@@ -157,10 +157,6 @@
     target.innerHTML=`<div class="curriculum-heading"><h4>Explore the subgoals</h4><span>${task.stages.filter(stage=>stage.id!=='g').length} intermediate subgoals</span></div><div class="curriculum-tabs" role="tablist" aria-label="${esc(task.name)} curriculum">${task.stages.map((stage,index)=>`<button id="curriculum-${task.id}-${stage.id}" type="button" role="tab" data-curriculum-stage="${stage.id}" aria-selected="${index===0}" aria-controls="result-curriculum-preview" aria-label="${esc(stage.id==='g' ? curriculumLabel(stage) : 'Subgoal '+stage.id.slice(1))}" tabindex="${index===0 ? 0 : -1}">${stage.id==='g' ? esc(curriculumLabel(stage)) : 'g<sub>'+esc(stage.id.slice(1))+'</sub>'}</button>`).join('')}</div><div id="result-curriculum-preview" class="curriculum-preview" role="tabpanel" aria-labelledby="curriculum-${task.id}-${task.stages[0].id}"></div>`;
     showCurriculumStage(task,task.stages[0].id);
   }
-  function renderOODTable() {
-    const evidence = window.LFD_DATA.resultPanels.oodEvidence;
-    $('#results-table').innerHTML = `<caption class="sr-only">Constrained molecular design. Sampling budgets differ.</caption><thead><tr><th scope="col">Generator</th><th scope="col">Full-goal outcome</th><th scope="col">Samples</th><th scope="col">Round</th></tr></thead><tbody><tr><th scope="row">${methodLabel('Pre-trained')}</th><td>0 full-goal hits</td><td>${evidence.pretrained.attempts.toLocaleString('en-US')}</td><td>—</td></tr><tr class="ours"><th scope="row">${methodLabel('LFD')}</th><td>${esc(evidence.lfd.outcome)}</td><td>${evidence.lfd.batchSize}-sample batch</td><td>${evidence.lfd.round}</td></tr></tbody>`;
-  }
   function setupMetricHelp() {
     const container=$('#task-results-panel');
     const popup=document.createElement('div');
@@ -290,6 +286,7 @@
       panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
       const details=$('#task-results-details');
       const plots=$('#task-results-plots');
+      details.hidden=id==='ood';
       details.classList.toggle('has-novelty',id==='gsk3b');
       const pairedComparison=result?.table===1;
       details.classList.toggle('has-comparison',pairedComparison);
@@ -311,7 +308,7 @@
       } else if (id==='ood') {
         $('#task-results-plots').innerHTML='';
         $('#task-results-evidence').innerHTML='<div class="chart-data-links"><a href="#results?task=ood&stage=g&tab=traces">Explore final-goal traces ↗</a></div>';
-        renderOODTable();
+        $('#results-table').innerHTML='';
       } else {
         $('#task-results-plots').innerHTML=scatterMarkup(result);
         $('#task-results-evidence').innerHTML='';

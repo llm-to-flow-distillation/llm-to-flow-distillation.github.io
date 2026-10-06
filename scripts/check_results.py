@@ -201,9 +201,13 @@ def main():
         expect(hit).to_have_attribute('src','assets/hitGoal5.png')
         hit.scroll_into_view_if_needed()
         page.wait_for_function('document.querySelector(".goal5-hit img").naturalWidth===7212')
-        assert '38,500' in page.locator('#results-table').inner_text()
-        assert '512-sample batch' in page.locator('#results-table').inner_text()
-        assert 'Reported full-goal hit' in page.locator('#results-table').inner_text()
+        expect(page.locator('#task-results-details')).to_be_hidden()
+        assert page.locator('#results-table').inner_html()==''
+        page.locator('.curriculum-traces > summary').click()
+        expect(page.locator('.inline-trace-view')).to_be_visible()
+        curriculum=page.locator('#task-result-curriculum').bounding_box();discovery=page.locator('#result-discovery').bounding_box()
+        assert curriculum['y']+curriculum['height']<=discovery['y']
+        page.locator('.curriculum-traces > summary').click()
         # Tab semantics and standard arrow/Home/End navigation retain focus on the card.
         select('anticancer')
         page.locator('[data-result-task="anticancer"]').focus()
@@ -243,7 +247,10 @@ def main():
                     else:assert figure.bounding_box()['y']>=plot['y']+plot['height']+23
                 if task=='ood':
                     context=page.locator('#task-result-context').bounding_box();discovery=page.locator('#result-discovery').bounding_box()
-                    assert context['y']+context['height']<=discovery['y']
+                    curriculum=page.locator('#task-result-curriculum').bounding_box()
+                    assert context['y']+context['height']<=curriculum['y']
+                    assert curriculum['y']+curriculum['height']<=discovery['y']
+                    expect(page.locator('#task-results-details')).to_be_hidden()
                     assert page.locator('.goal5-hit img').bounding_box()['width']<=(280 if width<=600 else 360)
                 if task in ('anticancer','cpp'):
                     table=page.locator('#results-values').bounding_box();plot=page.locator('#task-results-plots').bounding_box()
@@ -324,7 +331,7 @@ def main():
         assert not errors,errors
         assert not failures,failures
         browser.close()
-    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_barplot_layout':'passed','goal5_observables_first':'passed','goal5_compact_figure':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':widths,'goals':5,'table_metric_pairs':66,'paired_activity_toxicity':'passed','docking_grouped_bars':'passed','docking_absolute_values':'passed','docking_baseline_deltas':'passed','docking_negative_improvements':'passed','docking_zero_reference':'passed','docking_black_error_bars':'passed','docking_signed_hover':'passed','molecule_barplot_layout':'passed','goal5_observables_first':'passed','goal5_summary_below_traces':'passed','goal5_table':'removed','goal5_compact_figure':'passed','scaffold_novelty_values':'passed','scaffold_novelty_marker_colored_cis':'passed','table_method_colors':'passed','scaffold_axis_definition_hover_focus_touch':'passed','scaffold_novelty_hover_touch':'passed','scaffold_novelty_table_layout':'passed','plot_data_disclosure':'removed','task_plot_isolation':'passed','marker_legends':'passed','lower_plot_legends':'passed','desktop_single_line_legends':'passed','table_plot_equal_height':'passed','plot_and_table_footers':'removed','hover_tooltips':'passed','redundant_table_plot_headings':'removed','compact_numbered_two_row_cards':'passed','verbatim_goal_headers':'passed','curriculum_subbox':'passed','anticancer_table_plot_layout':'passed','cpp_table_plot_layout':'passed','proxy_paragraphs':'removed','shared_generator_legend':'passed','fifth_task_evidence':'passed','goal5_curriculum_plot':'removed','goal5_figure':'passed','generator_colors':'passed','observable_lists':'passed','curriculum_stages':23,'curriculum_keyboard_touch':'passed','curriculum_trace_links':'passed','score_footers_and_metric_tiles':'removed','single_results_panel':'passed','selected_task_highlight':'passed','inline_paper_links':'removed','verbatim_curriculum_goals':23,'rapid_switching':'passed','keyboard':'passed','hover_touch':'passed','local_file':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 
