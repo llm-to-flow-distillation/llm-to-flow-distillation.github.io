@@ -37,7 +37,7 @@
       <h1 id="hero-title" class="paper-title"><span class="title-main">LLM-to-Flow Distillation:</span> <span class="title-subtitle">Teaching Natural Language Goals<br class="title-break"> to Scientific Generators</span></h1>
       <div class="authors">
         <p class="author-row"><span>Riccardo De Santi<sup>1,2,*</sup></span><span>Federico Di Gennaro<sup>1,*</sup></span><span>Angelo Gnazzo<sup>3,4,*</sup></span></p>
-        <p class="author-row"><span>Sophia Tang<sup>5</sup></span><span>Pranam Chatterjee<sup>5</sup></span><span>Fanny Yang<sup>1</sup></span><span>İsmail İlkan Ceylan<sup>3,4,6</sup></span><span>Michael Bronstein<sup>4,6</sup></span><span>Andreas Krause<sup>1,2</sup></span></p>
+        <p class="author-row"><span>Sophia Tang<sup>5</sup></span><span>Pranam Chatterjee<sup>5</sup></span><span>Fanny Yang<sup>1</sup></span><span>İsmail İlkan Ceylan<sup>3,4,6</sup></span><span>Michael M. Bronstein<sup>4,6</sup></span><span>Andreas Krause<sup>1,2</sup></span></p>
         <div class="affiliations"><span><sup>1</sup> ETH Zurich</span><span><sup>2</sup> ETH AI Center</span><span><sup>3</sup> Technische Universität Wien</span><span><sup>4</sup> AITHYRA</span><span><sup>5</sup> University of Pennsylvania</span><span><sup>6</sup> University of Oxford</span></div>
         <p class="contribution-note">* Equal contribution, alphabetical order</p>
       </div>
@@ -55,7 +55,21 @@
       <div class="method-layout">
         <div class="method-content">
           <h3>Iterative DPO with LLM feedback</h3>
-          <p>LFD fine-tunes a pretrained flow with <strong>iterative Direct Preference Optimization (DPO)</strong> on LLM-generated preferences. The challenge is <strong>reachability</strong>: the starting generator may rarely produce designs satisfying the natural-language goal <span class="math math-inline" data-tex="g">g</span>. Let <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> be the region of designs satisfying <span class="math math-inline" data-tex="g">g</span>. Our aim is:</p>
+          <p>LLM-to-Flow Distillation (LFD) <strong>iteratively<strong> adapts a pretrained scientific generator (the student, e.g., a flow model) with Direct Preference Optimization (DPO) on LLM-generated preferences.  
+            As the pretrained model may rarely produce designs satisfying the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher (i.e., the LLM) also propose online and based on the generator state, intermediate sub-goals on which it can provide judgements $\ell_t(x_i)\in\{+,-,\varnothing\}$ for all currently generated samples $x_i$, where $\varnothing$ denotes abstention and the positive are enough to do DPO on all the pairs We define the positive and negative sets as
+\begin{equation}
+\mathcal P_t=\{x_i\in X_t:\ell_t(x_i)=+\},
+\qquad
+\mathcal N_t=\{x_i\in X_t:\ell_t(x_i)=-\}.
+\label{eq:llm-judge-sets}
+\end{equation}
+\looseness -1 These sets (abstained candidates are ignored) induces the preference datasets:
+\begin{equation}
+\label{eq:preference-set}
+\mathcal{D}_t = \{(x^+,x^-):x^+\in \mathcal P_t,\;x^-\in \mathcal N_t\},
+\end{equation}.
+            
+            Let <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> be the region of designs satisfying <span class="math math-inline" data-tex="g">g</span>. Our aim is:</p>
           <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
           <p>At each round, the teacher sees fresh samples through their observables <span class="math math-inline" data-tex="\mathcal O(x)">O(x)</span>. We ask for <strong>positive, negative, or abstain</strong> judgments under the current subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>, together with a rationale and sources of uncertainty. Positive–negative pairs form the DPO preferences; abstained candidates are excluded.</p>
           <p>DPO updates the flow using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen reference. We then draw fresh samples and repeat, so the feedback follows the generator’s evolving capabilities.</p>
