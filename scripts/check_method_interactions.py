@@ -97,7 +97,7 @@ def main():
             assert page.locator('.method-content .math-display, .method-curriculum .math-display').evaluate_all(
                 '(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
             assert page.locator('.method-content h3').count() == 0
-            expect(page.locator('.method-curriculum > #curriculum-title')).to_have_text('A design-space view')
+            expect(page.locator('.method-curriculum p > #curriculum-title')).to_have_text('A design-space view.')
             assert r'\mathcal D_t' not in page.locator('.method-preference-equation').get_attribute('data-tex')
             expect(page.locator('.method-content > .method-update [data-tex]').first).to_have_attribute(
                 'data-tex', r'\mathcal D_t=\mathcal P_t\times\mathcal N_t')

@@ -15,7 +15,7 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=633ba01380e5">
+  <link rel="stylesheet" href="site.css?v=221ba606aa65">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -82,8 +82,7 @@
         </div>
       </div>
       <div class="method-curriculum" aria-labelledby="curriculum-title">
-        <h3 id="curriculum-title">A design-space view</h3>
-        <p>A goal <span class="math math-inline" data-tex="g">g</span> defines a target region <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> in design space. When that region is rarely reached, LFD learns through attainable subgoals that tighten as the generator improves:</p>
+        <p><strong id="curriculum-title">A design-space view.</strong> A goal <span class="math math-inline" data-tex="g">g</span> defines a target region <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> in design space. When that region is rarely reached, LFD learns through attainable subgoals that tighten as the generator improves:</p>
         <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
         <p>Each <span class="math math-inline" data-tex="\Omega_{g_t}">Ω<sub>gₜ</sub></span> contains designs satisfying <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. The final goal stays fixed.</p>
       </div>
