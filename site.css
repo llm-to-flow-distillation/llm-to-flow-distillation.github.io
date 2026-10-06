@@ -129,7 +129,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-curriculum p { margin-bottom: 0; }
 .method-curriculum .curriculum-equation { margin: 18px 0; padding-block: 4px; text-align: center; }
 .method-curriculum p:last-child { margin-bottom: 0; }
-.algorithm-box { container-type: inline-size; float: right; width: 40%; max-width: 460px; margin: 0 0 20px 36px; min-width: 0; padding: 0 16px 16px; border: 1px solid #efd2b4; border-radius: 16px; background: #fff7ed; color: #382b21; font-family: KaTeX_Main, 'Times New Roman', serif; box-shadow: 0 4px 18px #8c4b1606; }
+.algorithm-box { container-type: inline-size; float: right; width: min(520px, calc(100% - 320px)); max-width: 520px; margin: 0 0 20px 36px; min-width: 0; padding: 0 16px 16px; border: 1px solid #efd2b4; border-radius: 16px; background: #fff7ed; color: #382b21; font-family: KaTeX_Main, 'Times New Roman', serif; box-shadow: 0 4px 18px #8c4b1606; }
 .algorithm-box h3 { display: grid; gap: 4px; margin: 0 -16px; padding: 14px 16px; border-bottom: 1px solid #efd2b4; border-radius: 15px 15px 0 0; background: #ffedd5; font-size: 18px; font-weight: 400; line-height: 1.5; }
 .algorithm-box h3 > span:first-child { color: #94633c; font: 600 11px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; }
 .algorithm-name { white-space: nowrap; }
