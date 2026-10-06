@@ -14,9 +14,9 @@
   // Rich function explanations: hover/focus to preview; click or tap to pin.
   function setupFunctionDetails() {
     const popup = $('#algorithm-details');
-    const buttons = $$('.algorithm-function');
+    const buttons = $$('.algorithm-function, .method-definition');
     const panels = $$('[data-function-panel]', popup);
-    const titles = {sample: 'Sample the current generator', observe: 'Observe the sample batch', setgoal: 'SetGoal', judge: 'LLM-Judge', minimize: 'Minimize · distill the preferences'};
+    const titles = {learnable: 'Learnable subgoals', sample: 'Sample the current generator', observe: 'Observe the sample batch', setgoal: 'SetGoal', judge: 'LLM-Judge', minimize: 'Minimize · distill the preferences'};
     const nativePopover = typeof popup.showPopover === 'function';
     let active = null, pinned = false, closeTimer, positionFrame, skipFocus = null, pointerTrigger = null;
 
@@ -57,6 +57,7 @@
       buttons.forEach(item => item.setAttribute('aria-expanded', String(item === active)));
       panels.forEach(panel => {panel.hidden = panel.dataset.functionPanel !== active.dataset.function;});
       $('#function-detail-title').textContent = titles[active.dataset.function];
+      popup.dataset.currentFunction = active.dataset.function;
       popup.dataset.open = 'true';
       popup.dataset.pinned = String(pinned);
       if (nativePopover && !popup.matches(':popover-open')) popup.showPopover();
@@ -73,6 +74,7 @@
       buttons.forEach(item => item.setAttribute('aria-expanded', 'false'));
       if (nativePopover && popup.matches(':popover-open')) popup.hidePopover();
       delete popup.dataset.open;
+      delete popup.dataset.currentFunction;
       delete popup.dataset.pinned;
       if (restoreFocus && document.activeElement !== previous) {
         skipFocus = previous;

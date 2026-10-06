@@ -25,7 +25,7 @@ def main():
         expect(popup).not_to_be_visible()
         assert page.locator('.algorithm-function').count() == 5
         page.screenshot(path=str(out/'desktop-overview.png'))
-        for name in ['sample','observe','setgoal','judge','minimize']:
+        for name in ['sample','observe','setgoal','judge','minimize','learnable']:
             trigger(name).hover()
             expect(popup).to_be_visible()
             expect(trigger(name)).to_have_attribute('aria-expanded','true')
@@ -37,6 +37,15 @@ def main():
             expect(popup).not_to_be_visible()
         trigger('setgoal').hover()
         page.mouse.move(1400,40)
+        expect(popup).not_to_be_visible()
+        trigger('learnable').focus()
+        expect(popup).to_be_visible()
+        expect(popup.locator('[data-function-panel="learnable"]')).to_have_text(
+            'i.e., such that the LLM judgement yields enough positive and negative examples for DPO.')
+        page.keyboard.press('Enter')
+        expect(popup).to_be_focused()
+        page.keyboard.press('Escape')
+        expect(trigger('learnable')).to_be_focused()
         expect(popup).not_to_be_visible()
         # Click pins; hovering another operation does not replace pinned content.
         trigger('minimize').click()
@@ -65,15 +74,36 @@ def main():
         for width in [360,390,768,1024,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
             page.goto(args.url + '/#method',wait_until='networkidle')
-            boxes = page.locator('.method-content, .algorithm-box').evaluate_all('(els)=>els.map(el=>{const r=el.getBoundingClientRect();return {x:r.x,y:r.y,right:r.right,bottom:r.bottom};})')
+            page.wait_for_function('document.fonts.status === "loaded"')
+            layout = page.evaluate("""() => {
+                const box = selector => { const r = document.querySelector(selector).getBoundingClientRect();
+                    return {x:r.x, y:r.y, right:r.right, bottom:r.bottom, width:r.width}; };
+                const lines = selector => { const range = document.createRange();
+                    range.selectNodeContents(document.querySelector(selector));
+                    return [...range.getClientRects()].map(r=>({x:r.x,y:r.y,right:r.right,bottom:r.bottom})); };
+                return {content:box('.method-content'), algorithm:box('.algorithm-box'),
+                    first:lines('.method-content > p:first-child'), last:lines('.method-content > p:last-child')};
+            }""")
+            content, algorithm = layout['content'], layout['algorithm']
             if width > 900:
-                assert abs(boxes[0]['y']-boxes[1]['y']) < 2, (width,boxes)
-                assert boxes[0]['right'] < boxes[1]['x'], (width,boxes)
+                # Prose shares the algorithm's vertical space, then fills the space below it.
+                assert abs(content['y']-algorithm['y']) < 2, (width,layout)
+                assert abs(content['right']-algorithm['right']) < 2, (width,layout)
+                assert all(line['right'] <= algorithm['x'] for line in layout['first']), (width,layout)
+                assert any(line['right'] > algorithm['x'] and line['y'] >= algorithm['bottom']
+                           for line in layout['last']), (width,layout)
             else:
-                assert boxes[0]['bottom'] < boxes[1]['y'], (width,boxes)
+                assert content['bottom'] < algorithm['y'], (width,layout)
+            assert page.locator('.method-content .math-display, .method-curriculum .math-display').evaluate_all(
+                '(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
+            assert page.locator('.method-content h3, .method-curriculum h3').count() == 0
+            expect(page.locator('p > #curriculum-title')).to_have_text('Connection with curriculum learning.')
+            assert r'\mathcal D_t' not in page.locator('.method-preference-equation').get_attribute('data-tex')
+            expect(page.locator('.method-content > p:last-child [data-tex]').first).to_have_attribute(
+                'data-tex', r'\mathcal D_t=\mathcal P_t\times\mathcal N_t')
             assert page.evaluate('document.documentElement.scrollWidth') <= width
             assert page.locator('.algorithm-row').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
-            for name in ['sample','observe','setgoal','judge','minimize']:
+            for name in ['sample','observe','setgoal','judge','minimize','learnable']:
                 trigger(name).click()
                 expect(popup).to_be_visible()
                 page.wait_for_function('document.fonts.status === "loaded"')
@@ -100,6 +130,11 @@ def main():
         touch.locator('[data-function="judge"]').tap()
         touch.locator('#method-title').tap()
         expect(touch.locator('#algorithm-details')).not_to_be_visible()
+        touch.locator('[data-function="learnable"]').tap()
+        expect(touch.locator('#algorithm-details')).to_be_visible()
+        expect(touch.locator('[data-function-panel="learnable"]')).to_be_visible()
+        touch.locator('#close-function-details').tap()
+        expect(touch.locator('#algorithm-details')).not_to_be_visible()
         # Resizing an open panel repositions it inside the viewport.
         page.set_viewport_size({'width':1440,'height':1000})
         page.goto(args.url + '/#method',wait_until='networkidle')
@@ -113,7 +148,7 @@ def main():
         assert not errors, errors
         assert not failures, failures
         browser.close()
-    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','wraparound_prose':'passed','learnable_definition':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

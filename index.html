@@ -15,12 +15,12 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=f444551c5f8a">
+  <link rel="stylesheet" href="site.css?v=f3bc0cd3fdb1">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
   <script src="results.js?v=823d7ac71a52" defer></script>
-  <script src="site.js?v=971e78d419a1" defer></script>
+  <script src="site.js?v=454213a24eeb" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -53,14 +53,6 @@
     <section id="method" class="method-section wrap section-space" aria-labelledby="method-title">
       <h2 id="method-title">Method: LLM-to-Flow Distillation</h2>
       <div class="method-layout">
-        <div class="method-content">
-          <h3>Iterative DPO with LLM feedback</h3>
-          <p>LLM-to-Flow Distillation (LFD) <strong>iteratively</strong> adapts a pretrained scientific generator (the student) with Direct Preference Optimization (DPO) on preferences induced by an LLM teacher.</p>
-          <p>Because the pretrained model may rarely generate samples aligned with the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher also proposes intermediate subgoals that are <strong>learnable</strong> under the current generator: they yield enough positive and negative examples for DPO.</p>
-          <p>At each round <span class="math math-inline" data-tex="t">t</span>, the teacher uses observables <span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> of the current sample batch <span class="math math-inline" data-tex="X_t">X<sub>t</sub></span> to propose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. Then, for each candidate, it returns a <strong>positive, negative, or abstain</strong> judgment <span class="math math-inline" data-tex="\ell_t(x_i)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x<sub>i</sub>) ∈ {+, −, ∅}</span>. Excluding abstentions, the positive and negative sets induce the preference dataset:</p>
-          <div class="math math-display method-preference-equation" data-tex="\begin{aligned}\mathcal P_t&amp;=\{x_i\in X_t:\ell_t(x_i)=+\},\\\mathcal N_t&amp;=\{x_i\in X_t:\ell_t(x_i)=-\},\\\mathcal D_t&amp;=\mathcal P_t\times\mathcal N_t.\end{aligned}">P<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = +},<br>N<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = −},<br>D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub>.</div>
-          <p>All positive–negative pairs in <span class="math math-inline" data-tex="\mathcal D_t">D<sub>t</sub></span> train the student, using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen DPO reference. We then draw fresh samples and repeat.</p>
-        </div>
         <div class="algorithm-box" aria-labelledby="algorithm-title">
           <h3 id="algorithm-title"><span>Algorithm</span><span class="algorithm-name">LLM-to-Flow Distillation (LFD)</span></h3>
           <p class="algorithm-inputs"><strong>Require:</strong> <span class="algorithm-input">pretrained flow <span class="math math-inline" data-tex="v_{\theta_0}">v<sub>θ₀</sub></span></span>, <span class="algorithm-input">natural-language goal <span class="math math-inline" data-tex="g">g</span></span>, <span class="algorithm-input">LLM teacher</span>, <span class="algorithm-input">observables <span class="math math-inline" data-tex="\mathcal O">O</span></span>, <span class="algorithm-input">rounds <span class="math math-inline" data-tex="T">T</span></span>, <span class="algorithm-input">batch size <span class="math math-inline" data-tex="n">n</span></span>.</p>
@@ -75,10 +67,16 @@
             <li class="algorithm-row"><span class="algorithm-line"><strong>return</strong> <span class="math math-inline" data-tex="v_{\theta_T}">v<sub>θ_T</sub></span></span></li>
           </ol>
         </div>
+        <div class="method-content">
+          <p>LLM-to-Flow Distillation (LFD) <strong>iteratively</strong> adapts a pretrained scientific generator (the student) with Direct Preference Optimization (DPO) on preferences induced by an LLM teacher.</p>
+          <p>Because the pretrained model may rarely generate samples aligned with the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher also proposes intermediate subgoals that are <button class="method-definition" type="button" data-function="learnable" aria-label="Learnable subgoals: definition" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details">learnable</button> from the currently generated samples.</p>
+          <p>At each round <span class="math math-inline" data-tex="t">t</span>, the teacher uses observables <span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> of the current sample batch <span class="math math-inline" data-tex="X_t">X<sub>t</sub></span> to propose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. Then, for each candidate, it returns a <strong>positive, negative, or abstain</strong> judgment <span class="math math-inline" data-tex="\ell_t(x_i)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x<sub>i</sub>) ∈ {+, −, ∅}</span>. Excluding abstentions, the positive and negative sets induce the dataset:</p>
+          <div class="math math-display method-preference-equation" data-tex="\begin{aligned}\mathcal P_t&amp;=\{x_i\in X_t:\ell_t(x_i)=+\},\\\mathcal N_t&amp;=\{x_i\in X_t:\ell_t(x_i)=-\}.\end{aligned}">P<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = +},<br>N<sub>t</sub> = {x<sub>i</sub> ∈ X<sub>t</sub> : ℓ<sub>t</sub>(x<sub>i</sub>) = −}.</div>
+          <p>All positive–negative pairs in <span class="math math-inline" data-tex="\mathcal D_t=\mathcal P_t\times\mathcal N_t">D<sub>t</sub> = P<sub>t</sub> × N<sub>t</sub></span> train the student, using the current generator <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span> as a frozen DPO reference. We then draw fresh samples and repeat.</p>
+        </div>
       </div>
       <div class="method-curriculum" aria-labelledby="curriculum-title">
-        <h3 id="curriculum-title">Curriculum learning through reachable regions</h3>
-        <p>Let <span class="math math-inline" data-tex="\Omega_g\subseteq\mathcal X">Ω<sub>g</sub> ⊆ X</span> be the region of designs satisfying the original goal <span class="math math-inline" data-tex="g">g</span>. We aim to increase the probability of reaching it:</p>
+        <p><strong id="curriculum-title" class="paragraph-title">Connection with curriculum learning.</strong> Let <span class="math math-inline" data-tex="\Omega_g\subseteq\mathcal X">Ω<sub>g</sub> ⊆ X</span> be the region of designs satisfying the original goal <span class="math math-inline" data-tex="g">g</span>. We aim to increase the probability of reaching it:</p>
         <div class="math math-display method-goal-equation" data-tex="p_{\theta_T}(\Omega_g)\gg p_{\theta_0}(\Omega_g).">p<sub>θ_T</sub>(Ω<sub>g</sub>) ≫ p<sub>θ₀</sub>(Ω<sub>g</sub>).</div>
         <p>Starting from a broad, attainable relaxation <span class="math math-inline" data-tex="g_0">g<sub>0</sub></span>, the teacher tightens the subgoals online as the student improves. Their corresponding regions form a curriculum toward the original goal:</p>
         <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
@@ -86,6 +84,9 @@
       </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
         <div class="function-popover-heading"><h3 id="function-detail-title">Function details</h3><button id="close-function-details" type="button" aria-label="Close function details">×</button></div>
+        <div data-function-panel="learnable" hidden>
+          <p>i.e., such that the LLM judgement yields enough positive and negative examples for DPO.</p>
+        </div>
         <div data-function-panel="sample" hidden>
           <p>Draw a fresh batch from the current student <span class="math math-inline" data-tex="p_{\theta_t}">p<sub>θₜ</sub></span>.</p><div class="math math-display" data-tex="X_t=\{x_i\}_{i=1}^{n}\sim p_{\theta_t}">X<sub>t</sub> = {x<sub>i</sub>}<sub>i=1</sub><sup>n</sup> ∼ p<sub>θₜ</sub></div><p>Resampling after every update keeps the teacher’s feedback tied to what the generator can currently produce.</p>
         </div>
