@@ -109,8 +109,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .text-link { display: inline-flex; gap: 17px; font-size: 13px; border-bottom: 1px solid #b5b7bd; padding-bottom: 2px; margin-top: 6px; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
 /* The method prose wraps around the floating algorithm and continues below it. */
-.method-section, .results-section { border-top: 2px solid #9aa6b5; }
-.method-band { display: flow-root; margin-top: 64px; background: #f6f6f6; }
+.method-band { display: flow-root; margin-top: 64px; background: #fafafa; }
 .method-section > h2 { text-align: left; text-wrap: balance; }
 .method-layout { display: flow-root; margin-top: 32px; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
