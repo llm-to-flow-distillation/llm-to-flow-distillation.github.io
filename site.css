@@ -544,7 +544,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 #goal-results-toggle:hover { color: var(--goal-strong); }
 #goal-results-content { padding-top: 18px; }
 #goal-results-content > .results-details { border-top: 0; }
-.result-curriculum { margin: 0; padding: 22px 0; border-radius: 0; background: none; }
+.goal-section.result-curriculum { margin: 0 0 22px; padding: 18px 20px; border: 1px solid var(--goal-border); border-radius: 12px; background: var(--goal-surface); }
 .curriculum-tabs { display: flex; flex-wrap: wrap; gap: 7px; margin: 12px 0 8px; }
 .curriculum-tabs button { min-height: 38px; min-width: 46px; padding: 7px 13px; border: 1px solid var(--goal-border); border-radius: 8px; background: #fff; font-size: 13px; color: var(--goal-strong); }
 .curriculum-tabs sub { font-size: .75em; line-height: 0; }
@@ -585,7 +585,8 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 @media (max-width: 600px) {
   .task-context-grid { padding-inline: 0; }
   .context-source { padding-inline: 0; }
-  .goal-section, .result-curriculum { padding: 18px 0; }
+  .goal-section { padding: 18px 0; }
+  .goal-section.result-curriculum { padding: 16px 12px; }
   .discovery-summary { grid-template-columns: 1fr; padding: 0 0 24px; gap: 24px; }
   .goal5-hit { max-width: 280px; justify-self: center; }
   .discovery-zero { font-size: 48px; }

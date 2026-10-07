@@ -70,13 +70,13 @@ def main():
             assert card.locator('.goal-prompt q').evaluate('(el)=>getComputedStyle(el).fontStyle')=='italic'
             assert page.locator('#task-results-panel > .goal-section').count()==3
             assert page.locator('.goal-section-title').all_text_contents()==['LLM inputs','Sub-goals and LLM traces','Results']
-            assert page.locator('#task-result-curriculum').evaluate('(el)=>getComputedStyle(el).backgroundColor')=='rgba(0, 0, 0, 0)'
+            assert page.locator('#task-result-curriculum').evaluate('(el)=>{const s=getComputedStyle(el);return parseFloat(s.borderLeftWidth)>0 && parseFloat(s.borderRadius)>0 && s.backgroundColor!=="rgba(0, 0, 0, 0)"}')
             assert page.locator('a').evaluate_all('(els)=>els.every(el=>!el.textContent.toLowerCase().includes("in the paper"))')
             expect(page.locator(f'.generator-legend [data-generator="{task["generator"]}"]')).to_contain_text(task['generator'])
             expect(page.locator('#task-results-panel')).to_have_attribute('data-generator', task['generator'])
             assert page.locator('.proxy-context,.chart-readout,#results-table-note,.task-scatter figcaption,.task-docking figcaption,.scaffold-novelty figcaption').count() == 0
             expect(page.locator('#llm-inputs-title')).to_have_text('LLM inputs')
-            expect(page.locator('.observable-toggle')).to_have_text('Observable list')
+            expect(page.locator('.observable-toggle')).to_have_text('List of observables')
             assert page.locator('.observable-context p').count() == 0
             obs=page.locator('#task-result-context').bounding_box()
             if goal['id'] in ('d2','gsk3b'):
