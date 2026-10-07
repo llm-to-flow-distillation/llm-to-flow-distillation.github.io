@@ -431,6 +431,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 [data-generator="PepDFM"] { --goal-accent: #345d86; --goal-surface: #f1f6fc; --goal-border: #cdddef; --goal-strong: #284b70; --goal-selected: #e4eefb; }
 [data-generator="FlowMol3"] { --goal-accent: #216d62; --goal-surface: #eef8f4; --goal-border: #c8e3d8; --goal-strong: #1b584f; --goal-selected: #e0f2e9; }
 .generator-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0; font-size: 13px; }
+.trace-verbatim-note { margin: 12px 0 18px; font-size: 12px; line-height: 1.7; color: #606875; }
 .generator-legend > span:first-child { margin-right: 4px; color: #535964; }
 .generator-label { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border: 1px solid var(--goal-border); border-radius: 20px; background: var(--goal-surface); color: var(--goal-strong); font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
 .generator-label > span { font-weight: 400; }
@@ -534,6 +535,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 /* Three peer sections, with only inputs and numerical results disclosed. */
 .goal-section { margin: 0; padding: 22px 0; border: 0; border-radius: 0; background: none; }
 .goal-section + .goal-section { border-top: 2px solid #cbd2da; }
+#task-result-context { border-bottom: 2px solid #cbd2da; margin-bottom: 22px; }
 .goal-section-title { margin: 0; font-size: 17px; line-height: 1.5; font-weight: 650; color: var(--ink); }
 .section-heading-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
 .observable-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; border: 0; background: none; color: var(--goal-strong); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--goal-border); }
@@ -551,7 +553,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-tabs button[aria-selected="true"] { background: var(--goal-accent); border-color: var(--goal-accent); color: #fff; }
 .curriculum-preview { padding: 4px 0 2px; }
 .curriculum-preview > p { margin: 8px 0 12px; font-size: 14px; line-height: 1.75; }
-.curriculum-rounds { font-size: 11px; font-style: normal; color: #5c6570; }
 .curriculum-traces { margin-top: 14px; scroll-margin-top: 80px; }
 .curriculum-traces .explorer-tabs { margin-top: 14px; }
 .curriculum-traces .explorer-tabs button { font-size: 13px; }

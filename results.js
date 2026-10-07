@@ -152,8 +152,7 @@
     });
     const preview=$('#result-curriculum-preview');
     preview.setAttribute('aria-labelledby',`curriculum-${task.id}-${id}`);
-    const rounds=stage.rounds===0 ? 'Assessment only' : `${stage.rounds} training ${stage.rounds===1 ? 'round' : 'rounds'}`;
-    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q> <span class="curriculum-rounds">· ${esc(rounds)}</span></p><div class="curriculum-traces"><div class="inline-trace-view"></div></div>`;
+    preview.innerHTML=`<p class="goal-quotation"><q>${esc(stage.exactGoal)}</q></p><div class="curriculum-traces"><div class="inline-trace-view"></div></div>`;
     window.LFD_TRACES.mount(preview.querySelector('.curriculum-traces'),task.id,id,resetTab);
   }
   function renderCurriculum(task) {

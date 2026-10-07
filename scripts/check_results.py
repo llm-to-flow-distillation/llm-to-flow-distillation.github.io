@@ -335,7 +335,7 @@ def main():
                 expect(touch.locator('#task-results-plots')).to_be_hidden()
                 touch.locator('[data-curriculum-stage="g"]').tap()
                 expect(touch.locator('[data-curriculum-stage="g"]')).to_have_attribute('aria-selected','true')
-                expect(touch.locator('#result-curriculum-preview .curriculum-rounds')).to_contain_text('Assessment only')
+                assert touch.locator('#result-curriculum-preview .curriculum-rounds').count()==0
         page.goto((root/'index.html').as_uri(),wait_until='load')
         page.locator('[data-result-task="anticancer"]').click()
         page.locator('#goal-results-toggle').click()
