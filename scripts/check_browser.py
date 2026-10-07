@@ -82,13 +82,11 @@ def main():
                 page.locator('#tab-traces').click()
                 assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
                 assert page.locator('.trace-card').count() == len(stage['traces'])
+                assert page.locator('.sample-id, .judge-passes > span, .trace-provenance').count()==0
                 assert page.locator('.trace-pair').count() == 2
                 for pair in stage['tracePairs']:
                     row = page.locator(f'.trace-pair[data-pair-id="{pair["id"]}"]')
-                    if pair.get('sizeUnit')=='aa':
-                        assert row.locator('.trace-pair-heading').count()==0
-                    else:
-                        assert row.locator('h4').inner_text() == pair['label']
+                    assert row.locator('.trace-pair-heading').count()==0
                     assert row.locator('.trace-card').evaluate_all('(els) => els.map(el => el.dataset.sampleId)') == [pair['positiveId'], pair['negativeId']]
                     cards = row.locator('.trace-card')
                     assert abs(cards.nth(0).bounding_box()['y'] - cards.nth(1).bounding_box()['y']) < 2
@@ -112,6 +110,7 @@ def main():
                     assert page.evaluate('navigator.clipboard.readText()') == first['representation']['value']
                 assert page.locator('#trace-search, #trace-filter, .trace-controls, .trace-selection-note').count() == 0
                 assert page.locator('.trace-card').count() == len(stage['traces'])
+                assert page.locator('.sample-id, .judge-passes > span, .trace-provenance').count()==0
                 assert page.locator('#tab-evidence, #panel-evidence').count() == 0
                 assert page.locator('a[href*="paper.pdf"]').count() == 0
                 rendered = page.locator('body').inner_text().replace('arXiv','',1)

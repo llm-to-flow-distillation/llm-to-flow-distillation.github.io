@@ -233,14 +233,10 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 .selection-bridge p, .selection-bridge ul { margin-top: 14px; }
 .selection-bridge li { margin: 5px 0; }
 .trace-pair + .trace-pair { border-top: 1px solid #e0e5ed; padding-top: 22px; margin-top: 8px; }
-.trace-pair-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 12px; margin-bottom: 15px; }
-.trace-pair-heading h4 { font-size: 17px; color: #33445d; font-weight: 600; margin: 0; }
-.trace-pair-heading > span { font-size: 10px; color: #737d8c; }
 .trace-pair-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; align-items: start; }
 .trace-pair-grid.single-candidate { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
 .trace-card { border: 1px solid #dce1e7; border-radius: 12px; padding: 18px; margin-bottom: 18px; background: #fff; min-width: 0; }
 .trace-card-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; font-size: 10px; margin-bottom: 15px; color: #626773; }
-.sample-id { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 .judgment-badge { font-size: 10px; font-weight: 600; letter-spacing: .2px; padding: 4px 7px; border-radius: 4px; }
 .judgment-positive { color: #275b3d; background: #eaf4ec; }
 .judgment-negative { color: #914042; background: #fbeded; }
@@ -259,12 +255,10 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 .judge-passes { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; padding: 12px 0; border-top: 1px solid #e6e8ed; margin-bottom: 4px; }
 .judge-passes button { background: #fff; border: 1px solid #d7dce5; border-radius: 5px; padding: 5px 8px; font-size: 11px; color: #566075; }
 .judge-passes button[aria-pressed=true] { background: #eaf0f8; border-color: #b4c5df; color: #2e4e75; font-weight: 600; }
-.judge-passes > span { margin-left: auto; font-size: 9px; color: #707783; }
 .judge-output[hidden] { display: none; }
 .trace-field h5 { font-size: 12px; font-weight: 600; color: #303b4b; margin: 12px 0 8px; }
 .trace-card .trace-field p { font-size: 13px; color: #46505f; margin: 0; line-height: 1.8; overflow-wrap: anywhere; }
 .trace-uncertainty { border-top: 1px solid #e9ebef; margin-top: 16px; padding-top: 1px; }
-.trace-provenance { margin-top: 16px; color: #717988; font-size: 10px; line-height: 1.65; }
 .trace-placeholder { border-style: dashed; background: #fcfcfd; }
 .selection-placeholder { border-style: dashed; background: #fafbfc; }
 .placeholder-notice { padding: 13px 16px; border: 1px solid #e1e4e9; border-radius: 8px; background: #f7f8fa; margin-bottom: 20px; line-height: 1.8; }
