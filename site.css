@@ -223,11 +223,6 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 .explorer-panel[hidden] { display: none; }
 .panel-label { font-size: 11px; font-weight: 500; color: #585e69; margin-bottom: 9px; }
 .panel-description { font-size: 13px; color: #5b606b; line-height: 1.85; }
-.trace-controls { display: flex; gap: 10px; margin-bottom: 17px; }
-.trace-controls input, .trace-controls select { max-width: 100%; border: 1px solid #d4d7dc; border-radius: 5px; background: #fff; padding: 10px 11px; font-size: 12px; color: #474d59; }
-.trace-controls input::placeholder { color: #737781; }
-.search-label { flex: 1; min-width: 0; }
-.search-label input { width: 100%; }
 .selection-card { background: #f5f7fb; border: 1px solid #dde3ed; border-radius: 14px; padding: 22px 24px; margin-bottom: 0; color: #333b48; }
 .selection-card h4 { font-size: 19px; margin: 9px 0 14px; color: #29364a; }
 .selection-card p { font-size: 14px; line-height: 1.85; margin: 0; }
@@ -237,7 +232,6 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 .selection-bridge summary { cursor: pointer; color: #3a506e; font-weight: 600; }
 .selection-bridge p, .selection-bridge ul { margin-top: 14px; }
 .selection-bridge li { margin: 5px 0; }
-.trace-selection-note { font-size: 12px; color: #647083; line-height: 1.75; margin: 0 0 22px; }
 .trace-pair + .trace-pair { border-top: 1px solid #e0e5ed; padding-top: 22px; margin-top: 8px; }
 .trace-pair-heading { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 7px 12px; margin-bottom: 15px; }
 .trace-pair-heading h4 { font-size: 17px; color: #33445d; font-weight: 600; margin: 0; }
@@ -282,8 +276,6 @@ figcaption { font-size: 12px; line-height: 1.7; margin-top: 12px; color: var(--m
 @media (max-width: 600px) {
   .selection-card { padding: 18px; }
   .trace-card { padding: 16px; }
-  .trace-controls { flex-wrap: wrap; }
-  .trace-controls .search-label { flex-basis: 100%; }
   .explorer-tabs { gap: 19px; }
 }
 .trace-empty { border: 1px dashed #bfc3cc; border-radius: 5px; padding: 18px; color: #656b77; font-size: 13px; line-height: 1.9; }
@@ -415,8 +407,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .stage-button { min-width: 37px; padding: 7px 11px; }
   .explorer-tabs { gap: 19px; }
   .explorer-tabs button { font-size: 11px; }
-  .trace-controls { flex-direction: column; }
-  .trace-controls select { width: 100%; }
   .result-number { font-size: 32px; }
   .table-controls { padding: 18px 15px; }
   .table-controls h3 { font-size: 17px; }
@@ -543,7 +533,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .task-molecule figcaption { text-align: center; margin-top: 10px; font-size: 11px; line-height: 1.7; color: #5b626c; }
 /* Three peer sections, with only inputs and numerical results disclosed. */
 .goal-section { margin: 0; padding: 22px 0; border: 0; border-radius: 0; background: none; }
-.goal-section + .goal-section { border-top: 1px solid var(--line); }
+.goal-section + .goal-section { border-top: 2px solid #cbd2da; }
 .goal-section-title { margin: 0; font-size: 17px; line-height: 1.5; font-weight: 650; color: var(--ink); }
 .section-heading-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 22px; }
 .observable-toggle { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0; border: 0; background: none; color: var(--goal-strong); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--goal-border); }
@@ -567,7 +557,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .curriculum-traces .explorer-tabs button { font-size: 13px; }
 .curriculum-traces .explorer-tabs button[aria-selected=true] { color: var(--goal-strong); border-bottom-color: var(--goal-accent); }
 .curriculum-traces .selection-card { background: none; border: 0; border-radius: 0; padding: 8px 0 0; }
-.curriculum-traces .selection-card h4 { color: var(--goal-strong); }
+.curriculum-traces .selection-card h4, .curriculum-traces .selection-limitations > strong { font-family: inherit; font-size: 16px; font-weight: 650; line-height: 1.5; color: var(--goal-strong); margin: 9px 0 12px; }
 .inline-trace-view { min-width: 0; }
 #results-table th, #results-table td { padding-block: 13px; }
 #results-table thead th { font-size: 13px; font-weight: 600; background: #fafbfc; }

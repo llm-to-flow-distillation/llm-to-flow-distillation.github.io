@@ -201,15 +201,9 @@
   }
   function renderTraces() {
     const stage = currentStage();
-    const query = $('#trace-search').value.trim().toLowerCase();
-    const label = $('#trace-filter').value;
-    const traces = stage.traces.filter(trace => (label === 'all' || trace.label === label) && [trace.rationale,trace.uncertainty,trace.sampleId,trace.label,trace.representation?.value,...(trace.passes || []).flatMap(pass => [pass.rationale,pass.uncertainty])].join(' ').toLowerCase().includes(query));
-    if (!traces.length) {
-      $('#trace-list').innerHTML = '<div class="trace-empty">No examples match this search and judgment filter. Clear the search or choose All judgments.</div>';
-      return;
-    }
+    const traces = stage.traces;
     const pairs = stage.tracePairs.map(pair => ({...pair,items:[pair.positiveId,pair.negativeId].map(id => traces.find(trace => trace.sampleId === id)).filter(Boolean)})).filter(pair => pair.items.length);
-    $('#trace-list').innerHTML = `${stage.traces[0].status === 'placeholder' ? '<p class="placeholder-notice"><strong>Placeholder examples.</strong> Candidate structures, rationales, and uncertainties will appear here when the source traces are available.</p>' : '<p class="trace-selection-note">Illustrative pairs selected for size diversity and clear, consistent goal-specific judgments.</p>'}${pairs.map(pair => `<section class="trace-pair" data-pair-id="${esc(pair.id)}" aria-label="${esc(pair.label)}"><div class="trace-pair-heading"><h4>${esc(pair.label)}</h4>${stage.traces[0].status === 'recorded' ? `<span>${pair.sizeUnit === 'aa' ? 'Matched length' : 'Comparable molecular weight'}</span>` : ''}</div><div class="trace-pair-grid ${pair.items.length === 1 ? 'single-candidate' : ''}">${pair.items.map(renderTraceCard).join('')}</div></section>`).join('')}`;
+    $('#trace-list').innerHTML = `${stage.traces[0].status === 'placeholder' ? '<p class="placeholder-notice"><strong>Placeholder examples.</strong> Candidate structures, rationales, and uncertainties will appear here when the source traces are available.</p>' : ''}${pairs.map(pair => `<section class="trace-pair" data-pair-id="${esc(pair.id)}" aria-label="${esc(pair.label)}"><div class="trace-pair-heading"><h4>${esc(pair.label)}</h4>${stage.traces[0].status === 'recorded' ? `<span>${pair.sizeUnit === 'aa' ? 'Matched length' : 'Comparable molecular weight'}</span>` : ''}</div><div class="trace-pair-grid ${pair.items.length === 1 ? 'single-candidate' : ''}">${pair.items.map(renderTraceCard).join('')}</div></section>`).join('')}`;
     $$('.trace-card').forEach(card => {
       const trace = traces.find(item => item.sampleId === card.dataset.sampleId);
       $('.copy-candidate', card)?.addEventListener('click', () => copy(trace.representation.value, 'Candidate copied'));
@@ -242,8 +236,6 @@
         buttons[index].click();buttons[index].focus();
       });
     });
-    $('#trace-search').addEventListener('input', renderTraces);
-    $('#trace-filter').addEventListener('change', renderTraces);
   }
   function populateTraces() {
     const view = $('.inline-trace-view',traceDisclosure);

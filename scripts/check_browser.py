@@ -106,25 +106,13 @@ def main():
                     first = stage['traces'][0]
                     page.locator('.copy-candidate').first.click()
                     assert page.evaluate('navigator.clipboard.readText()') == first['representation']['value']
-                    page.locator('#trace-search').fill(first['representation']['value'])
-                    assert page.locator('.trace-card').count() == 1
-                    page.locator('#trace-search').fill('')
-                if stage['traces']:
-                    page.locator('#trace-filter').select_option('POSITIVE')
-                    assert page.locator('.trace-card').count() == sum(t['label'] == 'POSITIVE' for t in stage['traces'])
-                    page.locator('#trace-filter').select_option('all')
-                    page.locator('#trace-search').fill(stage['traces'][0]['sampleId'])
-                    assert page.locator('.trace-card').count() >= 1
-                    page.locator('#trace-search').fill('no-such-judgment-xyz')
-                    assert 'No examples match' in page.locator('.trace-empty').inner_text()
-                    page.locator('#trace-search').fill('')
-                else:
-                    assert 'not available' in page.locator('.trace-empty').inner_text()
+                assert page.locator('#trace-search, #trace-filter, .trace-controls, .trace-selection-note').count() == 0
+                assert page.locator('.trace-card').count() == len(stage['traces'])
                 assert page.locator('#tab-evidence, #panel-evidence').count() == 0
                 assert page.locator('a[href*="paper.pdf"]').count() == 0
                 rendered = page.locator('body').inner_text().replace('arXiv','',1)
                 assert not re.search(r'\b(?:paper|appendix|preprint|arxiv|bibtex|table\s+\d|figure\s+\d|algorithm\s+\d)\b',rendered,re.I), (task['id'],stage['id'])
-        print('All 23 stages, 64 recorded candidates and 28 placeholders, size-paired cards, searches, filters and Sources removal passed.')
+        print('All 23 stages, 64 recorded candidates and 28 placeholders, size-paired cards, removed search/filter controls and Sources removal passed.')
         page.goto(args.url + '/#explorer?task=cpp&stage=g&tab=traces', wait_until='networkidle')
         assert page.locator('#result-name-cpp').inner_text() == 'Peptide design for cell penetration'
         assert page.locator('#tab-traces').get_attribute('aria-selected') == 'true'
@@ -149,10 +137,8 @@ def main():
         expect(page.locator('#goal-results-content')).to_be_hidden()
         expect(page.locator('#tab-overview')).to_be_visible()
         page.locator('#tab-traces').click()
-        page.locator('#trace-search').fill('no-such-judgment-xyz')
         page.locator('[data-curriculum-stage="g1"]').click()
         expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
-        expect(page.locator('#trace-search')).to_have_value('')
         expect(page.locator('.trace-card')).to_have_count(4)
         page.locator('#task-result-curriculum').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#results')

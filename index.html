@@ -15,12 +15,12 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=a2bb627613fa">
+  <link rel="stylesheet" href="site.css?v=d8e6a30c7e53">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
   <script src="results.js?v=2419f7a0ebd5" defer></script>
-  <script src="site.js?v=217f7ac098ec" defer></script>
+  <script src="site.js?v=29bd0cb2f30d" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -143,10 +143,6 @@
     </div>
     <div id="panel-overview" class="explorer-panel" role="tabpanel" aria-labelledby="tab-overview"></div>
     <div id="panel-traces" class="explorer-panel" role="tabpanel" aria-labelledby="tab-traces" hidden>
-      <div class="trace-controls">
-        <label class="search-label"><span class="sr-only">Search recorded traces</span><input id="trace-search" type="search" placeholder="Search sequences, SMILES, or judgments…"></label>
-        <label><span class="sr-only">Filter by judgment</span><select id="trace-filter"><option value="all">All judgments</option><option value="POSITIVE">Positive</option><option value="NEGATIVE">Negative</option><option value="ABSTAIN">Abstain</option></select></label>
-      </div>
       <div id="trace-list" aria-live="polite"></div>
     </div>
   </template>
