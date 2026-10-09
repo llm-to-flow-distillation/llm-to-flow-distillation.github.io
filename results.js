@@ -122,12 +122,12 @@
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
     const d2=task.id === 'd2';
     const file=`assets/${d2 ? 'd2' : 'gsk3b'}-docking.png`;
-    return `<figure class="task-molecule"><a href="${file}" target="_blank" rel="noopener" aria-label="Open the ${esc(task.name)} docking figure at full resolution"><img src="${file}" width="${d2 ? 772 : 776}" height="${d2 ? 424 : 396}" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"></a><figcaption>Illustrative LFD molecule and computational docking pose.</figcaption></figure>`;
+    return `<figure class="task-molecule"><a data-zoom-figure href="${file}" target="_blank" rel="noopener" aria-label="Open the ${esc(task.name)} docking figure at full resolution"><img src="${file}" width="${d2 ? 772 : 776}" height="${d2 ? 424 : 396}" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"></a><figcaption>Illustrative LFD molecule and computational docking pose.</figcaption></figure>`;
   }
   function renderDiscoverySummary() {
     const evidence=window.LFD_DATA.resultPanels.oodEvidence;
     const figure=evidence.figure;
-    $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
+    $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a data-zoom-figure href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
     $('#task-result-context').innerHTML=`<div class="section-heading-row"><h4 id="llm-inputs-title" class="goal-section-title">LLM inputs</h4><button type="button" class="observable-toggle" aria-expanded="false" aria-controls="observable-list">List of observables<span class="disclosure-icon" aria-hidden="true"></span></button></div><ul id="observable-list" class="observable-list" hidden>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`;
@@ -162,7 +162,7 @@
     showCurriculumStage(task,task.stages[0].id,true);
   }
   function setupMetricHelp() {
-    const container=$('#task-results-panel');
+    const container=$('#results');
     const popup=document.createElement('div');
     popup.id='metric-help-popover';
     popup.className='metric-tooltip';
@@ -253,6 +253,32 @@
     document.addEventListener('scroll',event=>{if (!popup.contains(event.target)) close();},true);
     return close;
   }
+  const caseStudies = [
+    {id:'peptides', number:'01', generator:'PepDFM', domain:'Peptides',
+      title:'Peptides for biological activity',
+      description:'We adapt PepDFM toward selective anticancer activity and cell penetration. The LLM judges sequences and biophysical observables; activity and hemolysis are evaluated separately.',
+      tasks:['anticancer','cpp']},
+    {id:'molecules', number:'02', generator:'FlowMol3', domain:'Small molecules',
+      title:'Small molecules for binding and discovery',
+      description:'We adapt FlowMol3 toward dopamine D2 and GSK3β binding, and a discovery prompt with specific ring motifs. Docking scores, scaffold novelty, and structural goal satisfaction provide complementary evaluations.',
+      tasks:['d2','gsk3b','ood']}
+  ];
+  function resultSnapshot(id, results) {
+    const names={anticancer:'Selective anticancer activity',cpp:'Cell penetration',d2:'Dopamine D2 binding',gsk3b:'GSK3β binding',ood:'Specified ring motifs'};
+    const result=results.find(item=>item.id===id);
+    const heading=`<h4>${names[id]}</h4>`;
+    const link=`<button type="button" class="snapshot-link" data-open-result="${id}">Explore results <span aria-hidden="true">↗</span><span class="sr-only"> for ${names[id]}</span></button>`;
+    if (!result) {
+      const evidence=window.LFD_DATA.resultPanels.oodEvidence;
+      return `<article class="result-snapshot discovery-snapshot">${heading}<p class="snapshot-metric">Full discovery prompt</p><div class="snapshot-hit"><span><strong>0 / ${evidence.pretrained.attempts.toLocaleString('en-US')}</strong> pretrained samples satisfy the goal</span><span><strong>A full-goal hit</strong> LFD · round ${evidence.lfd.round}, ${evidence.lfd.batchSize} samples</span></div>${link}</article>`;
+    }
+    const metric=metricKeys(result)[0];
+    const values=['Pre-trained','LFD'].map(method=>{
+      const [mean,error]=result.rows.find(row=>row.method===method).values[0];
+      return `<div class="snapshot-value ${method==='LFD' ? 'snapshot-ours' : ''}"><span>${method==='Pre-trained' ? 'Pretrained' : 'LFD'}</span><strong>${mean.toFixed(2)}<small>${result.unit==='%' ? '%' : ''}</small></strong><span class="snapshot-uncertainty">± ${error.toFixed(2)}</span></div>`;
+    });
+    return `<article class="result-snapshot" data-snapshot="${id}">${heading}<div class="snapshot-metric">${metricLabel(metric,result.metrics[0].label+' ↑')}</div><div class="snapshot-comparison">${values[0]}<span class="snapshot-arrow" aria-hidden="true">→</span>${values[1]}</div>${link}</article>`;
+  }
   function init(results) {
     const data=window.LFD_DATA;
     const goals=data.resultPanels.tasks;
@@ -267,11 +293,12 @@
       if (event.key==='Escape') panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
     });
     const closeMetricHelp=setupMetricHelp();
-    cards.innerHTML=goals.map(goal=>{
+    const goalMarkup=goal=>{
       const task=data.tasks.find(task=>task.id===goal.id);
       const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
       return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
-    }).join('');
+    };
+    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><p class="case-eyebrow"><span>Case study ${study.number}</span><span class="generator-label" data-generator="${study.generator}">${study.generator} · ${study.domain}</span></p><h3 id="case-title-${study.id}">${study.title}</h3><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultSnapshot(id,results)).join('')}</div>${study.id==='peptides' ? '<p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p>' : ''}<div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
     function closeGoal() {
       closeMetricHelp();
       ++generation;
@@ -380,6 +407,17 @@
       $('#curriculum-'+task.id+'-'+task.stages[next].id).focus({preventScroll:true});
     });
     cards.addEventListener('click',event=>{
+      const snapshot=event.target.closest('[data-open-result]');
+      if (snapshot) {
+        const id=snapshot.dataset.openResult;
+        if (active!==id) render(id);
+        if ($('#goal-results-toggle').getAttribute('aria-expanded')!=='true') $('#goal-results-toggle').click();
+        requestAnimationFrame(()=>{
+          $('#goal-results-toggle').focus({preventScroll:true});
+          $('#goal-results-title').scrollIntoView({block:'start',behavior:'instant'});
+        });
+        return;
+      }
       const card=event.target.closest('[data-result-task]');
       if (!card) return;
       if (active===card.dataset.resultTask) closeGoal();

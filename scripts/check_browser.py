@@ -43,13 +43,13 @@ def main():
         page.evaluate('window.scrollTo({top: 300, behavior: "instant"})')
         expect(page.locator('#contents')).to_be_visible()
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#overview')
-        for section in ['method', 'results']:
+        for section in ['method', 'peptides', 'molecules']:
             page.locator(f'.contents-list a[href="#{section}"]').click()
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
             assert page.evaluate('location.hash') == '#' + section
             assert page.evaluate('document.activeElement.closest("section").id') == section
         # Scroll independently from the menu; tracking must work in both directions.
-        for section in ['results', 'method']:
+        for section in ['molecules', 'peptides', 'method']:
             page.locator('#' + section).evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
         page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
@@ -144,7 +144,7 @@ def main():
         expect(page.locator('#tab-traces')).to_have_attribute('aria-selected','true')
         expect(page.locator('.trace-card')).to_have_count(4)
         page.locator('#task-result-curriculum').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
-        expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#results')
+        expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#peptides')
         assert page.evaluate('location.hash') == '#results?task=anticancer&stage=g1&tab=traces'
         # Results are independently expandable and retain the active trace tab.
         toggle=page.locator('#goal-results-toggle')
@@ -189,14 +189,14 @@ def main():
                 expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'false')
                 expect(page.locator('.contents-toggle')).to_be_focused()
                 page.locator('.contents-toggle').click()
-                page.locator('.contents-list a[href="#results"]').click()
-                expect(page.locator('.contents-current')).to_have_text('Experiments')
+                page.locator('.contents-list a[href="#peptides"]').click()
+                expect(page.locator('.contents-current')).to_have_text('01 · Peptides')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 assert page.evaluate('document.documentElement.scrollWidth') <= width
             if width in [390,1440]:
                 page.goto(args.url,wait_until='networkidle')
                 page.evaluate("document.querySelectorAll('img').forEach(img => img.loading = 'eager')")
-                page.wait_for_function("[...document.images].every(img => img.complete && img.naturalWidth > 0)")
+                page.wait_for_function("[...document.images].filter(img => img.hasAttribute('src')).every(img => img.complete && img.naturalWidth > 0)")
                 page.screenshot(path=str(out / f'preview-{width}.png'),full_page=True)
                 page.locator('[data-result-task="anticancer"]').click()
                 page.locator('#tab-traces').click()

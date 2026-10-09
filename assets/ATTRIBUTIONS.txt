@@ -26,3 +26,12 @@ Archive SHA-256: ab056aae3031254cdffc64e7b886cdc43c91114b219bd7b1b68e097b8b3da6c
 
 Plotly.js basic v4.1.1 — MIT License. Self-hosted JavaScript for interactive plots.
 https://github.com/plotly/plotly.js — license in assets/plotly/LICENSE.
+
+Institution logos — original marks owned by their respective institutions.
+Used to identify the authors' listed affiliations; retrieved 2026-10-09.
+ETH Zurich: inline header SVG from https://ethz.ch/en.html
+ETH AI Center: https://ai.ethz.ch/_jcr_content/orginfo/imageLogo.imageformat.1564x880.193735214.png
+TU Wien: inline header SVG from https://www.tuwien.at/en/
+AITHYRA: https://aithyra.at/_assets/20554bf6d76678966a9097bdb4e0287a/Images/AITHYRA.svg?1771588837
+University of Pennsylvania: inline header SVG from https://www.upenn.edu/
+University of Oxford: https://hsm.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg

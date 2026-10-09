@@ -16,12 +16,12 @@
   <link rel="preload" href="assets/fonts/source-serif-4-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=61277a0b2240">
+  <link rel="stylesheet" href="site.css?v=2264bc47ebfe">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=c85c081292ee" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
-  <script src="results.js?v=f22034118ad8" defer></script>
-  <script src="site.js?v=f2ee562f7d48" defer></script>
+  <script src="results.js?v=dd6563e4751d" defer></script>
+  <script src="site.js?v=c890b3cacf5a" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -30,7 +30,8 @@
     <ol id="contents-list" class="contents-list">
       <li><a href="#overview" aria-current="location"><span class="contents-dot" aria-hidden="true"></span><span>Overview</span></a></li>
       <li><a href="#method"><span class="contents-dot" aria-hidden="true"></span><span>Method (LFD)</span></a></li>
-      <li><a href="#results"><span class="contents-dot" aria-hidden="true"></span><span>Experiments</span></a></li>
+      <li><a href="#peptides"><span class="contents-dot" aria-hidden="true"></span><span>01 · Peptides</span></a></li>
+      <li><a href="#molecules"><span class="contents-dot" aria-hidden="true"></span><span>02 · Small molecules</span></a></li>
     </ol>
   </nav>
   <main id="main">
@@ -38,18 +39,29 @@
       <div class="hero-heading">
       <h1 id="hero-title" class="paper-title"><span class="title-main">LLM-to-Flow Distillation:</span> <span class="title-subtitle">Teaching Natural Language Goals<br class="title-break"> to Scientific Generators</span></h1>
       <div class="authors">
-        <p class="author-row"><span>Riccardo De Santi<sup>1,2,*</sup></span><span>Federico Di Gennaro<sup>1,*</sup></span><span>Angelo Gnazzo<sup>3,4,*</sup></span></p>
-        <p class="author-row"><span>Sophia Tang<sup>5</sup></span><span>Pranam Chatterjee<sup>5</sup></span><span>Fanny Yang<sup>1</sup></span><span>İsmail İlkan Ceylan<sup>3,4,6</sup></span><span>Michael M. Bronstein<sup>4,6</sup></span><span>Andreas Krause<sup>1,2</sup></span></p>
-        <div class="affiliations"><span><sup>1</sup> ETH Zurich</span><span><sup>2</sup> ETH AI Center</span><span><sup>3</sup> Technische Universität Wien</span><span><sup>4</sup> AITHYRA</span><span><sup>5</sup> University of Pennsylvania</span><span><sup>6</sup> University of Oxford</span></div>
+        <p class="author-row"><span><a href="https://www.riccardodesanti.com/" target="_blank" rel="noopener">Riccardo De Santi</a><sup>1,2,*</sup></span><span><a href="https://federicodigennaro.github.io/" target="_blank" rel="noopener">Federico Di Gennaro</a><sup>1,*</sup></span><span><a href="https://angelognazzo.github.io/" target="_blank" rel="noopener">Angelo Gnazzo</a><sup>3,4,*</sup></span></p>
+        <p class="author-row"><span><a href="https://sophtang.github.io/" target="_blank" rel="noopener">Sophia Tang</a><sup>5</sup></span><span><a href="https://www.chatterjeelab.com/" target="_blank" rel="noopener">Pranam Chatterjee</a><sup>5</sup></span><span><a href="https://sml.inf.ethz.ch/group/fannyy/" target="_blank" rel="noopener">Fanny Yang</a><sup>1</sup></span><span><a href="https://www.cs.ox.ac.uk/people/ismaililkan.ceylan/" target="_blank" rel="noopener">İsmail İlkan Ceylan</a><sup>3,4,6</sup></span><span><a href="https://www.cs.ox.ac.uk/people/michael.bronstein/" target="_blank" rel="noopener">Michael M. Bronstein</a><sup>4,6</sup></span><span><a href="https://las.inf.ethz.ch/krausea" target="_blank" rel="noopener">Andreas Krause</a><sup>1,2</sup></span></p>
+        <div class="affiliations" aria-label="Author affiliations">
+          <a class="institution institution-eth" href="https://ethz.ch/en.html" target="_blank" rel="noopener" title="1. ETH Zurich"><sup aria-hidden="true">1</sup><img src="assets/logos/eth-zurich.svg" alt="ETH Zurich" width="120" height="48"></a>
+          <a class="institution institution-ai" href="https://ai.ethz.ch/" target="_blank" rel="noopener" title="2. ETH AI Center"><sup aria-hidden="true">2</sup><img src="assets/logos/eth-ai-center.png" alt="ETH AI Center" width="120" height="48"></a>
+          <a class="institution institution-tu" href="https://www.tuwien.at/en/" target="_blank" rel="noopener" title="3. TU Wien"><sup aria-hidden="true">3</sup><img src="assets/logos/tu-wien.svg" alt="TU Wien" width="120" height="48"></a>
+          <a class="institution institution-aithyra" href="https://aithyra.at/" target="_blank" rel="noopener" title="4. AITHYRA"><sup aria-hidden="true">4</sup><img src="assets/logos/aithyra.svg" alt="AITHYRA" width="120" height="48"></a>
+          <a class="institution institution-penn" href="https://www.upenn.edu/" target="_blank" rel="noopener" title="5. University of Pennsylvania"><sup aria-hidden="true">5</sup><img src="assets/logos/penn.svg" alt="University of Pennsylvania" width="120" height="48"></a>
+          <a class="institution institution-oxford" href="https://www.ox.ac.uk/" target="_blank" rel="noopener" title="6. University of Oxford"><sup aria-hidden="true">6</sup><img src="assets/logos/oxford.svg" alt="University of Oxford" width="120" height="48"></a>
+        </div>
         <p class="contribution-note">* Equal contribution, alphabetical order</p>
       </div>
+      <div class="hero-toolbar">
       <div class="hero-actions">
         <button class="resource-button paper-button" type="button" disabled aria-label="arXiv (link unavailable)"><svg class="resource-icon" fill="currentColor" aria-hidden="true" focusable="false" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3.8423 0a1.0037 1.0037 0 0 0-.922.6078c-.1536.3687-.0438.6275.2938 1.1113l6.9185 8.3597-1.0223 1.1058a1.0393 1.0393 0 0 0 .003 1.4229l1.2292 1.3135-5.4391 6.4444c-.2803.299-.4538.823-.2971 1.1986a1.0253 1.0253 0 0 0 .9585.635.9133.9133 0 0 0 .6891-.3405l5.783-6.126 7.4902 8.0051a.8527.8527 0 0 0 .6835.2597.9575.9575 0 0 0 .8777-.6138c.1577-.377-.017-.7502-.306-1.1407l-7.0518-8.3418 1.0632-1.13a.9626.9626 0 0 0 .0089-1.3165L4.6336.4639s-.3733-.4535-.768-.463zm0 .272h.0166c.2179.0052.4874.2715.5644.3639l.005.006.0052.0055 10.169 10.9905a.6915.6915 0 0 1-.0072.945l-1.0666 1.133-1.4982-1.7724-8.5994-10.39c-.3286-.472-.352-.6183-.2592-.841a.7307.7307 0 0 1 .6704-.4401Zm14.341 1.5701a.877.877 0 0 0-.6554.2418l-5.6962 6.1584 1.6944 1.8319 5.3089-6.5138c.3251-.4335.479-.6603.3247-1.0292a1.1205 1.1205 0 0 0-.9763-.689zm-7.6557 12.2823 1.3186 1.4135-5.7864 6.1295a.6494.6494 0 0 1-.4959.26.7516.7516 0 0 1-.706-.4669c-.1119-.2682.0359-.6864.2442-.9083l.0051-.0055.0047-.0055z"/></svg><span>arXiv</span></button>
         <a class="resource-button code-button" href="https://github.com/FedericoDiGennaro/LLM-to-Flow-Distillation" target="_blank" rel="noopener" aria-label="Code on GitHub"><svg class="resource-icon" fill="currentColor" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path d="M6.766 11.328c-2.063-.25-3.516-1.734-3.516-3.656 0-.781.281-1.625.75-2.188-.203-.515-.172-1.609.063-2.062.625-.078 1.468.25 1.968.703.594-.187 1.219-.281 1.985-.281.765 0 1.39.094 1.953.265.484-.437 1.344-.765 1.969-.687.218.422.25 1.515.046 2.047.5.593.766 1.39.766 2.203 0 1.922-1.453 3.375-3.547 3.64.531.344.89 1.094.89 1.954v1.625c0 .468.391.734.86.547C13.781 14.359 16 11.53 16 8.03 16 3.61 12.406 0 7.984 0 3.563 0 0 3.61 0 8.031a7.88 7.88 0 0 0 5.172 7.422c.422.156.828-.125.828-.547v-1.25c-.219.094-.5.156-.75.156-1.031 0-1.64-.562-2.078-1.609-.172-.422-.36-.672-.719-.719-.187-.015-.25-.093-.25-.187 0-.188.313-.328.625-.328.453 0 .844.281 1.25.86.313.452.64.655 1.031.655s.641-.14 1-.5c.266-.265.47-.5.657-.656"/></svg><span>Code</span></a>
       </div>
+      <nav class="hero-jumps" aria-label="Explore the project"><a href="#method">Method</a><a href="#peptides">Peptides</a><a href="#molecules">Small molecules</a></nav>
+      </div>
       </div>
       <figure class="hero-figure">
         <a href="assets/flow_adaptation_smooth.mp4" target="_blank" rel="noopener" aria-label="Open the method overview at full resolution"><video autoplay muted loop playsinline preload="auto" width="2154" height="612" poster="assets/main_ltf.png" aria-label="LLM-to-Flow Distillation overview: a scientist gives a discovery goal to an LLM teacher, which sets subgoals and evaluates a flow student as its distribution moves toward the discovery region."><source src="assets/flow_adaptation_smooth.mp4" type="video/mp4"><img src="assets/main_ltf.png" width="4546" height="1285" alt="LLM-to-Flow Distillation overview: the teacher guides the flow student toward a discovery goal."></video></a>
+        <figcaption class="overview-controls"><button id="animation-toggle" type="button" aria-pressed="false">Pause animation</button><a href="assets/flow_adaptation_smooth.mp4" target="_blank" rel="noopener">View full size ↗</a></figcaption>
       </figure>
     </section>
 
@@ -117,10 +129,8 @@
     </div>
 
     <section id="results" class="results-section wrap section-space" aria-labelledby="results-title">
-      <h2 id="results-title">Experiments on peptides and small molecules</h2>
-      <div class="generator-legend" aria-label="Starting generators"><span>Starting generators</span><span class="generator-label" data-generator="PepDFM">PepDFM <span>· peptides</span></span><span class="generator-label" data-generator="FlowMol3">FlowMol3 <span>· molecules</span></span></div>
-      <p class="trace-verbatim-note">Recorded LLM goal-selection rationales and judge traces are shown verbatim.</p>
-      <div id="result-cards" class="goal-accordions" aria-label="Discovery experiments"></div>
+      <h2 id="results-title" class="sr-only">Experiments on peptides and small molecules</h2>
+      <div id="result-cards" class="case-studies" aria-label="Discovery experiments"></div>
       <div id="task-results-panel" class="results-explorer" role="region" tabindex="-1" hidden>
         <section id="task-result-context" class="goal-section" aria-labelledby="llm-inputs-title"></section>
         <section id="task-result-curriculum" class="result-curriculum goal-section" aria-labelledby="goal-curriculum-title"></section>
@@ -150,6 +160,10 @@
       <div id="trace-list" aria-live="polite"></div>
     </div>
   </template>
+  <dialog id="figure-viewer" aria-labelledby="figure-viewer-title">
+    <div class="figure-viewer-heading"><h2 id="figure-viewer-title">Scientific figure</h2><button id="close-figure-viewer" type="button" aria-label="Close figure">×</button></div>
+    <img id="figure-viewer-image" alt="">
+  </dialog>
   <footer class="wrap"><span>LLM-to-Flow Distillation · 2026</span></footer>
   <div id="toast" role="status" aria-live="polite"></div>
   <noscript><div class="noscript">The method and evaluation notes are available without JavaScript. Enable JavaScript to use the algorithm explanations, trace explorer, and interactive result charts, or <a href="data/tasks.json">download the recorded task evidence</a>.</div></noscript>

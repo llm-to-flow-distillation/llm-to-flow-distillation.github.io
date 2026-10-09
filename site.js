@@ -273,6 +273,49 @@
   window.addEventListener('hashchange', event => openLinkedTrace(readHash(new URL(event.newURL).hash)));
   openLinkedTrace(initialTrace);
 
+  // Keep the original scientific assets intact; open images at a readable scale.
+  const figureViewer = $('#figure-viewer');
+  let figureTrigger = null;
+  document.addEventListener('click', event => {
+    const link = event.target.closest('[data-zoom-figure]');
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    if (typeof figureViewer.showModal !== 'function') return;
+    event.preventDefault();
+    figureTrigger = link;
+    const source = $('img', link);
+    $('#figure-viewer-image').src = link.href;
+    $('#figure-viewer-image').alt = source.alt;
+    $('#figure-viewer-title').textContent = link.closest('figure').querySelector('figcaption')?.textContent || 'Scientific figure';
+    figureViewer.showModal();
+    document.body.classList.add('figure-viewer-open');
+    $('#close-figure-viewer').focus();
+  });
+  $('#close-figure-viewer').addEventListener('click', () => figureViewer.close());
+  figureViewer.addEventListener('click', event => {
+    if (event.target === figureViewer) {
+      const bounds = figureViewer.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) figureViewer.close();
+    }
+  });
+  figureViewer.addEventListener('close', () => {
+    document.body.classList.remove('figure-viewer-open');
+    figureTrigger?.focus({preventScroll:true});
+  });
+  const video = $('.hero-figure video');
+  const animationToggle = $('#animation-toggle');
+  const syncPlayback = () => {
+    animationToggle.textContent = video.paused ? 'Play animation' : 'Pause animation';
+    animationToggle.setAttribute('aria-pressed', String(video.paused));
+  };
+  animationToggle.addEventListener('click', () => {
+    if (video.paused) video.play().catch(syncPlayback);
+    else video.pause();
+  });
+  video.addEventListener('play', syncPlayback);
+  video.addEventListener('pause', syncPlayback);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) video.pause();
+  syncPlayback();
+
   // Track section geometry so expanding traces and figures keeps the rail accurate.
   const contents = $('#contents');
   const contentsToggle = $('.contents-toggle', contents);
@@ -319,7 +362,7 @@
       const section = $(link.hash);
       history.pushState(null, '', link.hash);
       closeContents();
-      const heading = section.querySelector('h1, h2');
+      const heading = section.querySelector('h1, h2, h3');
       heading.setAttribute('tabindex', '-1');
       heading.focus({preventScroll: true});
       section.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'});
