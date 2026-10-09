@@ -40,7 +40,7 @@ def main():
                         assert trace['error']['color'] == '#252d28'
                         assert [r[2:] for r in trace['customdata']] == [[b['emitted'], b['selected']] for b in expected['bars']]
             # Every domain and method exposes the correct task and exact instruction text.
-            for method in ['joint_score'] + data['methods']:
+            for method in data['methods']:
                 trigger = page.locator(f'.calibration-prompt[data-domain="{domain["id"]}"][data-method="{method}"]')
                 trigger.focus()
                 popup = page.locator('#calibration-prompt-dialog')

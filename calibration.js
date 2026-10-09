@@ -14,7 +14,6 @@
   grid.innerHTML = data.domains.map(domain => `<div class="calibration-domain" data-calibration-domain="${domain.id}">
     <div class="calibration-domain-heading">${promptButton(domain, null, esc(domain.label), 'calibration-task')}<span>${esc(domain.metric)}</span></div>
     <div class="calibration-score-panel">
-      <div class="calibration-row-label">${promptButton(domain, 'joint_score', 'Joint scoring <span aria-hidden="true">↗</span>')}</div>
       <div id="calibration-scatter-${domain.id}" class="calibration-plot calibration-scatter" tabindex="0" role="group" aria-label="${esc(domain.label)}: LLM-estimated versus true score differences. Arrow keys inspect points; Escape dismisses the value."></div>
       <div class="calibration-mae" aria-label="Mean absolute error"><span>MAE</span>${domain.series.map(series => {const model = data.models.find(m => m.id === series.model); return `<span data-mae-model="${model.id}" title="${esc(model.label)}: mean absolute error ${series.mae.toFixed(2)}">${marker(model)}${series.mae.toFixed(1)}</span>`;}).join('')}</div>
     </div>
