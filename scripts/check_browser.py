@@ -43,13 +43,13 @@ def main():
         page.evaluate('window.scrollTo({top: 300, behavior: "instant"})')
         expect(page.locator('#contents')).to_be_visible()
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#overview')
-        for section in ['why-preferences', 'method', 'peptides', 'molecules']:
+        for section in ['method', 'why-preferences', 'peptides', 'molecules']:
             page.locator(f'.contents-list a[href="#{section}"]').click()
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
             assert page.evaluate('location.hash') == '#' + section
             assert page.evaluate('document.activeElement.closest("section").id') == section
         # Scroll independently from the menu; tracking must work in both directions.
-        for section in ['molecules', 'peptides', 'method', 'why-preferences']:
+        for section in ['molecules', 'peptides', 'why-preferences', 'method']:
             page.locator('#' + section).evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
         page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
@@ -59,7 +59,7 @@ def main():
         expect(page.locator('.paper-preview img')).to_have_js_property('complete', True)
         assert page.locator('.paper-preview img').evaluate('(el)=>el.naturalWidth>0')
         expect(page.locator('.code-button')).to_have_attribute('href', 'https://github.com/FedericoDiGennaro/LLM-to-Flow-Distillation')
-        for section in ['why-preferences', 'method', 'peptides', 'molecules']:
+        for section in ['method', 'why-preferences', 'peptides', 'molecules']:
             page.locator(f'.project-contents a[href="#{section}"]').focus()
             page.keyboard.press('Enter')
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
@@ -193,7 +193,7 @@ def main():
                 assert page.evaluate('document.documentElement.scrollWidth') <= width, f'{task["id"]} overflow at {width}px'
             if width < 1280:
                 page.locator('#method').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
-                expect(page.locator('.contents-current')).to_have_text('2. Method')
+                expect(page.locator('.contents-current')).to_have_text('1. Method')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 page.locator('.contents-toggle').click()
                 expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'true')

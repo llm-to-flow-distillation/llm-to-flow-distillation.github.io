@@ -74,7 +74,7 @@ Visual references supplied by the authors: [CUES](https://www.sophielwang.com/cu
 
 Interactive chart checks are in `scripts/check_results.py`. They verify all five task switches and keyboard/touch controls, peptide activity/toxicity coordinates, grouped docking deltas with negative improvements, signed hover values and black error bars, the GSK3β novelty plot and table layout, always-visible docking figures, the fifth-task evidence, and layouts from 360px through 2560px.
 
-Case-study checks are in `scripts/check_case_studies.py`. They verify author links and logo loading, source-derived headline results, direct result navigation, figure enlargement and focus restoration, animation controls, and responsive layout.
+Case-study checks are in `scripts/check_case_studies.py`. They verify author links and logo loading, source-derived headline results, goal result disclosures, figure enlargement and focus restoration, animation controls, and responsive layout.
 
 ## Why preferences?
 

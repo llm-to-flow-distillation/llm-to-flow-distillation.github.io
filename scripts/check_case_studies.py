@@ -41,7 +41,7 @@ def main():
             for group, ids in [('peptides', ['anticancer', 'cpp']), ('molecules', ['d2', 'gsk3b', 'ood'])]:
                 section = page.locator('#' + group)
                 assert section.locator('[data-result-task]').evaluate_all('(els)=>els.map(el=>el.dataset.resultTask)') == ids
-                assert section.locator('[data-open-result]').evaluate_all('(els)=>els.map(el=>el.dataset.openResult)') == ids
+                assert section.locator('[data-open-result], .snapshot-link').count() == 0
             # Summary values come from the same exact means and uncertainty terms as the full tables.
             for result in results:
                 card = page.locator(f'[data-snapshot="{result["id"]}"]')
@@ -49,8 +49,15 @@ def main():
                     mean, error = next(row for row in result['rows'] if row['method'] == method)['values'][0]
                     value = card.locator('.snapshot-value').nth(index)
                     unit = '%' if result['unit'] == '%' else ''
-                    expect(value.locator('strong')).to_have_text(f'{mean:.2f}{unit}')
+                    expect(value.locator('.snapshot-mean')).to_have_text(f'{mean:.2f}{unit}')
                     expect(value.locator('.snapshot-uncertainty')).to_have_text(f'± {error:.2f}')
+                    assert value.evaluate('''el => {
+                        const mean = el.querySelector('.snapshot-mean'), sd = el.querySelector('.snapshot-uncertainty');
+                        const a = mean.getBoundingClientRect(), b = sd.getBoundingClientRect();
+                        return getComputedStyle(mean).color === getComputedStyle(sd).color &&
+                            parseFloat(getComputedStyle(sd).fontSize) < parseFloat(getComputedStyle(mean).fontSize) &&
+                            b.x >= a.right && b.x - a.right < 8 && b.top < a.bottom;
+                    }''')
             hit = page.locator('.discovery-snapshot')
             expect(hit).to_contain_text(f'0 / {evidence["pretrained"]["attempts"]:,}')
             expect(hit).to_contain_text(f'round {evidence["lfd"]["round"]}, {evidence["lfd"]["batchSize"]} samples')
@@ -64,15 +71,16 @@ def main():
             expect(control).to_have_text('Pause animation')
             control.click()
             expect(video).to_have_js_property('paused', True)
-            # Direct result links open the correct goal and skip no data in the comparison.
+            # Results remain accessible through the goal and its Results disclosure.
             for task in ['anticancer', 'cpp', 'd2', 'gsk3b', 'ood']:
-                button = page.locator(f'[data-open-result="{task}"]')
+                button = page.locator(f'[data-result-task="{task}"]')
                 if width == 390:
                     button.tap()
                 else:
                     button.focus()
                     page.keyboard.press('Enter')
                 expect(page.locator(f'[data-result-task="{task}"]')).to_have_attribute('aria-expanded', 'true')
+                page.locator('#goal-results-toggle').click()
                 expect(page.locator('#goal-results-content')).to_be_visible()
                 expect(page.locator('#goal-results-toggle')).to_be_focused()
                 page.wait_for_function('(task)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===task', arg=task)
@@ -80,6 +88,9 @@ def main():
                 if task != 'ood':
                     source = next(item for item in results if item['id'] == task)
                     assert page.locator('#results-table tbody tr').count() == len(source['rows'])
+                    assert page.locator('#results-table tbody td').evaluate_all('''cells => cells.every(cell =>
+                        getComputedStyle(cell.querySelector('.table-mean')).color ===
+                        getComputedStyle(cell.querySelector('.table-uncertainty')).color)''')
                 else:
                     expect(page.locator('#result-discovery')).to_be_visible()
                 if task in ['d2', 'gsk3b', 'ood']:
@@ -127,7 +138,7 @@ def main():
     assert not errors, errors
     assert not failures, failures
     report = {'status': 'passed', 'author_links': 9, 'institution_logos': 6,
-              'case_studies': 2, 'source_derived_summaries': 5, 'direct_results': 'keyboard and touch',
+              'case_studies': 2, 'source_derived_summaries': 5, 'goal_results': 'keyboard and touch',
               'figure_viewer': '3 figures, keyboard and touch, focus restoration',
               'reduced_motion_and_playback': 'passed', 'viewports': [390, 768, 1440],
               'browser_errors': errors, 'failed_requests': failures}

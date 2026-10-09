@@ -19,7 +19,6 @@
       <div class="calibration-mae" aria-label="Mean absolute error"><span>MAE</span>${domain.series.map(series => {const model = data.models.find(m => m.id === series.model); return `<span data-mae-model="${model.id}" title="${esc(model.label)}: mean absolute error ${series.mae.toFixed(2)}">${marker(model)}${series.mae.toFixed(1)}</span>`;}).join('')}</div>
     </div>
     <div class="calibration-accuracy-panel">
-      <p class="calibration-row-label">Preferences · higher is better</p>
       <div id="calibration-bars-${domain.id}" class="calibration-plot calibration-bars" tabindex="0" role="group" aria-label="${esc(domain.label)}: pairwise accuracy by elicitation method. Arrow keys inspect bars; Escape dismisses the value."></div>
       <div class="calibration-methods">${data.methods.map(method => promptButton(domain, method, esc(data.prompts.methods[method].label))).join('')}</div>
     </div>
@@ -63,7 +62,7 @@
             customdata: series.bars.map(b => [data.prompts.methods[b.method].label, b.sd, b.emitted, b.selected]),
             marker: {color: model.color},
             error_y: {type: 'data', array: series.bars.map(b => b.sd), visible: true, color: '#252d28', thickness: 1, width: 2},
-            hovertemplate: `<b>${esc(model.label)}</b><br>%{customdata[0]} · ${esc(domain.label)}<br>Accuracy: %{y:.2f}% ± %{customdata[1]:.2f} SD<br>Emitted pairs: %{customdata[2]} / %{customdata[3]}<br>Mean across 3 seeds<extra></extra>`};
+            hovertemplate: `<b>${esc(model.label)}</b><br>%{customdata[0]} · ${esc(domain.label)}<br>Accuracy: %{y:.2f}% ± %{customdata[1]:.2f} SD<extra></extra>`};
         });
         await Plotly.newPlot(element, traces, layout(kind), {responsive: true, displayModeBar: false, scrollZoom: false});
         charts.push(element);
@@ -77,7 +76,7 @@
           selected = (selected + (['ArrowLeft', 'ArrowUp'].includes(event.key) ? -1 : 1) + points.length) % points.length;
           const point = points[selected], trace = traces[point.curveNumber], i = point.pointNumber;
           Plotly.Fx.hover(element, [point]);
-          live.textContent = kind === 'scatter' ? `${trace.name}. True difference ${trace.x[i].toFixed(2)}; LLM difference ${trace.y[i].toFixed(2)}.` : `${trace.name}, ${trace.customdata[i][0]}. Accuracy ${trace.y[i].toFixed(2)} percent, SD ${trace.customdata[i][1].toFixed(2)}; ${trace.customdata[i][2]} of 288 pairs emitted.`;
+          live.textContent = kind === 'scatter' ? `${trace.name}. True difference ${trace.x[i].toFixed(2)}; LLM difference ${trace.y[i].toFixed(2)}.` : `${trace.name}, ${trace.customdata[i][0]}. Accuracy ${trace.y[i].toFixed(2)} percent, SD ${trace.customdata[i][1].toFixed(2)}.`;
         });
         element.addEventListener('blur', () => Plotly.Fx.unhover(element));
       }

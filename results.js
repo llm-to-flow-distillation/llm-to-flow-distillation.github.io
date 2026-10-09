@@ -267,17 +267,16 @@
     const names={anticancer:'Selective anticancer activity',cpp:'Cell penetration',d2:'Dopamine D2 binding',gsk3b:'GSK3β binding',ood:'Specified ring motifs'};
     const result=results.find(item=>item.id===id);
     const heading=`<h4>${names[id]}</h4>`;
-    const link=`<button type="button" class="snapshot-link" data-open-result="${id}">Explore results <span aria-hidden="true">↗</span><span class="sr-only"> for ${names[id]}</span></button>`;
     if (!result) {
       const evidence=window.LFD_DATA.resultPanels.oodEvidence;
-      return `<article class="result-snapshot discovery-snapshot">${heading}<p class="snapshot-metric">Full discovery prompt</p><div class="snapshot-hit"><span><strong>0 / ${evidence.pretrained.attempts.toLocaleString('en-US')}</strong> pretrained samples satisfy the goal</span><span><strong>A full-goal hit</strong> LFD · round ${evidence.lfd.round}, ${evidence.lfd.batchSize} samples</span></div>${link}</article>`;
+      return `<article class="result-snapshot discovery-snapshot">${heading}<p class="snapshot-metric">Full discovery prompt</p><div class="snapshot-hit"><span><strong>0 / ${evidence.pretrained.attempts.toLocaleString('en-US')}</strong> pretrained samples satisfy the goal</span><span><strong>A full-goal hit</strong> LFD · round ${evidence.lfd.round}, ${evidence.lfd.batchSize} samples</span></div></article>`;
     }
     const metric=metricKeys(result)[0];
     const values=['Pre-trained','LFD'].map(method=>{
       const [mean,error]=result.rows.find(row=>row.method===method).values[0];
-      return `<div class="snapshot-value ${method==='LFD' ? 'snapshot-ours' : ''}"><span>${method==='Pre-trained' ? 'Pretrained' : 'LFD'}</span><strong>${mean.toFixed(2)}<small>${result.unit==='%' ? '%' : ''}</small></strong><span class="snapshot-uncertainty">± ${error.toFixed(2)}</span></div>`;
+      return `<div class="snapshot-value ${method==='LFD' ? 'snapshot-ours' : ''}"><span>${method==='Pre-trained' ? 'Pretrained' : 'LFD'}</span><strong><span class="snapshot-mean">${mean.toFixed(2)}<small>${result.unit==='%' ? '%' : ''}</small></span><span class="snapshot-uncertainty">± ${error.toFixed(2)}</span></strong></div>`;
     });
-    return `<article class="result-snapshot" data-snapshot="${id}">${heading}<div class="snapshot-metric">${metricLabel(metric,result.metrics[0].label+' ↑')}</div><div class="snapshot-comparison">${values[0]}<span class="snapshot-arrow" aria-hidden="true">→</span>${values[1]}</div>${link}</article>`;
+    return `<article class="result-snapshot" data-snapshot="${id}">${heading}<div class="snapshot-metric">${metricLabel(metric,result.metrics[0].label+' ↑')}</div><div class="snapshot-comparison">${values[0]}<span class="snapshot-arrow" aria-hidden="true">→</span>${values[1]}</div></article>`;
   }
   function init(results) {
     const data=window.LFD_DATA;
@@ -407,17 +406,6 @@
       $('#curriculum-'+task.id+'-'+task.stages[next].id).focus({preventScroll:true});
     });
     cards.addEventListener('click',event=>{
-      const snapshot=event.target.closest('[data-open-result]');
-      if (snapshot) {
-        const id=snapshot.dataset.openResult;
-        if (active!==id) render(id);
-        if ($('#goal-results-toggle').getAttribute('aria-expanded')!=='true') $('#goal-results-toggle').click();
-        requestAnimationFrame(()=>{
-          $('#goal-results-toggle').focus({preventScroll:true});
-          $('#goal-results-title').scrollIntoView({block:'start',behavior:'instant'});
-        });
-        return;
-      }
       const card=event.target.closest('[data-result-task]');
       if (!card) return;
       if (active===card.dataset.resultTask) closeGoal();

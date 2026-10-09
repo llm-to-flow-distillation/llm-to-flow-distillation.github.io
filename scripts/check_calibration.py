@@ -21,6 +21,8 @@ def main():
         page.on('response', lambda r: bad_requests.append(r.url) if r.status >= 400 else None)
         page.goto(args.url + '/#why-preferences', wait_until='networkidle')
         expect(page.locator('#calibration-grid')).to_have_attribute('data-ready', 'true')
+        assert page.locator('.project-contents a').evaluate_all('(els)=>els.map(el=>el.hash)') == ['#method', '#why-preferences', '#peptides', '#molecules']
+        assert page.locator('#method').bounding_box()['y'] < page.locator('#why-preferences').bounding_box()['y'] < page.locator('#peptides').bounding_box()['y']
         assert page.locator('#calibration-grid .js-plotly-plot').count() == 6
         for domain in data['domains']:
             for kind in ['scatter', 'bars']:
@@ -57,7 +59,11 @@ def main():
         bar = page.locator('#calibration-bars-peptide .barlayer .trace').first.locator('.point path').first
         # Plotly's transparent event layer intentionally sits above the SVG bar.
         bar.hover(force=True)
-        expect(page.locator('#calibration-bars-peptide .hovertext')).to_contain_text('Emitted pairs: 274 / 288')
+        expect(page.locator('#calibration-bars-peptide .hovertext')).to_contain_text('Accuracy: 79.89% ± 5.61 SD')
+        expect(page.locator('#calibration-bars-peptide .hovertext')).not_to_contain_text('Emitted pairs')
+        expect(page.locator('#calibration-bars-peptide .hovertext')).not_to_contain_text('Mean across')
+        assert page.locator('#calibration-caption').count() == 0
+        assert 'Preferences · higher is better' not in page.locator('#calibration-grid').inner_text()
         page.locator('#calibration-scatter-peptide').focus()
         page.keyboard.press('ArrowRight')
         expect(page.locator('#calibration-scatter-peptide .hovertext')).to_contain_text('Absolute error')
