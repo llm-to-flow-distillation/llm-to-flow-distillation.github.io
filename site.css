@@ -160,13 +160,17 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .intro-copy p:last-child { margin-bottom: 0; }
 .text-link { display: inline-flex; gap: 17px; font-size: 13px; border-bottom: 1px solid #b5b7bd; padding-bottom: 2px; margin-top: 6px; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
-/* The method prose wraps around the floating algorithm and continues below it. */
+/* Method: a single reading sequence, with the complete algorithm on demand. */
 .method-band { display: flow-root; margin-top: 40px; background: #fcfcfb; }
 .method-section > h2 { text-align: left; text-wrap: balance; }
-.method-layout { display: flow-root; margin-top: 26px; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
-.method-content p { margin-bottom: 18px; }
+.method-content p { margin-bottom: 14px; }
 .method-content p:last-child { margin-bottom: 0; }
+.method-introduction { margin: 0 0 32px; }
+.method-steps { display: grid; gap: 28px; list-style: none; padding: 0; margin: 0; }
+.method-step { min-width: 0; }
+.method-step h3 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; font: 600 20px/1.4 var(--serif); color: #253e32; }
+.method-step-number { flex-shrink: 0; font: 500 12px/1 var(--sans); color: #07857d; letter-spacing: .04em; }
 .method-preference-equation, .method-dpo-equation { margin-block: 20px; padding-block: 6px; }
 .method-dpo-equation { display: flex; justify-content: center; align-items: baseline; }
 .method-content strong, .method-curriculum strong { font-weight: 600; }
@@ -181,7 +185,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-curriculum p { margin-bottom: 0; }
 .method-curriculum .curriculum-equation { margin: 18px 0; padding-block: 4px; text-align: center; }
 .method-curriculum p:last-child { margin-bottom: 0; }
-.algorithm-box { container-type: inline-size; float: right; width: min(440px, calc(100% - 320px)); max-width: 440px; margin: 0 0 20px 32px; min-width: 0; padding: 0 16px 16px; border: 1px solid #e7d7c3; border-radius: 6px; background: #fffaf4; color: #382b21; font-family: KaTeX_Main, 'Times New Roman', serif; }
+.algorithm-box { container-type: inline-size; width: 100%; max-width: 520px; margin: 0 auto; min-width: 0; font-family: KaTeX_Main, 'Times New Roman', serif; }
 .algorithm-box h3 { display: grid; gap: 4px; margin: 0 -16px; padding: 14px 16px; border-bottom: 1px solid #e7d7c3; border-radius: 5px 5px 0 0; background: #fff3e3; font-size: 18px; font-weight: 400; line-height: 1.5; }
 .algorithm-box h3 > span:first-child { color: #94633c; font: 600 11px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; }
 .algorithm-name { white-space: nowrap; }
@@ -212,18 +216,10 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .function-popover strong { font-weight: 600; }
 .function-popover .math-display { margin-block: 18px; }
 .function-popover [data-function-panel][hidden] { display: none; }
-@media (max-width: 1100px) {
-  .algorithm-box { margin-left: 28px; }
-}
-@media (max-width: 900px) {
-  .method-layout { display: flex; flex-direction: column; gap: 28px; }
-  .method-content { order: 0; }
-  .algorithm-box { order: 1; float: none; width: 100%; margin: 0 auto; }
-}
 @media (max-width: 760px) {
   .method-curriculum { padding: 18px; }
 }
-@media (max-width: 680px) {
+@media (max-width: 900px) {
   .method-dpo-equation { flex-direction: column; align-items: center; gap: 14px; }
   .dpo-equation-space { display: none; }
 }
@@ -704,14 +700,13 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .overview-controls a { padding: 2px 0; }
 .overview-controls a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
-/* The method reads as an article; only the algorithm uses academic rules. */
+/* Shared section typography and academic styling for the optional pseudocode. */
 .method-band { background: #fff; margin-top: 64px; }
 .method-section { border-top: 1px solid #b9c8c4; padding-block: 64px 0; }
 .method-section > .section-heading { text-wrap: initial; }
 .section-heading, .case-study h3.section-heading { display: flex; align-items: baseline; gap: 13px; margin: 0 0 26px; font-size: 32px; font-weight: 600; line-height: 1.25; letter-spacing: -.55px; color: #171b19; }
 .section-anchor { flex-shrink: 0; color: #07857d; font-weight: 400; text-decoration: none; }
 .section-anchor:hover { color: #00594f; }
-.method-layout { margin-top: 30px; }
 .algorithm-box { padding: 0 0 12px; border: 0; border-block: 1.5px solid #29332f; border-radius: 0; background: transparent; color: #111; }
 .algorithm-box h3 { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 10px 0; border: 0; border-bottom: 1px solid #a9b1ac; border-radius: 0; background: transparent; font-size: 17px; line-height: 1.45; }
 .algorithm-box h3 > span:first-child { color: #111; font: 700 17px/1.45 KaTeX_Main, 'Times New Roman', serif; letter-spacing: 0; text-transform: none; }
@@ -720,7 +715,24 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .algorithm-row:nth-child(n+3):nth-child(-n+6) { padding-block: 2px; }
 .algorithm-function { color: #07857d; border-bottom-color: #8bbcb5; }
 .algorithm-function:hover, .algorithm-function[aria-expanded="true"] { color: #00594f; }
-.method-curriculum { width: 100%; margin-top: 30px; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.method-curriculum { width: 100%; margin-top: 30px; padding: 24px 0 0; border: 0; border-top: 1px solid #dce5df; border-radius: 0; background: transparent; box-shadow: none; }
+.algorithm-disclosure { margin-top: 28px; border-block: 1px solid #b9c8c0; }
+.algorithm-disclosure > summary { justify-content: flex-start; gap: 14px; padding: 18px 0; cursor: pointer; }
+.algorithm-disclosure > summary strong { font: 600 18px/1.5 var(--serif); color: #253e32; }
+.algorithm-disclosure > summary > span { font: 11px/1.5 var(--sans); color: #758078; transform: none; }
+.algorithm-disclosure[open] > summary > span { transform: none; }
+.algorithm-disclosure > summary svg { width: 20px; height: 20px; flex: 0 0 20px; margin-left: auto; fill: none; stroke: #07857d; stroke-width: 1.5; transition: transform .15s; }
+.algorithm-disclosure[open] > summary svg { transform: rotate(180deg); }
+.algorithm-disclosure > summary:hover strong { color: #07857d; }
+.algorithm-disclosure-body { padding: 12px 0 24px; }
+.algorithm-hint { margin: 16px 0 0; text-align: center; font: 11px/1.5 var(--sans); color: #788179; }
+@media (max-width: 680px) {
+  .method-step h3 { font-size: 18px; gap: 9px; }
+  .method-introduction { margin-bottom: 26px; }
+  .method-steps { gap: 24px; }
+  .algorithm-disclosure > summary { flex-wrap: wrap; gap: 3px 12px; }
+  .algorithm-disclosure > summary > span { display: none; }
+}
 
 /* Two case studies: results first, then the complete discovery experiments. */
 .results-section { padding-top: 64px; padding-bottom: 0; }

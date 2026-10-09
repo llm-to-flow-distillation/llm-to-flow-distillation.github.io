@@ -23,8 +23,17 @@ def main():
         trigger = lambda name: page.locator(f'[data-function="{name}"]')
         page.goto(args.url + '/#method', wait_until='networkidle')
         expect(popup).not_to_be_visible()
+        disclosure = page.locator('#method-algorithm')
+        summary = disclosure.locator('summary')
+        expect(disclosure).not_to_have_attribute('open', '')
+        expect(page.locator('.algorithm-box')).not_to_be_visible()
+        expect(page.locator('.method-steps')).to_be_visible()
         assert page.locator('.algorithm-function').count() == 5
         page.screenshot(path=str(out/'desktop-overview.png'))
+        summary.focus()
+        page.keyboard.press('Enter')
+        expect(page.locator('.algorithm-box')).to_be_visible()
+        assert summary.locator('span').evaluate('(el)=>getComputedStyle(el).transform') == 'none'
         for name in ['sample','observe','setgoal','judge','minimize','learnable']:
             trigger(name).hover()
             expect(popup).to_be_visible()
@@ -71,35 +80,38 @@ def main():
         expect(popup.locator('[data-function-panel="minimize"]')).to_be_visible()
         page.keyboard.press('Escape')
         expect(popup).not_to_be_visible()
+        # Collapsing the pseudocode dismisses any pinned function explanation.
+        trigger('judge').click()
+        expect(popup).to_be_visible()
+        disclosure.evaluate('(el)=>el.open=false')
+        expect(popup).not_to_be_visible()
+        expect(page.locator('.algorithm-box')).not_to_be_visible()
         for width in [360,390,768,1024,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
             page.goto(args.url + '/#method',wait_until='networkidle')
+            page.reload(wait_until='networkidle')
             page.wait_for_function('document.fonts.status === "loaded"')
+            expect(page.locator('.algorithm-box')).not_to_be_visible()
+            summary.click()
+            expect(page.locator('.algorithm-box')).to_be_visible()
             layout = page.evaluate("""() => {
-                const box = selector => { const r = document.querySelector(selector).getBoundingClientRect();
+                const box = element => { const r = element.getBoundingClientRect();
                     return {x:r.x, y:r.y, right:r.right, bottom:r.bottom, width:r.width}; };
-                const lines = selector => { const range = document.createRange();
-                    range.selectNodeContents(document.querySelector(selector));
-                    return [...range.getClientRects()].map(r=>({x:r.x,y:r.y,right:r.right,bottom:r.bottom})); };
-                return {content:box('.method-content'), algorithm:box('.algorithm-box'),
-                    first:lines('.method-content > p:first-child'), last:lines('.method-content > .method-update')};
+                const get = selector => box(document.querySelector(selector));
+                return {content:get('.method-content'), algorithm:get('.algorithm-box'),
+                    intro:get('.method-introduction'), steps:[...document.querySelectorAll('.method-step')].map(box),
+                    curriculum:get('.method-curriculum'), disclosure:get('#method-algorithm')};
             }""")
             content, algorithm = layout['content'], layout['algorithm']
-            if width > 900:
-                # Prose shares the algorithm's vertical space, then fills the space below it.
-                assert abs(content['y']-algorithm['y']) < 2, (width,layout)
-                assert abs(content['right']-algorithm['right']) < 2, (width,layout)
-                assert all(line['right'] <= algorithm['x'] for line in layout['first']), (width,layout)
-                assert any(line['right'] > algorithm['x'] and line['y'] >= algorithm['bottom']
-                           for line in layout['last']), (width,layout)
-            else:
-                assert content['bottom'] < algorithm['y'], (width,layout)
+            reading_order = [layout['intro'], *layout['steps'], layout['curriculum'], layout['disclosure']]
+            assert all(before['bottom'] <= after['y'] for before,after in zip(reading_order,reading_order[1:])), (width,layout)
+            assert abs((algorithm['x']+algorithm['right'])-(content['x']+content['right'])) < 2, (width,layout)
             assert page.locator('.method-content .math-display, .method-curriculum .math-display').evaluate_all(
                 '(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
-            assert page.locator('.method-content h3').count() == 0
+            assert page.locator('.method-content h3').count() == 3
             expect(page.locator('.method-curriculum p > #curriculum-title')).to_have_text('A design-space view.')
             assert r'\mathcal D_t' not in page.locator('.method-preference-equation').get_attribute('data-tex')
-            expect(page.locator('.method-content > .method-update [data-tex]').first).to_have_attribute(
+            expect(page.locator('.method-update [data-tex]').first).to_have_attribute(
                 'data-tex', r'\mathcal D_t=\mathcal P_t\times\mathcal N_t')
             assert page.evaluate('document.documentElement.scrollWidth') <= width
             assert page.locator('.algorithm-row').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
@@ -121,6 +133,7 @@ def main():
         touch = mobile.new_page()
         touch.on('pageerror',lambda error:errors.append(str(error)))
         touch.goto(args.url + '/#method',wait_until='networkidle')
+        touch.locator('#method-algorithm > summary').tap()
         touch.locator('[data-function="minimize"]').tap()
         expect(touch.locator('#algorithm-details')).to_be_visible()
         expect(touch.locator('#algorithm-details')).to_have_attribute('data-pinned','true')
@@ -138,6 +151,8 @@ def main():
         # Resizing an open panel repositions it inside the viewport.
         page.set_viewport_size({'width':1440,'height':1000})
         page.goto(args.url + '/#method',wait_until='networkidle')
+        page.reload(wait_until='networkidle')
+        summary.click()
         trigger('minimize').click()
         page.set_viewport_size({'width':390,'height':844})
         page.wait_for_function('''() => {const r=document.querySelector('#algorithm-details').getBoundingClientRect();return r.x>=0 && r.right<=innerWidth && r.y>=0 && r.bottom<=innerHeight;}''')
@@ -148,7 +163,7 @@ def main():
         assert not errors, errors
         assert not failures, failures
         browser.close()
-    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','wraparound_prose':'passed','learnable_definition':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','ordered_method_steps':'passed','algorithm_disclosure':'passed','learnable_definition':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

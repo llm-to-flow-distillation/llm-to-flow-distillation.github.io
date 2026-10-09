@@ -128,6 +128,10 @@
     });
     window.addEventListener('scroll', schedulePosition, {passive: true});
     window.addEventListener('resize', schedulePosition);
+    const algorithmDisclosure = $('#method-algorithm');
+    algorithmDisclosure.addEventListener('toggle', () => {
+      if (!algorithmDisclosure.open) closePopup();
+    });
     new ResizeObserver(schedulePosition).observe(popup);
   }
   setupFunctionDetails();
