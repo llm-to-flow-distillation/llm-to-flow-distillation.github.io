@@ -142,7 +142,7 @@ def main():
         page.set_viewport_size({'width':390,'height':844})
         page.wait_for_function('''() => {const r=document.querySelector('#algorithm-details').getBoundingClientRect();return r.x>=0 && r.right<=innerWidth && r.y>=0 && r.bottom<=innerHeight;}''')
         page.keyboard.press('Escape')
-        page.locator('.curriculum-traces > summary').click()
+        page.locator('[data-result-task="anticancer"]').click()
         page.locator('#tab-traces').click()
         assert page.locator('.trace-card').count() == 4
         assert not errors, errors

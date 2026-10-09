@@ -1,3 +1,8 @@
+Source Serif 4 — The Source Serif 4 Project Authors, SIL Open Font License 1.1.
+Source: https://github.com/google/fonts/tree/main/ofl/sourceserif4
+License: fonts/SOURCE-SERIF-4-OFL.txt
+Self-hosted Latin, Latin-ext and Greek subsets; regular weights 400–700 and italic weights 400–600.
+
 Inter font — The Inter Project Authors, SIL Open Font License 1.1.
 Source: https://github.com/google/fonts/tree/main/ofl/inter
 License: fonts/OFL.txt

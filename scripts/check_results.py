@@ -58,7 +58,7 @@ def main():
             select(goal['id'])
             card = page.locator(f'[data-result-task="{goal["id"]}"]')
             expect(card).to_have_attribute('data-generator', task['generator'])
-            assert card.locator('.result-task-name').evaluate('(el)=>getComputedStyle(el).fontWeight') == '700'
+            assert card.locator('.result-task-name').evaluate('(el)=>getComputedStyle(el).fontWeight') == '600'
             icon=card.locator('.goal-card-state').bounding_box();header=card.bounding_box()
             assert abs(icon['y']+icon['height']/2-header['y']-header['height']/2)<1
             expect(card.locator('.goal-number')).to_have_text(f'Goal {goal["number"]}')
