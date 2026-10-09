@@ -254,11 +254,11 @@
     return close;
   }
   const caseStudies = [
-    {id:'peptides', number:'01', generator:'PepDFM', domain:'Peptides',
+    {id:'peptides', number:1, generator:'PepDFM', domain:'Peptides',
       title:'Peptides for biological activity',
       description:'We adapt PepDFM toward selective anticancer activity and cell penetration. The LLM judges sequences and biophysical observables; activity and hemolysis are evaluated separately.',
       tasks:['anticancer','cpp']},
-    {id:'molecules', number:'02', generator:'FlowMol3', domain:'Small molecules',
+    {id:'molecules', number:2, generator:'FlowMol3', domain:'Small molecules',
       title:'Small molecules for binding and discovery',
       description:'We adapt FlowMol3 toward dopamine D2 and GSK3β binding, and a discovery prompt with specific ring motifs. Docking scores, scaffold novelty, and structural goal satisfaction provide complementary evaluations.',
       tasks:['d2','gsk3b','ood']}
@@ -297,7 +297,7 @@
       const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
       return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
     };
-    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><p class="case-eyebrow"><span>Case study ${study.number}</span><span class="generator-label" data-generator="${study.generator}">${study.generator} · ${study.domain}</span></p><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>${study.title}</span></h3><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultSnapshot(id,results)).join('')}</div>${study.id==='peptides' ? '<p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p>' : ''}<div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
+    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultSnapshot(id,results)).join('')}</div>${study.id==='peptides' ? '<p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p>' : ''}<div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
     function closeGoal() {
       closeMetricHelp();
       ++generation;

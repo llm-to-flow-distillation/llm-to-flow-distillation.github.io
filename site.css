@@ -708,7 +708,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .method-band { background: #fff; margin-top: 64px; }
 .method-section { border-top: 1px solid #b9c8c4; padding-block: 64px 0; }
 .method-section > .section-heading { text-wrap: initial; }
-.section-heading, .case-study h3.section-heading { display: flex; align-items: baseline; gap: 13px; margin: 0 0 26px; font-size: 34px; font-weight: 600; line-height: 1.25; letter-spacing: -.55px; color: #171b19; }
+.section-heading, .case-study h3.section-heading { display: flex; align-items: baseline; gap: 13px; margin: 0 0 26px; font-size: 32px; font-weight: 600; line-height: 1.25; letter-spacing: -.55px; color: #171b19; }
 .section-anchor { flex-shrink: 0; color: #07857d; font-weight: 400; text-decoration: none; }
 .section-anchor:hover { color: #00594f; }
 .method-layout { margin-top: 30px; }
@@ -728,10 +728,9 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .case-study { padding: 64px 0; border-top: 1px solid #b9c8c4; scroll-margin-top: 30px; }
 .case-study + .case-study { margin-top: 0; }
 .case-study-heading { max-width: none; }
-.case-eyebrow { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; margin: 0 0 13px; font: 11px/1.5 var(--sans); color: var(--goal-strong); }
-.case-eyebrow > span:first-child { font-weight: 600; text-transform: uppercase; letter-spacing: .1em; }
-.case-eyebrow .generator-label { gap: 6px; font-size: 11px; }
-.case-study h3.section-heading { margin-bottom: 24px; }
+.case-study h3.section-heading { margin-bottom: 12px; }
+.case-generator { display: inline-flex; align-items: baseline; gap: 4px; margin: 0 0 20px; padding: 5px 12px; border: 1px solid var(--goal-border); border-radius: 999px; background: var(--goal-surface); color: var(--goal-strong); font: 12px/1.5 var(--sans); }
+.case-generator strong { font-weight: 600; }
 .case-description { margin: 0; font-size: 17px; line-height: 1.65; color: #4a534f; }
 
 /* Scientific feedback: a shared-legend, two-row comparison. */
