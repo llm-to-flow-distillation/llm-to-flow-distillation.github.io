@@ -31,7 +31,7 @@ def main():
         assert page.locator('a[href*="paper.pdf"], #citation').count() == 0
         expect(page.locator('button.paper-button')).to_be_disabled()
         assert page.locator('.paper-button').get_attribute('href') is None
-        expect(page.locator('.paper-button')).to_have_text('arXiv')
+        expect(page.locator('.paper-button')).to_have_text('[arXiv]')
         expect(page.locator('.hero-figure video source')).to_have_attribute('src', 'assets/flow_adaptation_smooth.mp4')
         expect(page.locator('.hero-figure video')).to_have_js_property('videoWidth', 2154)
         expect(page.locator('.hero-figure video')).to_have_js_property('videoHeight', 612)
@@ -54,7 +54,19 @@ def main():
             expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
         page.evaluate('window.scrollTo({top: 0, behavior: "instant"})')
         expect(page.locator('#contents')).not_to_be_visible()
-        print('Compact hero, uploaded figure, clickable contents, section tracking and focus passed.')
+        # The visible directory and heading permalinks share keyboard/focus behavior with the rail.
+        assert page.locator('.project-contents a').count() == 3
+        expect(page.locator('.paper-preview img')).to_have_js_property('complete', True)
+        assert page.locator('.paper-preview img').evaluate('(el)=>el.naturalWidth>0')
+        expect(page.locator('.code-button')).to_have_attribute('href', 'https://github.com/FedericoDiGennaro/LLM-to-Flow-Distillation')
+        for section in ['method', 'peptides', 'molecules']:
+            page.locator(f'.project-contents a[href="#{section}"]').focus()
+            page.keyboard.press('Enter')
+            expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href', '#' + section)
+            assert page.evaluate('document.activeElement.closest("section").id') == section
+            page.locator(f'.section-anchor[href="#{section}"]').click()
+            assert page.evaluate('location.hash') == '#' + section
+        print('Hero, resource previews, numbered contents, heading permalinks, section tracking and focus passed.')
         for task in data['tasks']:
             page.locator(f'[data-result-task="{task["id"]}"]').click()
             assert page.locator(f'#result-name-{task["id"]}').inner_text() == task['name']
@@ -181,7 +193,7 @@ def main():
                 assert page.evaluate('document.documentElement.scrollWidth') <= width, f'{task["id"]} overflow at {width}px'
             if width < 1280:
                 page.locator('#method').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
-                expect(page.locator('.contents-current')).to_have_text('Method (LFD)')
+                expect(page.locator('.contents-current')).to_have_text('1. Method')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 page.locator('.contents-toggle').click()
                 expect(page.locator('.contents-toggle')).to_have_attribute('aria-expanded', 'true')
@@ -190,7 +202,7 @@ def main():
                 expect(page.locator('.contents-toggle')).to_be_focused()
                 page.locator('.contents-toggle').click()
                 page.locator('.contents-list a[href="#peptides"]').click()
-                expect(page.locator('.contents-current')).to_have_text('01 · Peptides')
+                expect(page.locator('.contents-current')).to_have_text('2. Peptides')
                 expect(page.locator('.contents-list')).not_to_be_visible()
                 assert page.evaluate('document.documentElement.scrollWidth') <= width
             if width in [390,1440]:

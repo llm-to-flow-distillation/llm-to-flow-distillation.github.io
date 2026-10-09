@@ -35,3 +35,5 @@ TU Wien: inline header SVG from https://www.tuwien.at/en/
 AITHYRA: https://aithyra.at/_assets/20554bf6d76678966a9097bdb4e0287a/Images/AITHYRA.svg?1771588837
 University of Pennsylvania: inline header SVG from https://www.upenn.edu/
 University of Oxford: https://hsm.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg
+
+Paper resource preview — first page rendered from assets/paper.pdf using Ghostscript. Paper and figure rights remain with their authors. The repository resource preview is original HTML/CSS using the attributed GitHub mark.

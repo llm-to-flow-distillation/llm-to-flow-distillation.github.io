@@ -354,7 +354,7 @@
     const open = contents.classList.toggle('is-open');
     contentsToggle.setAttribute('aria-expanded', String(open));
   });
-  for (const link of contentsLinks) {
+  for (const link of [...contentsLinks, ...$$('.project-contents a, .section-anchor')]) {
     link.addEventListener('click', event => {
       // Preserve normal new-tab and modified-click behavior on these real anchors.
       if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
