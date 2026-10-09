@@ -731,7 +731,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .case-eyebrow > span:first-child { font-weight: 600; text-transform: uppercase; letter-spacing: .1em; }
 .case-eyebrow .generator-label { gap: 6px; font-size: 11px; }
 .case-study h3.section-heading { margin-bottom: 24px; }
-.case-description { max-width: 730px; margin: 0; font-size: 17px; line-height: 1.65; color: #4a534f; }
+.case-description { margin: 0; font-size: 17px; line-height: 1.65; color: #4a534f; }
 .case-results-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; margin: 30px 0 24px; padding: 24px 0; border-block: 1px solid var(--goal-border); }
 #molecules .case-results-summary { grid-template-columns: repeat(3,minmax(0,1fr)); }
 .result-snapshot { min-width: 0; display: flex; flex-direction: column; align-items: flex-start; }
