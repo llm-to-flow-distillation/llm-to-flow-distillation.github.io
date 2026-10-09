@@ -103,7 +103,7 @@ def main():
                     curriculum:get('.method-curriculum'), disclosure:get('#method-algorithm')};
             }""")
             content, algorithm = layout['content'], layout['algorithm']
-            reading_order = [layout['intro'], *layout['steps'], layout['curriculum'], layout['disclosure']]
+            reading_order = [layout['intro'], *layout['steps'], layout['disclosure'], layout['curriculum']]
             assert all(before['bottom'] <= after['y'] for before,after in zip(reading_order,reading_order[1:])), (width,layout)
             assert abs((algorithm['x']+algorithm['right'])-(content['x']+content['right'])) < 2, (width,layout)
             assert page.locator('.method-content .math-display, .method-curriculum .math-display').evaluate_all(

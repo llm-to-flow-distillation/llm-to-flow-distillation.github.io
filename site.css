@@ -715,7 +715,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .algorithm-row:nth-child(n+3):nth-child(-n+6) { padding-block: 2px; }
 .algorithm-function { color: #07857d; border-bottom-color: #8bbcb5; }
 .algorithm-function:hover, .algorithm-function[aria-expanded="true"] { color: #00594f; }
-.method-curriculum { width: 100%; margin-top: 30px; padding: 24px 0 0; border: 0; border-top: 1px solid #dce5df; border-radius: 0; background: transparent; box-shadow: none; }
+.method-curriculum { width: 100%; margin-top: 0; padding: 24px 0 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .algorithm-disclosure { margin-top: 28px; border-block: 1px solid #b9c8c0; }
 .algorithm-disclosure > summary { justify-content: flex-start; gap: 14px; padding: 18px 0; cursor: pointer; }
 .algorithm-disclosure > summary strong { font: 600 18px/1.5 var(--serif); color: #253e32; }

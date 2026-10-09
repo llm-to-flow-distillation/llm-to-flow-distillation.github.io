@@ -16,7 +16,7 @@
   <link rel="preload" href="assets/fonts/source-serif-4-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=c17eceb0cb23">
+  <link rel="stylesheet" href="site.css?v=09c4a2f2c3e3">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=64a47da44cbe" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -116,11 +116,6 @@
           </li>
         </ol>
       </div>
-      <div class="method-curriculum" aria-labelledby="curriculum-title">
-        <p><strong id="curriculum-title">A design-space view.</strong> A goal <span class="math math-inline" data-tex="g">g</span> defines a target region <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> in design space. When that region is rarely reached, LFD learns through attainable subgoals that tighten as the generator improves:</p>
-        <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
-        <p>Each <span class="math math-inline" data-tex="\Omega_{g_t}">Ω<sub>gₜ</sub></span> contains designs satisfying <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. The final goal stays fixed.</p>
-      </div>
       <details id="method-algorithm" class="algorithm-disclosure">
         <summary><strong>Full algorithm</strong><span>Inputs and iterative updates</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary>
         <div class="algorithm-disclosure-body">
@@ -141,6 +136,11 @@
           <p class="algorithm-hint">Hover or tap the highlighted operations for details.</p>
         </div>
       </details>
+      <div class="method-curriculum" aria-labelledby="curriculum-title">
+        <p><strong id="curriculum-title">A design-space view.</strong> A goal <span class="math math-inline" data-tex="g">g</span> defines a target region <span class="math math-inline" data-tex="\Omega_g">Ω<sub>g</sub></span> in design space. When that region is rarely reached, LFD learns through attainable subgoals that tighten as the generator improves:</p>
+        <div class="math math-display curriculum-equation" data-tex="\Omega_{g_0}\longrightarrow\Omega_{g_1}\longrightarrow\cdots\longrightarrow\Omega_{g_{T-1}}\longrightarrow\Omega_g">Ω<sub>g₀</sub> → Ω<sub>g₁</sub> → ⋯ → Ω<sub>g(T−1)</sub> → Ω<sub>g</sub></div>
+        <p>Each <span class="math math-inline" data-tex="\Omega_{g_t}">Ω<sub>gₜ</sub></span> contains designs satisfying <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>. The final goal stays fixed.</p>
+      </div>
       <div id="algorithm-details" class="function-popover" popover="manual" role="dialog" aria-modal="false" aria-labelledby="function-detail-title" tabindex="-1">
         <div class="function-popover-heading"><h3 id="function-detail-title">Function details</h3><button id="close-function-details" type="button" aria-label="Close function details">×</button></div>
         <div data-function-panel="learnable" hidden>
