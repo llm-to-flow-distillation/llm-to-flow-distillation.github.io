@@ -170,7 +170,7 @@
 
     <section id="why-preferences" class="preferences-section wrap" aria-labelledby="preferences-title">
       <h2 id="preferences-title" class="section-heading"><a class="section-anchor" href="#why-preferences" aria-label="Link to Why preferences?">#</a><span>Why preferences?</span></h2>
-      <p>Can an LLM provide useful scientific feedback without seeing the true property values? Across peptides, crystals, and small molecules, numerical score differences often depart from the true differences. Yet the same models recover <strong>relative preferences above chance</strong> through scoring, ranking, positive/negative labels, and pairwise comparisons.</p>
+      <p>We use a preference learning signal instead of an LLM’s pointwise estimate of a hidden quantity because such estimates can be unreliable. However, even strongly miscalibrated scores can induce an ordinal learning signal that we can exploit. Across peptide, crystal, and small-molecule tasks, numerical score differences often depart from the true differences. Yet the same frontier LLMs can induce <strong>relative preferences above chance</strong> through different elicitation methods (scoring, ranking, positive/negative labels, and pairwise comparisons).</p>
       <figure class="calibration-figure" aria-label="Score agreement and preference accuracy across three scientific domains">
         <p class="calibration-hint">Hover or tap a task or method to read the prompt. Select a model in the legend to show or hide it.</p>
         <div id="calibration-grid" class="calibration-grid"></div>
