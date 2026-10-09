@@ -16,11 +16,12 @@
   <link rel="preload" href="assets/fonts/source-serif-4-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=46971743d7ad">
+  <link rel="stylesheet" href="site.css?v=070d38b009f5">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
-  <script src="data/site-data.js?v=c85c081292ee" defer></script>
+  <script src="data/site-data.js?v=64a47da44cbe" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
   <script src="results.js?v=b1b13d96ac2e" defer></script>
+  <script src="calibration.js?v=0fd909382e11" defer></script>
   <script src="site.js?v=898189fff616" defer></script>
 </head>
 <body>
@@ -30,9 +31,10 @@
     <p class="contents-heading">Contents</p>
     <ol id="contents-list" class="contents-list">
       <li><a href="#overview" aria-current="location"><span>Overview</span></a></li>
-      <li><a href="#method"><span>1. Method</span></a></li>
-      <li><a href="#peptides"><span>2. Peptides</span></a></li>
-      <li><a href="#molecules"><span>3. Small molecules</span></a></li>
+      <li><a href="#why-preferences"><span>1. Why preferences?</span></a></li>
+      <li><a href="#method"><span>2. Method</span></a></li>
+      <li><a href="#peptides"><span>3. Peptides</span></a></li>
+      <li><a href="#molecules"><span>4. Small molecules</span></a></li>
     </ol>
   </nav>
   <main id="main">
@@ -57,9 +59,10 @@
         <nav class="project-contents" aria-labelledby="project-contents-title">
           <h2 id="project-contents-title">Contents</h2>
           <ol>
-            <li><a href="#method">1. Method</a></li>
-            <li><a href="#peptides">2. Case study: Peptides</a></li>
-            <li><a href="#molecules">3. Case study: Small molecules</a></li>
+            <li><a href="#why-preferences">1. Why preferences?</a></li>
+            <li><a href="#method">2. Method</a></li>
+            <li><a href="#peptides">3. Case study: Peptides</a></li>
+            <li><a href="#molecules">4. Case study: Small molecules</a></li>
           </ol>
         </nav>
         <div class="project-resources">
@@ -83,6 +86,19 @@
         <a href="assets/flow_adaptation_smooth.mp4" target="_blank" rel="noopener" aria-label="Open the method overview at full resolution"><video autoplay muted loop playsinline preload="auto" width="2154" height="612" poster="assets/main_ltf.png" aria-label="LLM-to-Flow Distillation overview: a scientist gives a discovery goal to an LLM teacher, which sets subgoals and evaluates a flow student as its distribution moves toward the discovery region."><source src="assets/flow_adaptation_smooth.mp4" type="video/mp4"><img src="assets/main_ltf.png" width="4546" height="1285" alt="LLM-to-Flow Distillation overview: the teacher guides the flow student toward a discovery goal."></video></a>
         <figcaption class="overview-controls"><button id="animation-toggle" type="button" aria-pressed="false">Pause animation</button><a href="assets/flow_adaptation_smooth.mp4" target="_blank" rel="noopener">View full size ↗</a></figcaption>
       </figure>
+    </section>
+
+    <section id="why-preferences" class="preferences-section wrap" aria-labelledby="preferences-title">
+      <h2 id="preferences-title" class="section-heading"><a class="section-anchor" href="#why-preferences" aria-label="Link to Why preferences?">#</a><span>Why preferences?</span></h2>
+      <p>Can an LLM provide useful scientific feedback without seeing the true property values? Across peptides, crystals, and small molecules, numerical score differences often depart from the true differences. Yet the same models recover <strong>relative preferences above chance</strong> through scoring, ranking, positive/negative labels, and pairwise comparisons.</p>
+      <figure class="calibration-figure" aria-label="Score agreement and preference accuracy across three scientific domains" aria-describedby="calibration-caption">
+        <p class="calibration-hint">Hover or tap a task or method to read the prompt. Select a model in the legend to show or hide it.</p>
+        <div id="calibration-grid" class="calibration-grid"></div>
+        <div id="calibration-legend" class="calibration-legend" role="group" aria-label="Models shown in all six plots"></div>
+        <figcaption id="calibration-caption">Top: raw joint-score differences in normalized benchmark units; the dashed diagonal marks perfect agreement. Bottom: preference accuracy (mean ± SD across three seeds); the dashed line marks 50% chance. Accuracy is conditional on emitted preferences; hover a bar for coverage. Positive/negative prompts were refined on these seeds, so their results are exploratory.</figcaption>
+      </figure>
+      <p class="preferences-takeaway"><strong>Relative judgments provide a learning signal even when score magnitudes are unreliable.</strong> LFD uses positive/negative batch judgments: each positive is preferred to each negative, while abstentions are excluded. This yields many training pairs from a single pass over the batch, avoiding a separate LLM query for every pair.</p>
+      <noscript><p>Enable JavaScript to explore the calibration results and elicitation prompts.</p></noscript>
     </section>
 
     <div class="method-band">

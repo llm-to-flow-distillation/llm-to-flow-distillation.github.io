@@ -12,7 +12,7 @@ The site works without a JavaScript framework, runtime CDN, API key, or paid ser
 
 ## Preview
 
-[Desktop preview](preview.png) · [Docking results preview](preview-docking.png) · [Table and novelty preview](preview-novelty.png) · [Subgoal preview](preview-subgoals.png) · [Trace explorer preview](preview-traces.png)
+[Desktop preview](preview.png) · [Why preferences preview](preview-preferences.png) · [Docking results preview](preview-docking.png) · [Table and novelty preview](preview-novelty.png) · [Subgoal preview](preview-subgoals.png) · [Trace explorer preview](preview-traces.png)
 
 From this directory, using Python 3.9 or newer:
 
@@ -75,3 +75,19 @@ Visual references supplied by the authors: [CUES](https://www.sophielwang.com/cu
 Interactive chart checks are in `scripts/check_results.py`. They verify all five task switches and keyboard/touch controls, peptide activity/toxicity coordinates, grouped docking deltas with negative improvements, signed hover values and black error bars, the GSK3β novelty plot and table layout, always-visible docking figures, the fifth-task evidence, and layouts from 360px through 2560px.
 
 Case-study checks are in `scripts/check_case_studies.py`. They verify author links and logo loading, source-derived headline results, direct result navigation, figure enlargement and focus restoration, animation controls, and responsive layout.
+
+## Why preferences?
+
+`data/calibration.json` reproduces Figure 3's original `all_models_boxed` comparison from the authors' `terra_gemini_opus_v3_results_2026-09-20` archive: 2,592 original joint-score difference observations, nine MAEs, and 36 preference-accuracy means with sample standard deviations and emitted/selected pair counts. The top row is the original score-agreement evaluation, **not** the archive's later fitted linear/isotonic calibration. The bottom-row Score method evaluates independent scoring, distinct from joint scoring above. Positive/negative results use Terra/Gemini's revised prompts and Opus v3; those arms are exploratory on previously inspected seeds. Accuracy is conditional on emitted preferences. Reference differences use direction-corrected min–max units.
+
+The importer verifies every scatter MAE against the figure metadata and every bar against its original run summary. It exports only plot coordinates, aggregates, verbatim prompt components, and SHA-256 source receipts, with no provider responses, candidate representations, credentials, or private paths:
+
+```bash
+python3.11 scripts/import_calibration.py --archive /path/to/terra_gemini_opus_v3_results_2026-09-20
+python3.11 scripts/import_calibration.py --archive /path/to/terra_gemini_opus_v3_results_2026-09-20 --check
+python3.11 scripts/build.py
+```
+
+`calibration.js` renders six responsive Plotly panels with a shared model-logo legend. Task/method prompts support hover, keyboard focus, click-to-pin, Escape, and touch; Claude's positive/negative variant is selectable. Shared prompt instructions are expandable. Candidate representations are appended per request in the original benchmark and are not part of the displayed prompt templates. Arrow keys inspect plot data as an alternative to hovering.
+
+Run `scripts/check_calibration.py --url http://127.0.0.1:8000` using the Playwright development environment to verify all displayed points/bars, exact prompts, linked legend, mouse/keyboard/touch behavior, and eight viewport widths. No model API calls or new experiments are needed.

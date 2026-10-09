@@ -37,3 +37,9 @@ University of Pennsylvania: inline header SVG from https://www.upenn.edu/
 University of Oxford: https://hsm.ox.ac.uk/sites/all/themes/custom/oxtheme/images/brandmark/svg/oxlogo-rect-border.svg
 
 Paper resource preview — first page rendered from assets/paper.pdf using Ghostscript. Paper and figure rights remain with their authors. The repository resource preview is original HTML/CSS using the attributed GitHub mark.
+
+OpenAI, Claude and Gemini model logos — LobeHub Icons, MIT license.
+Copied unchanged from the authors' Figure 3 assets; upstream retrieval 2026-09-21.
+Sources: https://github.com/lobehub/lobe-icons/tree/master/packages/static-svg/icons
+License and exact source URLs: model-logos/LICENSE and model-logos/README.md.
+The marks identify the compared model families. Their trademarks belong to their owners.
