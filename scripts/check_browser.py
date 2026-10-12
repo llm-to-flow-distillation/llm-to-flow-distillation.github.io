@@ -79,7 +79,7 @@ def main():
                 assert page.locator('#result-curriculum-preview > p q').inner_text() == stage['exactGoal']
                 assert page.locator('.curriculum-preview-links').count()==0
                 assert page.locator('.curriculum-rounds').count()==0
-                expect(page.locator('.trace-verbatim-note')).to_have_count(1)
+                expect(page.locator('.trace-verbatim-note')).to_have_count(2)
                 assert 'LLM goal selection · verbatim' not in page.locator('.selection-card').inner_text()
                 page.locator('#tab-overview').click()
                 selection = stage['selection']
@@ -149,7 +149,7 @@ def main():
         expect(page.locator('#task-results-panel')).not_to_be_visible()
         page.locator('[data-result-task="anticancer"]').click()
         expect(page.locator('#panel-overview')).to_be_visible()
-        expect(page.locator('#goal-results-content')).to_be_hidden()
+        assert page.locator('#goal-results-toggle,#goal-results-content').count() == 0
         expect(page.locator('#tab-overview')).to_be_visible()
         page.locator('#tab-traces').click()
         page.locator('[data-curriculum-stage="g1"]').click()
@@ -158,12 +158,9 @@ def main():
         page.locator('#task-result-curriculum').evaluate('(el) => el.scrollIntoView({behavior: "instant"})')
         expect(page.locator('.contents-list a[aria-current]')).to_have_attribute('href','#peptides')
         assert page.evaluate('location.hash') == '#results?task=anticancer&stage=g1&tab=traces'
-        # Results are independently expandable and retain the active trace tab.
-        toggle=page.locator('#goal-results-toggle')
-        toggle.focus();page.keyboard.press('Enter')
-        expect(page.locator('#goal-results-content')).to_be_visible()
-        toggle.focus();page.keyboard.press('Space')
-        expect(page.locator('#goal-results-content')).to_be_hidden()
+        # Primary plots remain outside the trace box while switching subgoals/tabs.
+        expect(page.locator('#comparison-anticancer')).to_be_visible()
+        assert page.locator('#task-results-panel .js-plotly-plot, #task-results-panel table').count() == 0
         expect(page.locator('#panel-traces')).to_be_visible()
         page.goto(args.url+'/#results?task=gsk3b&stage=g2&tab=traces',wait_until='networkidle')
         expect(page.locator('[data-result-task="gsk3b"]')).to_have_attribute('aria-expanded','true')
@@ -174,12 +171,13 @@ def main():
         assert len(ids)==len(set(ids)), 'Duplicate IDs after mounting traces'
         table_values = json.loads((root / 'data/results.json').read_text())
         for result in table_values:
+            page.locator(f'[data-result-metrics="{result["id"]}"] > summary').click()
             page.locator(f'[data-result-task="{result["id"]}"]').click()
-            page.locator('#goal-results-toggle').click()
             for index,row in enumerate(result['rows']):
-                rendered = page.locator('#results-table tbody tr').nth(index)
+                rendered = page.locator(f'#results-table-{result["id"]} tbody tr').nth(index)
                 assert row['method'] in rendered.inner_text()
                 assert rendered.locator('td').all_text_contents() == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']]
+            page.locator(f'[data-result-metrics="{result["id"]}"] > summary').click()
         print('Deep links, reload, invalid-link recovery, keyboard tabs, candidate clipboard and 66 result cells passed.')
         for width in [360,390,768,1200,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
@@ -217,12 +215,12 @@ def main():
         assert page.locator('[data-result-task]').count() == 5
         expect(page.locator('#task-results-panel')).not_to_be_visible()
         page.locator('[data-result-task="anticancer"]').click()
-        assert page.locator('#results-table tbody tr').count() == 5
+        assert page.locator('#results-table-anticancer tbody tr').count() == 5
         assert not errors, errors
         assert not failed_requests, failed_requests
         browser.close()
     print('Responsive widths 360/390/768/1200/1280/1440, local-file loading, zero browser errors and zero failed HTTP requests passed.')
-    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','overview_progress_and_footer':'removed','rationale_visible_by_default':'passed','results_disclosure':'passed','legacy_trace_links':'open matching inline stage','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
+    (out/'report.json').write_text(json.dumps({'status':'passed','stages':23,'recorded_candidates':64,'placeholder_slots':28,'reported_value_pairs':66,'viewports':[360,390,768,1200,1280,1440],'contents_navigation':'passed','verbatim_goal_rationales':13,'verbatim_judge_outputs':128,'copy_representations':'passed','judge_pass_switching':'passed','placeholder_separation':'passed','size_matched_pairs':32,'source_tab':'removed','overview_progress_and_footer':'removed','rationale_visible_by_default':'passed','results_outside_traces':'passed','legacy_trace_links':'open matching inline stage','legacy_source_links':'fall back to goal rationale','browser_errors':errors,'failed_http_requests':failed_requests},indent=2)+'\n')
 
 
 if __name__ == '__main__':

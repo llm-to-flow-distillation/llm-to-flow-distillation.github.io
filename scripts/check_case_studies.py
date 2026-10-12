@@ -42,25 +42,17 @@ def main():
                 section = page.locator('#' + group)
                 assert section.locator('[data-result-task]').evaluate_all('(els)=>els.map(el=>el.dataset.resultTask)') == ids
                 assert section.locator('[data-open-result], .snapshot-link').count() == 0
-            # Summary values come from the same exact means and uncertainty terms as the full tables.
+            # Primary results are visible before opening any goal; tables retain exact source values.
+            page.wait_for_function('document.querySelector("#result-cards").dataset.plotsReady === "true"')
+            assert page.locator('.result-overview').count() == 5
+            assert page.locator('.snapshot-value').count() == 0
             for result in results:
-                card = page.locator(f'[data-snapshot="{result["id"]}"]')
-                for index, method in enumerate(['Pre-trained', 'LFD']):
-                    mean, error = next(row for row in result['rows'] if row['method'] == method)['values'][0]
-                    value = card.locator('.snapshot-value').nth(index)
-                    unit = '%' if result['unit'] == '%' else ''
-                    expect(value.locator('.snapshot-mean')).to_have_text(f'{mean:.2f}{unit}')
-                    expect(value.locator('.snapshot-uncertainty')).to_have_text(f'± {error:.2f}')
-                    assert value.evaluate('''el => {
-                        const mean = el.querySelector('.snapshot-mean'), sd = el.querySelector('.snapshot-uncertainty');
-                        const a = mean.getBoundingClientRect(), b = sd.getBoundingClientRect();
-                        return getComputedStyle(mean).color === getComputedStyle(sd).color &&
-                            parseFloat(getComputedStyle(sd).fontSize) < parseFloat(getComputedStyle(mean).fontSize) &&
-                            b.x >= a.right && b.x - a.right < 8 && b.top < a.bottom;
-                    }''')
-            hit = page.locator('.discovery-snapshot')
+                table = page.locator(f'#results-table-{result["id"]}')
+                for index,row in enumerate(result['rows']):
+                    assert table.locator('tbody tr').nth(index).locator('td').all_text_contents() == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']]
+            hit = page.locator('.discovery-overview')
             expect(hit).to_contain_text(f'0 / {evidence["pretrained"]["attempts"]:,}')
-            expect(hit).to_contain_text(f'round {evidence["lfd"]["round"]}, {evidence["lfd"]["batchSize"]} samples')
+            expect(hit).to_contain_text(f'Round {evidence["lfd"]["round"]} · a {evidence["lfd"]["batchSize"]}-sample batch')
             # Reduced motion pauses the overview; user playback remains available.
             video = page.locator('.hero-figure video')
             expect(video).to_have_js_property('paused', True)
@@ -80,21 +72,19 @@ def main():
                     button.focus()
                     page.keyboard.press('Enter')
                 expect(page.locator(f'[data-result-task="{task}"]')).to_have_attribute('aria-expanded', 'true')
-                page.locator('#goal-results-toggle').click()
-                expect(page.locator('#goal-results-content')).to_be_visible()
-                expect(page.locator('#goal-results-toggle')).to_be_focused()
-                page.wait_for_function('(task)=>document.querySelector("#task-results-panel").dataset.plotReadyTask===task', arg=task)
+                assert page.locator('#task-results-panel .results-section-content, #goal-results-toggle').count() == 0
                 assert page.locator('[data-result-task][aria-expanded="true"]').count() == 1
                 if task != 'ood':
                     source = next(item for item in results if item['id'] == task)
-                    assert page.locator('#results-table tbody tr').count() == len(source['rows'])
-                    assert page.locator('#results-table tbody td').evaluate_all('''cells => cells.every(cell =>
+                    assert page.locator(f'#results-table-{task} tbody tr').count() == len(source['rows'])
+                    page.locator(f'[data-result-metrics="{task}"] > summary').click()
+                    assert page.locator(f'#results-table-{task} tbody td').evaluate_all('''cells => cells.every(cell =>
                         getComputedStyle(cell.querySelector('.table-mean')).color ===
                         getComputedStyle(cell.querySelector('.table-uncertainty')).color)''')
                 else:
-                    expect(page.locator('#result-discovery')).to_be_visible()
+                    expect(page.locator('.discovery-overview')).to_be_visible()
                 if task in ['d2', 'gsk3b', 'ood']:
-                    figure = page.locator('[data-zoom-figure]')
+                    figure = page.locator(f'[data-result-overview="{task}"] [data-zoom-figure]')
                     assert figure.count() == 1
                     figure.focus()
                     if width == 390:
@@ -122,7 +112,7 @@ def main():
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (width, task)
             # Summary metric help is usable before opening any goal.
             page.goto(args.url, wait_until='networkidle')
-            label = page.locator('[data-snapshot="anticancer"] [data-metric]')
+            label = page.locator('[data-result-overview="anticancer"] .xtitle')
             label.scroll_into_view_if_needed()
             page.wait_for_timeout(100)
             label.click()
@@ -132,13 +122,13 @@ def main():
             page.screenshot(path=str(out / f'overview-{width}.png'))
             page.locator('#peptides').evaluate('(el)=>el.scrollIntoView({block:"start"})')
             page.screenshot(path=str(out / f'peptides-{width}.png'))
-            assert page.locator('.result-snapshot').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)')
+            assert page.locator('.result-overview').evaluate_all('(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)')
             page.close()
         browser.close()
     assert not errors, errors
     assert not failures, failures
     report = {'status': 'passed', 'author_links': 9, 'institution_logos': 6,
-              'case_studies': 2, 'source_derived_summaries': 5, 'goal_results': 'keyboard and touch',
+              'case_studies': 2, 'always_visible_results': 5, 'goal_traces': 'keyboard and touch',
               'figure_viewer': '3 figures, keyboard and touch, focus restoration',
               'reduced_motion_and_playback': 'passed', 'viewports': [390, 768, 1440],
               'browser_errors': errors, 'failed_requests': failures}

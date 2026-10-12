@@ -82,7 +82,7 @@
   }
   function scatterMarkup(result) {
     const peptide = result.table === 1;
-    return `<figure class="task-scatter"><div class="result-plot-frame"><div id="comparison-chart" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
+    return `<figure class="task-scatter"><div class="result-plot-frame"><div id="comparison-${result.id}" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
   }
   function renderScatter(result) {
     const yIndex = result.table === 1 ? 1 : 2;
@@ -93,7 +93,7 @@
       error_y:{type:'data',array:[row.values[yIndex][1]],visible:true,color:style(row.method).color,thickness:1.5,width:5},
       hovertemplate:`<b>${esc(row.method)}</b><br>${result.metrics.map((m,i)=>`${esc(m.label)}: ${interval(...row.values[i])}`).join('<br>')}<extra></extra>`
     }));
-    return draw('#comparison-chart',traces,layout({
+    return draw('#comparison-'+result.id,traces,layout({
       xaxis:{fixedrange:true,title:{text:result.metrics[0].label+' ↑',standoff:18},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:result.metrics[yIndex].label+' ↓',standoff:16},gridcolor:'#eceef2',zeroline:false,automargin:true}
     }),[['.xtitle',metricKeys(result)[0]],['.ytitle',metricKeys(result)[yIndex]]]);
@@ -103,16 +103,16 @@
   }
   function renderTable(result) {
     const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
-    $('#results-table').innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${metricLabel(metricKeys(result)[i],m.label+(i === 2 && result.table === 1 ? '' : '\u00a0'+(m.direction === 'up' ? '↑' : '↓')))}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
+    $('#results-table-'+result.id).innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${metricLabel(metricKeys(result)[i],m.label+(i === 2 && result.table === 1 ? '' : '\u00a0'+(m.direction === 'up' ? '↑' : '↓')))}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
   }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
     {label:'Vina', tick:'|Vina|<br>(kcal/mol)', unit:' kcal/mol'},
     {label:'rDock', tick:'|rDock|', unit:''}
   ];
-  function dockingMarkup(result) {
+  function dockingMarkup(result, includeExample=true) {
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
-    return `<div class="molecular-results"><figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-chart" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>${molecularExample(result)}</div>`;
+    return `<div class="molecular-results"><figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-${result.id}" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>${includeExample ? molecularExample(result) : ''}</div>`;
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
@@ -124,10 +124,10 @@
     const file=`assets/${d2 ? 'd2' : 'gsk3b'}-docking.png`;
     return `<figure class="task-molecule"><a data-zoom-figure href="${file}" target="_blank" rel="noopener" aria-label="Open the ${esc(task.name)} docking figure at full resolution"><img src="${file}" width="${d2 ? 772 : 776}" height="${d2 ? 424 : 396}" alt="${esc(task.name)}: LFD-generated molecular structure and computational docking pose" loading="lazy"></a><figcaption>Illustrative LFD molecule and computational docking pose.</figcaption></figure>`;
   }
-  function renderDiscoverySummary() {
+  function discoveryMarkup() {
     const evidence=window.LFD_DATA.resultPanels.oodEvidence;
     const figure=evidence.figure;
-    $('#result-discovery').innerHTML=`<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a data-zoom-figure href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
+    return `<div class="discovery-summary"><div class="discovery-comparison"><div class="discovery-prior"><span class="metric-policy">Pretrained FlowMol3</span><div class="discovery-zero">0 <span>/ ${evidence.pretrained.attempts.toLocaleString('en-US')}</span></div><p>samples satisfy the full goal</p></div><div class="discovery-hit"><span class="metric-policy">LFD-adapted FlowMol3</span><strong>A full-goal hit</strong><p>Round ${evidence.lfd.round} · a ${evidence.lfd.batchSize}-sample batch</p></div></div><figure class="goal5-hit"><a data-zoom-figure href="${esc(figure.file)}" target="_blank" rel="noopener" aria-label="Open the Goal 5 hit figure at full resolution"><img src="${esc(figure.file)}" width="${figure.width}" height="${figure.height}" alt="LFD-generated Goal 5 hit, with the required structural features annotated" loading="lazy"></a><figcaption>The reported structure satisfying Goal 5.</figcaption></figure></div>`;
   }
   function renderTaskContext(goal) {
     $('#task-result-context').innerHTML=`<div class="section-heading-row"><h4 id="llm-inputs-title" class="goal-section-title">LLM inputs</h4><button type="button" class="observable-toggle" aria-expanded="false" aria-controls="observable-list">List of observables<span class="disclosure-icon" aria-hidden="true"></span></button></div><ul id="observable-list" class="observable-list" hidden>${goal.observables.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`;
@@ -263,21 +263,17 @@
       description:'We adapt FlowMol3 toward dopamine D2 and GSK3β binding, and a discovery prompt with specific ring motifs. Docking scores, scaffold novelty, and structural goal satisfaction provide complementary evaluations.',
       tasks:['d2','gsk3b','ood']}
   ];
-  function resultSnapshot(id, results) {
+  function resultOverview(id, results) {
     const names={anticancer:'Selective anticancer activity',cpp:'Cell penetration',d2:'Dopamine D2 binding',gsk3b:'GSK3β binding',ood:'Specified ring motifs'};
     const result=results.find(item=>item.id===id);
     const goalNumber=window.LFD_DATA.resultPanels.tasks.find(task=>task.id===id).number;
     const heading=`<h4>${names[id]} (Goal&nbsp;${goalNumber})</h4>`;
-    if (!result) {
-      const evidence=window.LFD_DATA.resultPanels.oodEvidence;
-      return `<article class="result-snapshot discovery-snapshot">${heading}<p class="snapshot-metric">Full discovery prompt</p><div class="snapshot-hit"><span><strong>0 / ${evidence.pretrained.attempts.toLocaleString('en-US')}</strong> pretrained samples satisfy the goal</span><span><strong>A full-goal hit</strong> LFD · round ${evidence.lfd.round}, ${evidence.lfd.batchSize} samples</span></div></article>`;
-    }
-    const metric=metricKeys(result)[0];
-    const values=['Pre-trained','LFD'].map(method=>{
-      const [mean,error]=result.rows.find(row=>row.method===method).values[0];
-      return `<div class="snapshot-value ${method==='LFD' ? 'snapshot-ours' : ''}"><span>${method==='Pre-trained' ? 'Pretrained' : 'LFD'}</span><strong><span class="snapshot-mean">${mean.toFixed(2)}<small>${result.unit==='%' ? '%' : ''}</small></span><span class="snapshot-uncertainty">± ${error.toFixed(2)}</span></strong></div>`;
-    });
-    return `<article class="result-snapshot" data-snapshot="${id}">${heading}<div class="snapshot-metric">${metricLabel(metric,result.metrics[0].label+' ↑')}</div><div class="snapshot-comparison">${values[0]}<span class="snapshot-arrow" aria-hidden="true">→</span>${values[1]}</div></article>`;
+    if (!result) return `<article class="result-overview discovery-overview" data-result-overview="${id}">${heading}${discoveryMarkup()}</article>`;
+    const mainPlot=result.table===1 ? scatterMarkup(result) : id==='gsk3b' ? noveltyMarkup() : dockingMarkup(result,false);
+    const table=`<div class="table-scroll" tabindex="0" role="region" aria-label="${esc(result.name)} numerical results"><table id="results-table-${id}" class="results-table"></table></div>`;
+    const extra=id==='gsk3b' ? dockingMarkup(result) : result.table===2 ? molecularExample(result) : '';
+    const label=id==='gsk3b' ? 'Docking scores and numerical results' : 'Numerical results';
+    return `<article class="result-overview" data-result-overview="${id}">${heading}${mainPlot}<details class="result-metrics" data-result-metrics="${id}"><summary><strong>${label}</strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary><div class="result-metrics-content">${extra}${table}</div></details></article>`;
   }
   function init(results) {
     const data=window.LFD_DATA;
@@ -285,12 +281,11 @@
     const cards=$('#result-cards');
     const panel=$('#task-results-panel');
     let active=null;
-    let generation=0;
     document.addEventListener('pointerdown',()=>{
-      panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
+      cards.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
     });
     document.addEventListener('keydown',event=>{
-      if (event.key==='Escape') panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
+      if (event.key==='Escape') cards.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Fx.unhover(plot));
     });
     const closeMetricHelp=setupMetricHelp();
     const goalMarkup=goal=>{
@@ -298,10 +293,23 @@
       const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
       return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
     };
-    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultSnapshot(id,results)).join('')}</div><p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p><div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
+    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultOverview(id,results)).join('')}</div><p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p><div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
+    results.forEach(renderTable);
+    fonts.then(()=>Promise.all(results.map(result=>result.table===1 ? renderScatter(result) : result.id==='gsk3b' ? renderNovelty() : renderDockingBars(result))))
+      .then(()=>{cards.dataset.plotsReady='true';});
+    cards.querySelectorAll('[data-result-metrics]').forEach(details=>{
+      details.addEventListener('toggle',async()=>{
+        closeMetricHelp();
+        if (!details.open) return;
+        await fonts;
+        if (details.dataset.resultMetrics==='gsk3b' && !$('#docking-gsk3b').data) {
+          await renderDockingBars(results.find(result=>result.id==='gsk3b'));
+        }
+        details.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Plots.resize(plot));
+      });
+    });
     function closeGoal() {
       closeMetricHelp();
-      ++generation;
       const button=$('#result-card-'+active);
       if (button) {
         button.setAttribute('aria-expanded','false');
@@ -316,17 +324,12 @@
     function render(id) {
       closeMetricHelp();
       active=id;
-      const current=++generation;
       const goal=goals.find(task=>task.id===id);
       const task=data.tasks.find(task=>task.id===id);
-      const result=results.find(result=>result.id===id);
       panel.hidden=false;
       $('#goal-content-'+id).append(panel);
       panel.dataset.selectedTask=id;
       panel.dataset.generator=goal.generator;
-      delete panel.dataset.plotReadyTask;
-      $('#goal-results-content').hidden=true;
-      $('#goal-results-toggle').setAttribute('aria-expanded','false');
       panel.setAttribute('aria-labelledby','result-card-'+id);
       cards.querySelectorAll('[data-result-task]').forEach(card=>{
         const selected=card.dataset.resultTask===id;
@@ -335,56 +338,8 @@
         $('#goal-content-'+card.dataset.resultTask).hidden=!selected;
         card.classList.toggle('is-selected',selected);
       });
-      // Dispose of inactive plots so resize listeners and tooltips cannot leak across tasks.
-      panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.purge(plot));
-      const details=$('#task-results-details');
-      const plots=$('#task-results-plots');
-      details.hidden=id==='ood';
-      details.classList.toggle('has-novelty',id==='gsk3b');
-      const pairedComparison=result?.table===1;
-      details.classList.toggle('has-comparison',pairedComparison);
-      // Keep the same interactive plot node when switching between split and full-width layouts.
-      if (pairedComparison) $('#results-values').after(plots);
-      else details.before(plots);
-      $('#task-scaffold-novelty').innerHTML=id==='gsk3b' ? noveltyMarkup() : '';
-      $('#result-discovery').innerHTML='';
-      if (!result) renderDiscoverySummary();
       renderTaskContext(goal);
       renderCurriculum(task);
-      if (result && result.table===2) {
-        $('#task-results-plots').innerHTML=dockingMarkup(result);
-        $('#task-results-evidence').innerHTML='';
-        renderTable(result);
-      } else if (id==='ood') {
-        $('#task-results-plots').innerHTML='';
-        $('#task-results-evidence').innerHTML='';
-        $('#results-table').innerHTML='';
-      } else {
-        $('#task-results-plots').innerHTML=scatterMarkup(result);
-        $('#task-results-evidence').innerHTML='';
-        renderTable(result);
-      }
-      let plotsStarted=false;
-      $('#goal-results-toggle').onclick=()=>{
-        const toggle=$('#goal-results-toggle');
-        const expanded=toggle.getAttribute('aria-expanded')!=='true';
-        toggle.setAttribute('aria-expanded',String(expanded));
-        $('#goal-results-content').hidden=!expanded;
-        closeMetricHelp();
-        if (!expanded) return;
-        if (plotsStarted) {
-          panel.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Plots.resize(plot));
-          return;
-        }
-        plotsStarted=true;
-        fonts.then(()=>{
-          if (current!==generation) return;
-          const work=id==='ood' ? null : result.table===2 ? renderDockingBars(result) : renderScatter(result);
-          const plots=[work];
-          if (id==='gsk3b') plots.push(renderNovelty());
-          return Promise.all(plots).then(()=>{if (current===generation) panel.dataset.plotReadyTask=id;});
-        });
-      };
     }
     $('#task-result-curriculum').addEventListener('click',event=>{
       const button=event.target.closest('[data-curriculum-stage]');
@@ -455,7 +410,7 @@
     const lower=Math.min(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)-spread)));
     const upper=Math.max(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)+spread)));
     const padding=(upper-lower)*.1;
-    return draw('#docking-chart',traces,layout({
+    return draw('#docking-'+result.id,traces,layout({
       barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
       xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
       yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
