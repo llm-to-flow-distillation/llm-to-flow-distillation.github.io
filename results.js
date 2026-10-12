@@ -98,13 +98,6 @@
       yaxis:{fixedrange:true,title:{text:result.metrics[yIndex].label+' ↓',standoff:16},gridcolor:'#eceef2',zeroline:false,automargin:true}
     }),[['.xtitle',metricKeys(result)[0]],['.ytitle',metricKeys(result)[yIndex]]]);
   }
-  function methodLabel(method) {
-    return `<span class="table-method" style="color:${style(method).color}">${esc(method === 'LFD' ? 'LFD · ours' : method)}</span>`;
-  }
-  function renderTable(result) {
-    const best = result.metrics.map((metric,i)=>(metric.direction === 'up' ? Math.max : Math.min)(...result.rows.map(row=>row.values[i][0])));
-    $('#results-table-'+result.id).innerHTML = `<caption class="sr-only">${esc(result.name)}. Higher is better for up arrows, lower for down arrows. Distance from prior is descriptive.</caption><thead><tr><th scope="col">Method</th>${result.metrics.map((m,i)=>`<th scope="col">${metricLabel(metricKeys(result)[i],m.label+(i === 2 && result.table === 1 ? '' : '\u00a0'+(m.direction === 'up' ? '↑' : '↓')))}</th>`).join('')}</tr></thead><tbody>${result.rows.map(row=>`<tr class="${row.method === 'LFD' ? 'ours' : ''}"><th scope="row">${methodLabel(row.method)}</th>${row.values.map(([mean,error],i)=>`<td class="${!(i === 2 && result.table === 1) && mean === best[i] ? 'best' : ''}"><span class="table-mean">${mean.toFixed(2)}</span> <span class="table-uncertainty">± ${error.toFixed(2)}</span></td>`).join('')}</tr>`).join('')}</tbody>`;
-  }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
     {label:'Vina', tick:'|Vina|<br>(kcal/mol)', unit:' kcal/mol'},
@@ -116,7 +109,7 @@
   }
   function noveltyMarkup() {
     const rows=window.LFD_DATA.charts.novelty;
-    return `<figure class="scaffold-novelty"><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help">${metricLabel('novelty','Novel scaffolds in top 100 ↑','novelty-axis-label')}</div></div>${legend(rows.map(row=>row.method))}<div class="sr-only"><table><caption>GSK3 beta scaffold novelty and docking quality, means with 95% confidence intervals</caption><thead><tr><th scope="col">Method</th><th scope="col">Novel scaffolds</th><th scope="col">Negative rDock, top 5%</th></tr></thead><tbody>${rows.map(row=>`<tr><th scope="row">${esc(row.method)}</th><td>${interval(row.noveltyMean,row.noveltyCI95)}</td><td>${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}</td></tr>`).join('')}</tbody></table></div></figure>`;
+    return `<figure class="scaffold-novelty"><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help">${metricLabel('novelty','Novel scaffolds in top 100 ↑','novelty-axis-label')}</div></div>${legend(rows.map(row=>row.method))}</figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -269,11 +262,10 @@
     const goalNumber=window.LFD_DATA.resultPanels.tasks.find(task=>task.id===id).number;
     const heading=`<h4>${names[id]} (Goal&nbsp;${goalNumber})</h4>`;
     if (!result) return `<article class="result-overview discovery-overview" data-result-overview="${id}">${heading}${discoveryMarkup()}</article>`;
-    const mainPlot=result.table===1 ? scatterMarkup(result) : id==='gsk3b' ? noveltyMarkup() : dockingMarkup(result,false);
-    const table=`<div class="table-scroll" tabindex="0" role="region" aria-label="${esc(result.name)} numerical results"><table id="results-table-${id}" class="results-table"></table></div>`;
-    const extra=id==='gsk3b' ? dockingMarkup(result) : result.table===2 ? molecularExample(result) : '';
-    const label=id==='gsk3b' ? 'Docking scores and numerical results' : 'Numerical results';
-    return `<article class="result-overview" data-result-overview="${id}">${heading}${mainPlot}<details class="result-metrics" data-result-metrics="${id}"><summary><strong>${label}</strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary><div class="result-metrics-content">${extra}${table}</div></details></article>`;
+    const mainPlot=result.table===1 ? scatterMarkup(result) : dockingMarkup(result);
+    const scaffold=id==='gsk3b' ? noveltyMarkup() : '<p class="scaffold-placeholder">Scaffold novelty results for dopamine D2 will be added here.</p>';
+    const more=result.table===2 ? `<details class="result-metrics" data-result-metrics="${id}"><summary><strong>Scaffold novelty</strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary><div class="result-metrics-content">${scaffold}</div></details>` : '';
+    return `<article class="result-overview" data-result-overview="${id}">${heading}${mainPlot}${more}</article>`;
   }
   function init(results) {
     const data=window.LFD_DATA;
@@ -293,17 +285,16 @@
       const prompt=task.stages.find(stage=>stage.id==='g').exactGoal;
       return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
     };
-    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultOverview(id,results)).join('')}</div><p class="trace-verbatim-note">All recorded LLM goal-selection rationales and judge traces below are shown verbatim.</p><div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
-    results.forEach(renderTable);
-    fonts.then(()=>Promise.all(results.map(result=>result.table===1 ? renderScatter(result) : result.id==='gsk3b' ? renderNovelty() : renderDockingBars(result))))
+    cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultOverview(id,results)).join('')}</div><div class="trace-introduction"><h4>LLM traces</h4><p class="trace-verbatim-note">All the reported LLM traces below for goal-selection rationales and judgments are shown verbatim.</p></div><div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
+    fonts.then(()=>Promise.all(results.map(result=>result.table===1 ? renderScatter(result) : renderDockingBars(result))))
       .then(()=>{cards.dataset.plotsReady='true';});
     cards.querySelectorAll('[data-result-metrics]').forEach(details=>{
       details.addEventListener('toggle',async()=>{
         closeMetricHelp();
         if (!details.open) return;
         await fonts;
-        if (details.dataset.resultMetrics==='gsk3b' && !$('#docking-gsk3b').data) {
-          await renderDockingBars(results.find(result=>result.id==='gsk3b'));
+        if (details.dataset.resultMetrics==='gsk3b' && !$('#novelty-chart').data) {
+          await renderNovelty();
         }
         details.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Plots.resize(plot));
       });

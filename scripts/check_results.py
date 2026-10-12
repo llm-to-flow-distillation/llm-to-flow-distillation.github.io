@@ -38,11 +38,6 @@ def main():
             task = result['id']
             overview = page.locator(f'[data-result-overview="{task}"]')
             assert f'Goal {next(g["number"] for g in panel_data["tasks"] if g["id"]==task)}' in overview.locator('h4').inner_text().replace('\xa0',' ')
-            table = overview.locator('.results-table')
-            for index,row in enumerate(result['rows']):
-                tr=table.locator('tbody tr').nth(index)
-                assert tr.locator('td').all_text_contents() == [f'{mean:.2f} ± {error:.2f}' for mean,error in row['values']]
-                assert tr.locator('.table-method').evaluate('(el)=>el.style.color') == 'rgb('+', '.join(str(int(colors[row['method']][i:i+2],16)) for i in (1,3,5))+')'
             if result['table']==1:
                 chart=overview.locator('.js-plotly-plot')
                 actual=chart.evaluate('(el)=>el.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],color:t.marker.color,symbol:t.marker.symbol,xc:t.error_x.color,yc:t.error_y.color}))')
@@ -52,10 +47,6 @@ def main():
                 expect(chart.locator('.hoverlayer')).to_contain_text('LFD')
                 for mean,error in result['rows'][-1]['values']:
                     expect(chart.locator('.hoverlayer')).to_contain_text(f'{mean:.2f} ± {error:.2f}')
-            details=overview.locator('.result-metrics')
-            expect(details).not_to_have_attribute('open','')
-            details.locator('summary').focus();page.keyboard.press('Enter')
-            expect(table).to_be_visible()
             if result['table']==2:
                 chart=overview.locator(f'#docking-{task}')
                 page.wait_for_function('(id)=>document.querySelector(id).data !== undefined',arg=f'#docking-{task}')
@@ -72,11 +63,27 @@ def main():
                 expect(chart.locator('.hoverlayer')).to_contain_text('LFD')
                 expect(chart.locator('.hoverlayer')).to_contain_text('Original score:')
                 assert chart.locator('.errorbar path').evaluate_all('(els)=>els.length>0 && els.every(el=>getComputedStyle(el).stroke==="rgb(0, 0, 0)")')
-            details.locator('summary').click()
-            expect(table).not_to_be_visible()
+        assert page.locator('#result-cards table').count()==0
+        assert page.locator('.result-metrics').count()==2
+        for task in ['d2','gsk3b']:
+            details=page.locator(f'[data-result-metrics="{task}"]')
+            expect(details.locator('summary')).to_contain_text('Scaffold novelty')
+            details.locator('summary').focus();page.keyboard.press('Enter')
+            if task=='d2':
+                expect(details).to_contain_text('will be added here')
+                assert details.locator('.interactive-chart').count()==0
+            else:
+                page.wait_for_function('document.querySelector("#novelty-chart").data !== undefined')
         chart=page.locator('#novelty-chart')
         actual=chart.evaluate('(el)=>el.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],color:t.marker.color,xc:t.error_x.color,yc:t.error_y.color}))')
         assert actual==[dict(method=r['method'],x=r['noveltyMean'],y=r['negativeRDockMean'],dx=r['noveltyCI95'],dy=r['negativeRDockCI95'],color=colors[r['method']],xc=colors[r['method']],yc=colors[r['method']]) for r in novelty]
+        page.locator('[data-result-metrics="d2"] summary').click()
+        page.locator('[data-result-metrics="gsk3b"] summary').click()
+        for study in ['peptides','molecules']:
+            intro=page.locator(f'#{study} .trace-introduction')
+            expect(intro.locator('h4')).to_have_text('LLM traces')
+            expect(intro.locator('p')).to_contain_text('goal-selection rationales and judgments are shown verbatim.')
+            assert intro.locator('p').evaluate('(el)=>{const a=getComputedStyle(el),b=getComputedStyle(document.querySelector(".method-introduction"));return a.fontFamily===b.fontFamily && a.fontSize===b.fontSize && a.lineHeight===b.lineHeight}')
         hit=page.locator('.discovery-overview')
         expect(hit).to_contain_text('0 / 38,500')
         expect(hit).to_contain_text('A full-goal hit')
@@ -113,6 +120,9 @@ def main():
         touch.wait_for_function('document.querySelector("#result-cards").dataset.plotsReady === "true"')
         for task,kind in [('anticancer','scatter'),('cpp','scatter'),('d2','bar'),('gsk3b','novelty')]:
             selector='#novelty-chart' if kind=='novelty' else f'#docking-{task}' if kind=='bar' else f'#comparison-{task}'
+            if kind=='novelty':
+                touch.locator('[data-result-metrics="gsk3b"] summary').tap()
+                touch.wait_for_function('document.querySelector("#novelty-chart").data !== undefined')
             chart=touch.locator(selector)
             point=chart.locator('.barlayer .trace').last.locator('.point path').first if kind=='bar' else chart.locator('.scatterlayer .trace').last.locator('.point')
             point.tap(force=True)
@@ -122,7 +132,7 @@ def main():
         mobile.close();browser.close()
     assert not errors,errors
     assert not failures,failures
-    report={'status':'passed','primary_plots':4,'supplementary_docking_plot':1,'source_tables':4,
+    report={'status':'passed','primary_plots':4,'expandable_scaffold_plot':1,'dopamine_placeholder':True,'rendered_tables':0,
             'goal5_hit':'preserved','results_outside_traces':'passed','persistent_plot_nodes':'passed',
             'hover_touch':'passed','black_docking_intervals':'passed','colored_scaffold_intervals':'passed',
             'viewports':widths,'browser_errors':errors,'failed_http_requests':failures}

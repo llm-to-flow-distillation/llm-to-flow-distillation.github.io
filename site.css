@@ -473,7 +473,6 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 [data-generator="PepDFM"] { --goal-accent: #345d86; --goal-surface: #f7f9fc; --goal-border: #d7e0ea; --goal-strong: #284b70; --goal-selected: #edf2f8; }
 [data-generator="FlowMol3"] { --goal-accent: #216d62; --goal-surface: #f6faf8; --goal-border: #d3e3db; --goal-strong: #1b584f; --goal-selected: #edf5f0; }
 .generator-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 14px 0; font-size: 13px; }
-.trace-verbatim-note { margin: 12px 0 18px; font-size: 12px; line-height: 1.7; color: #606875; }
 .generator-legend > span:first-child { margin-right: 4px; color: #535964; }
 .generator-label { display: inline-flex; align-items: center; gap: 5px; padding: 2px 0; border: 0; border-radius: 0; background: transparent; color: var(--goal-strong); font-size: 12px; font-weight: 500; line-height: 1.5; white-space: nowrap; }
 .generator-label > span { font-weight: 400; }
@@ -661,7 +660,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 }
 
 /* Serif reading text, with a consistent sans-serif layer for navigation and data. */
-.generator-legend, .trace-verbatim-note, .observable-toggle, .observable-list,
+.generator-legend, .observable-toggle, .observable-list,
 .curriculum-tabs, .explorer-tabs, .plot-key, .metric-tooltip, .judgment-badge,
 .candidate-observables, .representation-header, .judge-passes, .evidence-status,
 .placeholder-note, .placeholder-notice, figcaption, footer, #toast { font-family: var(--sans); }
@@ -821,15 +820,15 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .result-metrics > summary svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; flex-shrink: 0; }
 .result-metrics[open] > summary svg { transform: rotate(180deg); }
 .result-metrics-content { padding-top: 8px; min-width: 0; }
-.result-metrics-content .table-scroll { margin-top: 12px; }
-.result-metrics-content .results-table th, .result-metrics-content .results-table td { padding: 12px 8px; }
-.result-metrics-content .results-table .table-mean { font-size: 14px; }
-.result-metrics-content .results-table .table-uncertainty { font-size: 11px; }
-.result-metrics-content .results-table thead th { white-space: normal; }
-.result-metrics-content .task-molecule { max-width: 360px; margin: 18px auto; }
+.result-overview .task-molecule { max-width: 360px; margin: 18px auto; }
+.result-overview .task-molecule img { height: 185px; object-fit: contain; }
+.scaffold-placeholder { padding: 28px 16px; margin: 0; background: var(--goal-surface); color: var(--goal-strong); font: 14px/1.65 var(--sans); }
+.trace-introduction { margin: 28px 0 22px; }
+.trace-introduction h4 { margin: 0 0 12px; font: 600 20px/1.4 var(--serif); color: #253e32; }
+.trace-introduction .trace-verbatim-note { margin: 0; font: inherit; color: inherit; }
+@media (max-width: 760px) { .trace-introduction h4 { font-size: 18px; } }
 .discovery-overview { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid var(--goal-border); }
 .discovery-overview .discovery-summary { margin: 0; }
-.trace-verbatim-note { font-size: 11px; margin: 0 0 16px; }
 .goal-accordions { margin: 0; gap: 12px; }
 .goal-accordion { background: #fff; border-color: var(--goal-border); border-radius: 5px; }
 .result-card { padding: 17px 54px 17px 22px; border-radius: 4px; background: var(--goal-surface); }
