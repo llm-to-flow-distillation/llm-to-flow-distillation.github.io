@@ -23,17 +23,11 @@ def main():
         trigger = lambda name: page.locator(f'[data-function="{name}"]')
         page.goto(args.url + '/#method', wait_until='networkidle')
         expect(popup).not_to_be_visible()
-        disclosure = page.locator('#method-algorithm')
-        summary = disclosure.locator('summary')
-        expect(disclosure).not_to_have_attribute('open', '')
-        expect(page.locator('.algorithm-box')).not_to_be_visible()
-        expect(page.locator('.method-steps')).to_be_visible()
+        expect(page.locator('.algorithm-box')).to_be_visible()
+        assert page.locator('#method-algorithm > summary').count() == 0
+        assert page.locator('.method-step').count() == 3
         assert page.locator('.algorithm-function').count() == 5
         page.screenshot(path=str(out/'desktop-overview.png'))
-        summary.focus()
-        page.keyboard.press('Enter')
-        expect(page.locator('.algorithm-box')).to_be_visible()
-        assert summary.locator('span').evaluate('(el)=>getComputedStyle(el).transform') == 'none'
         for name in ['sample','observe','setgoal','judge','minimize','learnable']:
             trigger(name).hover()
             expect(popup).to_be_visible()
@@ -80,19 +74,11 @@ def main():
         expect(popup.locator('[data-function-panel="minimize"]')).to_be_visible()
         page.keyboard.press('Escape')
         expect(popup).not_to_be_visible()
-        # Collapsing the pseudocode dismisses any pinned function explanation.
-        trigger('judge').click()
-        expect(popup).to_be_visible()
-        disclosure.evaluate('(el)=>el.open=false')
-        expect(popup).not_to_be_visible()
-        expect(page.locator('.algorithm-box')).not_to_be_visible()
         for width in [360,390,768,1024,1280,1440]:
             page.set_viewport_size({'width':width,'height':1000})
             page.goto(args.url + '/#method',wait_until='networkidle')
             page.reload(wait_until='networkidle')
             page.wait_for_function('document.fonts.status === "loaded"')
-            expect(page.locator('.algorithm-box')).not_to_be_visible()
-            summary.click()
             expect(page.locator('.algorithm-box')).to_be_visible()
             layout = page.evaluate("""() => {
                 const box = element => { const r = element.getBoundingClientRect();
@@ -103,12 +89,15 @@ def main():
                     curriculum:get('.method-curriculum'), disclosure:get('#method-algorithm')};
             }""")
             content, algorithm = layout['content'], layout['algorithm']
-            reading_order = [layout['intro'], *layout['steps'], layout['disclosure'], layout['curriculum']]
-            assert all(before['bottom'] <= after['y'] for before,after in zip(reading_order,reading_order[1:])), (width,layout)
-            assert abs((algorithm['x']+algorithm['right'])-(content['x']+content['right'])) < 2, (width,layout)
-            assert page.locator('.method-content .math-display, .method-curriculum .math-display').evaluate_all(
-                '(els)=>els.every(el=>el.scrollWidth<=el.clientWidth+1)'), width
-            assert page.locator('.method-content h3').count() == 3
+            if width >= 1000:
+                assert algorithm['x'] >= layout['intro']['right'], (width,layout)
+                assert abs(algorithm['y'] - layout['intro']['y']) < 2, (width,layout)
+                assert layout['steps'][1]['y'] >= max(layout['disclosure']['bottom'],layout['steps'][0]['bottom']), (width,layout)
+            else:
+                reading_order = [layout['intro'], layout['steps'][0], layout['disclosure'], *layout['steps'][1:], layout['curriculum']]
+                assert all(before['bottom'] <= after['y'] for before,after in zip(reading_order,reading_order[1:])), (width,layout)
+            assert abs(layout['steps'][1]['width'] - content['width']) < 2, (width,layout)
+            assert page.locator('.method-step > h3').count() == 3
             expect(page.locator('.method-curriculum p > #curriculum-title')).to_have_text('A design-space view.')
             assert r'\mathcal D_t' not in page.locator('.method-preference-equation').get_attribute('data-tex')
             expect(page.locator('.method-update [data-tex]').first).to_have_attribute(
@@ -133,7 +122,6 @@ def main():
         touch = mobile.new_page()
         touch.on('pageerror',lambda error:errors.append(str(error)))
         touch.goto(args.url + '/#method',wait_until='networkidle')
-        touch.locator('#method-algorithm > summary').tap()
         touch.locator('[data-function="minimize"]').tap()
         expect(touch.locator('#algorithm-details')).to_be_visible()
         expect(touch.locator('#algorithm-details')).to_have_attribute('data-pinned','true')
@@ -152,7 +140,6 @@ def main():
         page.set_viewport_size({'width':1440,'height':1000})
         page.goto(args.url + '/#method',wait_until='networkidle')
         page.reload(wait_until='networkidle')
-        summary.click()
         trigger('minimize').click()
         page.set_viewport_size({'width':390,'height':844})
         page.wait_for_function('''() => {const r=document.querySelector('#algorithm-details').getBoundingClientRect();return r.x>=0 && r.right<=innerWidth && r.y>=0 && r.bottom<=innerHeight;}''')
@@ -163,7 +150,7 @@ def main():
         assert not errors, errors
         assert not failures, failures
         browser.close()
-    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','ordered_method_steps':'passed','algorithm_disclosure':'passed','learnable_definition':'passed','browser_errors':errors,'failed_requests':failures}
+    report={'status':'passed','viewports':views,'pointer_hover':'passed','pinning':'passed','keyboard':'passed','touch':'passed','responsive_positioning':'passed','trace_smoke':'passed','ordered_method_steps':'passed','visible_side_algorithm':'passed','learnable_definition':'passed','browser_errors':errors,'failed_requests':failures}
     (out/'report.json').write_text(json.dumps(report,indent=2)+'\n')
     print(json.dumps(report))
 

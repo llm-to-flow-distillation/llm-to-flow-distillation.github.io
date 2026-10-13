@@ -162,7 +162,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .intro-copy p:last-child { margin-bottom: 0; }
 .text-link { display: inline-flex; gap: 17px; font-size: 13px; border-bottom: 1px solid #b5b7bd; padding-bottom: 2px; margin-top: 6px; }
 .text-link:hover { color: var(--red); border-color: var(--red); }
-/* Method: a single reading sequence, with the complete algorithm on demand. */
+/* Method: opening explanation beside the always-visible algorithm. */
 .method-band { display: flow-root; margin-top: 40px; background: #fcfcfb; }
 .method-section > h2 { text-align: left; text-wrap: balance; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
@@ -692,7 +692,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .hero-actions { margin: 0; }
 .hero-figure { width: calc(100% + 40px); margin: 24px -20px 0; }
 
-/* Shared section typography and academic styling for the optional pseudocode. */
+/* Shared section typography and academic styling for the pseudocode. */
 .method-band { background: #fff; margin-top: 40px; }
 .method-section { border-top: 1px solid #b9c8c4; padding-block: 40px 0; }
 .method-section > .section-heading { text-wrap: initial; }
@@ -929,4 +929,18 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .resource-preview .resource-label { font-size: 22px; }
   .repository-preview strong { font-size: 16px; }
   .repository-owner { font-size: 10px; }
+}
+
+/* Keep the algorithm beside the opening explanation; later steps use the full width. */
+.method-content { display: grid; grid-template-columns: minmax(0,1fr); gap: 22px 32px; }
+.method-introduction { grid-column: 1; grid-row: 1; margin: 0; }
+.method-steps { display: contents; }
+.method-step { grid-column: 1 / -1; }
+.method-step:first-child { grid-column: 1; grid-row: 2; }
+.method-algorithm { grid-column: 1; grid-row: 3; min-width: 0; }
+.method-algorithm .algorithm-hint { margin: 10px 0 0; }
+@media (min-width: 1000px) {
+  .method-content { grid-template-columns: minmax(0,1fr) minmax(0,.85fr); grid-template-rows: min-content auto; row-gap: 22px; align-items: start; }
+  .method-algorithm { grid-column: 2; grid-row: 1 / span 2; }
+  .method-algorithm .algorithm-box { max-width: none; }
 }
