@@ -88,6 +88,6 @@ python3.11 scripts/import_calibration.py --archive /path/to/terra_gemini_opus_v3
 python3.11 scripts/build.py
 ```
 
-`calibration.js` renders six responsive Plotly panels with a shared model-logo legend. Task/method prompts support hover, keyboard focus, click-to-pin, Escape, and touch; Claude's positive/negative variant is selectable. Shared prompt instructions are expandable. Candidate representations are appended per request in the original benchmark and are not part of the displayed prompt templates. Arrow keys inspect plot data as an alternative to hovering.
+The closed-by-default “Why preferences?” disclosure sits at the end of Method step 02. It opens automatically for direct `#why-preferences` links. `calibration.js` renders its charts on first expansion and resizes them on reopening. It renders six responsive Plotly panels with a shared model-logo legend. Task/method prompts support hover, keyboard focus, click-to-pin, Escape, and touch; Claude's positive/negative variant is selectable. Shared prompt instructions are expandable. Candidate representations are appended per request in the original benchmark and are not part of the displayed prompt templates. Arrow keys inspect plot data as an alternative to hovering.
 
 Run `scripts/check_calibration.py --url http://127.0.0.1:8000` using the Playwright development environment to verify all displayed points/bars, exact prompts, linked legend, mouse/keyboard/touch behavior, and eight viewport widths. No model API calls or new experiments are needed.

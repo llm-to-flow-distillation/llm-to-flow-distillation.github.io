@@ -82,7 +82,11 @@
     }
     grid.dataset.ready = 'true';
   }
-  const ready = render();
+  const disclosure = document.querySelector('#why-preferences');
+  let ready;
+  function ensureRendered() {
+    return ready ||= document.fonts.ready.then(render);
+  }
   legend.addEventListener('click', async event => {
     const button = event.target.closest('[data-calibration-model]');
     if (!button) return;
@@ -90,7 +94,7 @@
     activeModels.has(key) ? activeModels.delete(key) : activeModels.add(key);
     button.setAttribute('aria-pressed', String(activeModels.has(key)));
     document.querySelectorAll(`[data-mae-model="${key}"]`).forEach(el => el.classList.toggle('muted', !activeModels.has(key)));
-    await ready;
+    await ensureRendered();
     await Promise.all(charts.map(chart => Plotly.restyle(chart, {visible: data.models.map(m => activeModels.has(m.id))})));
   });
 
@@ -173,5 +177,24 @@
   document.addEventListener('pointerdown', event => {if (trigger && !popup.contains(event.target) && !trigger.contains(event.target)) close();});
   document.addEventListener('keydown', event => {if (event.key === 'Escape' && trigger) {event.preventDefault(); close(popup.contains(document.activeElement));}});
   window.addEventListener('resize', position);
-  window.addEventListener('scroll', () => {if (!pinned) close(); else position();}, {passive: true});
+  window.addEventListener('scroll', () => {
+    if (!pinned && document.activeElement !== trigger && !popup.contains(document.activeElement)) close();
+    else position();
+  }, {passive: true});
+  disclosure.addEventListener('toggle', async () => {
+    if (!disclosure.open) {
+      close();
+      charts.forEach(chart => Plotly.Fx.unhover(chart));
+      return;
+    }
+    await ensureRendered();
+    if (disclosure.open) await Promise.all(charts.map(chart => Plotly.Plots.resize(chart)));
+  });
+  function openFromHash() {
+    if (location.hash !== '#why-preferences') return;
+    disclosure.open = true;
+    requestAnimationFrame(() => disclosure.scrollIntoView());
+  }
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
 })();

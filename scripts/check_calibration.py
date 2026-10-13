@@ -19,9 +19,14 @@ def main():
         page = browser.new_page(viewport={'width': 1440, 'height': 1100}, reduced_motion='reduce')
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.on('response', lambda r: bad_requests.append(r.url) if r.status >= 400 else None)
-        page.goto(args.url + '/#why-preferences', wait_until='networkidle')
+        page.goto(args.url, wait_until='networkidle')
+        expect(page.locator('#why-preferences')).not_to_have_attribute('open', '')
+        assert page.locator('#why-preferences .js-plotly-plot').count() == 0
+        assert page.locator('.method-step').nth(1).locator('#why-preferences').count() == 1
+        page.locator('#why-preferences > summary').focus()
+        page.keyboard.press('Enter')
         expect(page.locator('#calibration-grid')).to_have_attribute('data-ready', 'true')
-        assert page.locator('.project-contents a').evaluate_all('(els)=>els.map(el=>el.hash)') == ['#method', '#why-preferences', '#peptides', '#molecules']
+        assert page.locator('.project-contents a').evaluate_all('(els)=>els.map(el=>el.hash)') == ['#method', '#peptides', '#molecules']
         assert page.locator('#method').bounding_box()['y'] < page.locator('#why-preferences').bounding_box()['y'] < page.locator('#peptides').bounding_box()['y']
         assert page.locator('#calibration-grid .js-plotly-plot').count() == 6
         for domain in data['domains']:
