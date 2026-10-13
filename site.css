@@ -126,9 +126,12 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .hero-figure { margin: 36px 0 0; }
 .hero-figure > a, .hero-figure img, .hero-figure video { display: block; }
 .hero-figure img, .hero-figure video { width: 100%; height: auto; }
+/* Match the rounded frame baked into the animation and hide its square edge. */
+.hero-figure > a { overflow: hidden; border-radius: 2% / 7%; }
+.hero-figure video { clip-path: inset(0 0 1px round 2% / 7%); }
 
 /* Scroll-aware contents rail; stays outside the reading column. */
-.contents-nav { position: fixed; z-index: 30; left: max(20px, calc((100vw - 980px) / 2 - 180px)); top: 50%; width: 164px; font-family: var(--serif); transform: translate(-8px, -50%); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s, transform .2s, visibility .2s; }
+.contents-nav { position: fixed; z-index: 30; left: max(12px, calc((100vw - 980px) / 2 - 204px)); top: 50%; width: 164px; font-family: var(--serif); transform: translate(-8px, -50%); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s, transform .2s, visibility .2s; }
 .contents-nav.is-visible { opacity: 1; visibility: visible; pointer-events: auto; transform: translate(0, -50%); }
 .contents-toggle { display: none; }
 .contents-heading { margin: 0 0 13px; font-size: 20px; font-weight: 600; }
