@@ -306,19 +306,7 @@
     figureTrigger?.focus({preventScroll:true});
   });
   const video = $('.hero-figure video');
-  const animationToggle = $('#animation-toggle');
-  const syncPlayback = () => {
-    animationToggle.textContent = video.paused ? 'Play animation' : 'Pause animation';
-    animationToggle.setAttribute('aria-pressed', String(video.paused));
-  };
-  animationToggle.addEventListener('click', () => {
-    if (video.paused) video.play().catch(syncPlayback);
-    else video.pause();
-  });
-  video.addEventListener('play', syncPlayback);
-  video.addEventListener('pause', syncPlayback);
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) video.pause();
-  syncPlayback();
 
   // Track section geometry so expanding traces and figures keeps the rail accurate.
   const contents = $('#contents');

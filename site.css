@@ -100,7 +100,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #6c737d; display: inline-block; flex-shrink: 0; }
 
 /* The paper title, authors and resources are the entire page header. */
-.hero { padding-top: 88px; text-align: left; }
+.hero { padding-top: 64px; text-align: left; }
 .hero-heading { max-width: 980px; margin-inline: auto; }
 .paper-title { max-width: 980px; margin: 0 0 24px; font-size: 36px; font-weight: 400; letter-spacing: -.6px; line-height: 1.25; }
 .paper-title > span { display: block; }
@@ -168,8 +168,8 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-content { color: inherit; font: inherit; min-width: 0; }
 .method-content p { margin-bottom: 14px; }
 .method-content p:last-child { margin-bottom: 0; }
-.method-introduction { margin: 0 0 32px; }
-.method-steps { display: grid; gap: 28px; list-style: none; padding: 0; margin: 0; }
+.method-introduction { margin: 0 0 24px; }
+.method-steps { display: grid; gap: 22px; list-style: none; padding: 0; margin: 0; }
 .method-step { min-width: 0; }
 .method-step h3 { display: flex; align-items: baseline; gap: 12px; margin: 0 0 12px; font: 600 20px/1.4 var(--serif); color: #253e32; }
 .method-step-number { flex-shrink: 0; font: 500 12px/1 var(--sans); color: #07857d; letter-spacing: .04em; }
@@ -180,7 +180,7 @@ sup { margin-left: 2px; font-size: .65em; line-height: 0; }
 .method-definition:hover, .method-definition[aria-expanded="true"] { color: #294f80; border-bottom-style: solid; }
 .math-inline { white-space: nowrap; }
 .method-section .katex { font-size: 1.1em; color: inherit; }
-.math-display { text-align: center; max-width: 100%; margin: 26px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
+.math-display { text-align: center; max-width: 100%; margin: 20px 0; padding: 2px 5px; overflow-x: auto; overflow-y: hidden; }
 .math-display .katex-display { margin: 0; }
 .method-curriculum { width: min(760px, 100%); margin: 32px auto 0; padding: 22px 26px; border: 1.5px solid #dbc3a8; border-radius: 6px; background: #fffaf4; text-align: left; }
 .method-curriculum .math { color: #000; }
@@ -690,17 +690,13 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .institution-oxford img { width: 108px; }
 .contribution-note { margin-top: 14px; }
 .hero-actions { margin: 0; }
-.hero-figure { width: calc(100% + 40px); margin: 40px -20px 0; }
-.overview-controls { display: flex; justify-content: flex-end; gap: 22px; margin: 14px 20px 0; font: 11px/1.5 var(--sans); color: #63736d; }
-.overview-controls button { border: 0; border-bottom: 1px solid #c2cfc7; padding: 2px 0; color: inherit; background: none; font: inherit; }
-.overview-controls a { padding: 2px 0; }
-.overview-controls a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.hero-figure { width: calc(100% + 40px); margin: 24px -20px 0; }
 
 /* Shared section typography and academic styling for the optional pseudocode. */
-.method-band { background: #fff; margin-top: 64px; }
-.method-section { border-top: 1px solid #b9c8c4; padding-block: 64px 0; }
+.method-band { background: #fff; margin-top: 40px; }
+.method-section { border-top: 1px solid #b9c8c4; padding-block: 40px 0; }
 .method-section > .section-heading { text-wrap: initial; }
-.section-heading, .case-study h3.section-heading { display: flex; align-items: baseline; gap: 13px; margin: 0 0 26px; font-size: 32px; font-weight: 600; line-height: 1.25; letter-spacing: -.55px; color: #171b19; }
+.section-heading, .case-study h3.section-heading { display: flex; align-items: baseline; gap: 13px; margin: 0 0 20px; font-size: 32px; font-weight: 600; line-height: 1.25; letter-spacing: -.55px; color: #171b19; }
 .section-anchor { flex-shrink: 0; color: #07857d; font-weight: 400; text-decoration: none; }
 .section-anchor:hover { color: #00594f; }
 .algorithm-box { padding: 0 0 12px; border: 0; border-block: 1.5px solid #29332f; border-radius: 0; background: transparent; color: #111; }
@@ -712,7 +708,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .algorithm-function { color: #07857d; border-bottom-color: #8bbcb5; }
 .algorithm-function:hover, .algorithm-function[aria-expanded="true"] { color: #00594f; }
 .method-curriculum { width: 100%; margin-top: 0; padding: 24px 0 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-.algorithm-disclosure { margin-top: 28px; border-block: 1px solid #b9c8c0; }
+.algorithm-disclosure { margin-top: 22px; border-block: 1px solid #b9c8c0; }
 .algorithm-disclosure > summary { justify-content: flex-start; gap: 14px; padding: 18px 0; cursor: pointer; }
 .algorithm-disclosure > summary strong { font: 600 18px/1.5 var(--serif); color: #253e32; }
 .algorithm-disclosure > summary > span { font: 11px/1.5 var(--sans); color: #758078; transform: none; }
@@ -731,9 +727,9 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 }
 
 /* Two case studies: results first, then the complete discovery experiments. */
-.results-section { padding-top: 64px; padding-bottom: 0; }
+.results-section { padding-top: 40px; padding-bottom: 0; }
 .case-studies { display: block; }
-.case-study { padding: 64px 0; border-top: 1px solid #b9c8c4; scroll-margin-top: 30px; }
+.case-study { padding: 40px 0; border-top: 1px solid #b9c8c4; scroll-margin-top: 30px; }
 .case-study + .case-study { margin-top: 0; }
 .case-study-heading { max-width: none; }
 .case-study h3.section-heading { margin-bottom: 12px; }
@@ -742,9 +738,9 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .case-description { margin: 0; font-size: 17px; line-height: 1.65; color: #4a534f; }
 
 /* Scientific feedback: a shared-legend, two-row comparison. */
-.preferences-section { margin-top: 64px; padding-top: 64px; border-top: 1px solid #b9c8c4; scroll-margin-top: 30px; }
+.preferences-section { margin-top: 40px; padding-top: 40px; border-top: 1px solid #b9c8c4; scroll-margin-top: 30px; }
 .preferences-section > p { font-size: 17px; line-height: 1.7; }
-.calibration-figure { margin: 30px 0 26px; }
+.calibration-figure { margin: 24px 0 20px; }
 .calibration-hint { margin: 0 0 26px; color: #707a74; font: 11px/1.6 var(--sans); }
 .calibration-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 26px; }
 .calibration-domain { min-width: 0; }
@@ -792,7 +788,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .calibration-mae { gap: 9px; }
 }
 @media (max-width: 700px) {
-  .preferences-section { margin-top: 42px; padding-top: 42px; }
+  .preferences-section { margin-top: 32px; padding-top: 32px; }
   .preferences-section > p { font-size: 16px; }
   .calibration-grid { grid-template-columns: minmax(0,1fr); gap: 38px; }
   .calibration-domain-heading { margin-bottom: 16px; }
@@ -804,7 +800,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .calibration-logo { width: 21px; height: 21px; }
 }
 /* Always-visible primary results precede the goal and trace disclosures. */
-.case-results-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; margin: 30px 0 24px; padding: 24px 0; border-block: 1px solid var(--goal-border); align-items: start; }
+.case-results-summary { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 28px; margin: 24px 0 20px; padding: 20px 0; border-block: 1px solid var(--goal-border); align-items: start; }
 .result-overview { min-width: 0; }
 .result-overview > h4 { margin: 0 0 18px; color: var(--goal-strong); font-size: 18px; line-height: 1.4; font-weight: 600; }
 .result-overview:nth-child(2) { border-left: 1px solid var(--goal-border); padding-left: 28px; }
@@ -824,7 +820,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .result-overview .task-molecule { max-width: 360px; margin: 18px auto; }
 .result-overview .task-molecule img { height: 185px; object-fit: contain; }
 .scaffold-placeholder { padding: 28px 16px; margin: 0; background: var(--goal-surface); color: var(--goal-strong); font: 14px/1.65 var(--sans); }
-.trace-introduction { margin: 28px 0 22px; }
+.trace-introduction { margin: 22px 0 18px; }
 .trace-introduction h4 { margin: 0 0 12px; font: 600 20px/1.4 var(--serif); color: #253e32; }
 .trace-introduction .trace-verbatim-note { margin: 0; font: inherit; color: inherit; }
 @media (max-width: 760px) { .trace-introduction h4 { font-size: 18px; } }
@@ -862,17 +858,16 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 }
 @media (max-width: 1000px) {
   .hero-figure { width: 100%; margin-inline: 0; }
-  .overview-controls { margin-inline: 0; }
 }
 @media (max-width: 760px) {
   .affiliations { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px 14px; }
   .institution { justify-content: flex-start; }
   .institution img { max-width: calc(100% - 12px); }
   .institution-tu img { width: 38px; }
-  .method-band { margin-top: 48px; }
-  .method-section, .case-study { padding-top: 42px; }
-  .case-study { padding-bottom: 42px; }
-  .results-section { padding-top: 42px; }
+  .method-band { margin-top: 32px; }
+  .method-section, .case-study { padding-top: 32px; }
+  .case-study { padding-bottom: 32px; }
+  .results-section { padding-top: 32px; }
   .section-heading, .case-study h3.section-heading { font-size: 28px; gap: 9px; }
   .case-description { font-size: 16px; }
 
@@ -893,7 +888,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 
 
 /* A visible contents list and resource previews, following the reading order. */
-.project-directory { display: grid; grid-template-columns: minmax(0,1.12fr) minmax(0,1fr); gap: 38px; align-items: start; margin-top: 34px; padding: 28px 0 20px; border-top: 1px solid #c7cfcb; }
+.project-directory { display: grid; grid-template-columns: minmax(0,1.12fr) minmax(0,1fr); gap: 38px; align-items: start; margin-top: 26px; padding: 20px 0 12px; border-top: 1px solid #c7cfcb; }
 .project-contents h2 { margin: 0 0 15px; font-size: 23px; font-weight: 600; letter-spacing: 0; }
 .project-contents ol { list-style: none; margin: 0; padding-left: 20px; border-left: 1px solid #18241e; }
 .project-contents li + li { margin-top: 10px; }
