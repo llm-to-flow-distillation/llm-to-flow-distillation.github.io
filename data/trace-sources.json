@@ -1,5 +1,5 @@
 {
-  "selection": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders, not recorded judgments. Provider reasoning metadata is excluded.",
+  "selection": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. Provider reasoning metadata is excluded.",
   "sources": [
     {
       "file": "EXP-0131/campaign/judgments/G01-p1/repeat-1.json",
@@ -360,6 +360,142 @@
     {
       "file": "EXP-0244/gate50_F30/11001/campaign/rounds/round-12/training/samples/child.jsonl",
       "sha256": "72d9cb8a249cd113d7af674ffc0ad27270a229256fb071978b8ecc7495acc908"
+    },
+    {
+      "file": "drugs-ltfd-c3/campaign/api/curriculum_controller/artifacts/a98dbf1d7cd8508318eda5748760b87f473c6cafa0a4a10b10ec965d6c58117a/response.json",
+      "sha256": "7ecc1ae737e4696d0e6b164e4c4195042dcbde2e0d308f468b34b26189464073"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2-08/campaign/api/curriculum_controller/artifacts/e3f017028b68202bc3b7c1395f69169e3eeb8491bfe0dc7bf4316ca02c810d9f/response.json",
+      "sha256": "b09c388f9174e45ad67fdd3f92ba4064f3b6c344c326bddb138ae5d3859712a3"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+      "sha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-2.json",
+      "sha256": "e16a672c817e501c938ef562c7749194514a4d80a61b76bf75a8b11f69f76c1a"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/stable_summary.json",
+      "sha256": "1b291cb7cf431e5b9c6bde725c82ab90c4ff1aa47a3bc65027a356dfb7b85829"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2-08/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+      "sha256": "0c770982841d9c88ae49b916d051ef14b68b4e6dd5b7351be6265b84d012e53b"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+      "sha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-2.json",
+      "sha256": "07c937e13b6f3f3b54cbd8e0ec20341a21f9fcb5dfa557433d5129475e4224c2"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/stable_summary.json",
+      "sha256": "ee2f0f68582a75cdb08b080abc5dbe16be643217eecb3907a4dd76d3e1f6e414"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+      "sha256": "66774f5132d7087e7aa70e84de680f21601b710055d59902d6197d6bf62c60ee"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/frozen_config.json",
+      "sha256": "25e24cebc8888b4bb168babe0d20764bcd3d14bc44c0f52d66a33db874fac796"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+      "sha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-2.json",
+      "sha256": "f3836af7c621bc4f0900650c6a25a3489d9fb4d189f500a112ee2335b314b92f"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/stable_summary.json",
+      "sha256": "980e8afeaf2472ce74473f562e0716aa83f541e08f18e6e5e44f63596b77a900"
+    },
+    {
+      "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/development/child/pool/candidate_pool.jsonl",
+      "sha256": "22d5cfbd9a49f950fef224804e8e336cdcc683a9af859e8075fb7b6f78376250"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/frozen_config.json",
+      "sha256": "18ea91cca0be2967d62dda5bd88c1c288facc34815a9162bce6f4e342ae1c8ec"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-1.json",
+      "sha256": "7101aa87d79f1913bdc4bd7c0265addc642e61d15fb060748aa2a05a516996dd"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-2.json",
+      "sha256": "bd720c5965f396e25b83b9a6380826db724c61a6d97c8be99aefbb6f508e6cda"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/stable_summary.json",
+      "sha256": "04a87f6ac270d4f4131517f53b8bb7d999f692f1f8f2918368531f4ea7a9a8b4"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+      "sha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-2.json",
+      "sha256": "5ddc7acda2943e4db271284e0a752c519eb965696b2456da987199187dc5bfef"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/stable_summary.json",
+      "sha256": "400e2a955cddcb9bd451b3b792ac35891098aa806a0f329ddb61029ca0f569f1"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+      "sha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-2.json",
+      "sha256": "a6deab0bd298db844f78145d1fffe947c03e26ef91e6e2e403c3f512e6fec32d"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/stable_summary.json",
+      "sha256": "049fd794bb65ed6f7e31bc903ee237694090051c8de29178eb181df4feb991a2"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+      "sha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-2.json",
+      "sha256": "b5d90a6ab5ad9b4da70d8c1f9f6ff2fc164d92485cb6e95455655e4f53bb41f5"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/stable_summary.json",
+      "sha256": "3f80125a980c5d409b721498e36a4fac00bcb717f788797d7b82420ab97b955b"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+      "sha256": "791a72ac07562f963f2ecf16aff301f4cceec261bcb21f5ceccd092dc2548099"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/goal_selection/proposal-2.json",
+      "sha256": "09ae775aa588f8048319ec759ffc98686336b69604493ee73d2143c2615cffb1"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+      "sha256": "6c88b4ebddad00bd0e5648dd908a9594d00e7866b06611ead3cb27b2e3041fee"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/goal_selection/proposal-1.json",
+      "sha256": "567b1bb8ea06a141d24e121af84f38e90276a9062e2e1e8d1f9f721c78c00f69"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-03/goal_selection/proposal-1.json",
+      "sha256": "76766a2409482cccae13e1b3d2e878cd709b254e3daf384cab71070753af3b2e"
+    },
+    {
+      "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+      "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
     }
   ]
 }

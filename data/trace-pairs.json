@@ -429,6 +429,180 @@
           "selectionReason": "Similar-weight larger structures contrast the recorded binding-motif hypothesis with an acylhydrazone stability concern; neither label establishes measured affinity."
         }
       ]
+    },
+    "d2": {
+      "g0": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 193.250–197.234 Da",
+          "positiveId": "item-045",
+          "negativeId": "item-031",
+          "sizes": [
+            193.25,
+            197.234
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 424.522–438.528 Da",
+          "positiveId": "item-172",
+          "negativeId": "item-235",
+          "sizes": [
+            438.528,
+            424.522
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ],
+      "g1": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 222.308–231.299 Da",
+          "positiveId": "item-018",
+          "negativeId": "item-006",
+          "sizes": [
+            231.299,
+            222.308
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 406.504–412.265 Da",
+          "positiveId": "item-159",
+          "negativeId": "item-134",
+          "sizes": [
+            406.504,
+            412.265
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ],
+      "g": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 234.343–238.267 Da",
+          "positiveId": "item-188",
+          "negativeId": "item-005",
+          "sizes": [
+            234.343,
+            238.267
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 283.393–289.408 Da",
+          "positiveId": "item-004",
+          "negativeId": "item-172",
+          "sizes": [
+            289.408,
+            283.393
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ]
+    },
+    "ood": {
+      "g0": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 189.262–191.274 Da",
+          "positiveId": "item-435",
+          "negativeId": "item-296",
+          "sizes": [
+            189.262,
+            191.274
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 433.917–437.540 Da",
+          "positiveId": "item-226",
+          "negativeId": "item-509",
+          "sizes": [
+            433.917,
+            437.54
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ],
+      "g1": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 166.264–171.243 Da",
+          "positiveId": "item-348",
+          "negativeId": "item-476",
+          "sizes": [
+            171.243,
+            166.264
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 448.501–453.564 Da",
+          "positiveId": "item-193",
+          "negativeId": "item-218",
+          "sizes": [
+            453.564,
+            448.501
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ],
+      "g2": [
+        {
+          "id": "pair-1",
+          "label": "Smaller molecules · 182.231–184.264 Da",
+          "positiveId": "item-194",
+          "negativeId": "item-332",
+          "sizes": [
+            182.231,
+            184.264
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        },
+        {
+          "id": "pair-2",
+          "label": "Larger molecules · 461.434–463.494 Da",
+          "positiveId": "item-384",
+          "negativeId": "item-014",
+          "sizes": [
+            463.494,
+            461.434
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
+        }
+      ],
+      "g": [
+        {
+          "id": "pair-1",
+          "label": "Final assessment · 254.293–254.363 Da",
+          "positiveId": "item-151",
+          "negativeId": "item-404",
+          "sizes": [
+            254.363,
+            254.293
+          ],
+          "sizeUnit": "Da",
+          "selectionReason": "The only stable full-goal positive, paired with a stable negative from the same round-6 cohort at nearly identical molecular weight."
+        }
+      ]
     }
   }
 }

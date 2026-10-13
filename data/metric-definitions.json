@@ -156,6 +156,23 @@
       "sourcePages": [
         8
       ]
+    },
+    "novelty-d2": {
+      "title": "Scaffold novelty — D2",
+      "text": "Distinct Bemis–Murcko scaffolds among each sampling seed’s 100 best-rDock molecules that are absent from the recorded GEOM-Drugs training-SMILES reference. Duplicate scaffolds count once; atom and bond types are retained and stereochemistry is ignored. The reference contains 243,480 molecules and 79,679 distinct scaffolds. Two-sided 95% Student-t confidence intervals across five sampling seeds, with 256 generation proposals per seed, conditional on the selected checkpoints.",
+      "references": [
+        "scaffold"
+      ],
+      "source": "results/drugs/plot_D2_pareto_icml.py",
+      "referencePolicy": "geom_training_smiles"
+    },
+    "rdock-top-d2": {
+      "title": "−rDock (top 5%) — D2",
+      "text": "Within each sampling seed, average the lowest ceil(0.05 × successfully docked count) rDock SCORE.INTER values, then negate the mean across five seeds for display. All 30 method/seed cohorts select 13 molecules. Higher values indicate better docking within this selected group. Two-sided 95% Student-t confidence intervals across five sampling seeds, with 256 generation proposals per seed, conditional on the selected checkpoints.",
+      "references": [
+        "rdock"
+      ],
+      "source": "results/drugs/plot_D2_pareto_icml.py"
     }
   }
 }

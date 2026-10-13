@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "selectionNote": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders, not recorded judgments. Provider reasoning metadata is excluded.",
+  "selectionNote": "Editorially selected illustrative pairs: stable labels in both passes, explicit explanations relevant to the current goal, distinct size ranges, and comparable sizes within each positive/negative pair. Peptides are matched exactly by length; molecules are approximately matched by molecular weight. These are not random samples, causal controls, or validated activity rankings. No selection uses downstream activity or docking scores. Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. Provider reasoning metadata is excluded.",
   "tasks": [
     {
       "id": "anticancer",
@@ -3107,11 +3107,10 @@
     },
     {
       "id": "d2",
-      "lineage": "Reported nine-update D2 curriculum in the paper; original campaign artifacts were not located in the inspected local archive.",
+      "lineage": "drugs-ltfd-c3 (1 update) → drugs-ltfd-c3h3 (2) → drugs-ltfd-c3h3g2-08 (2) → drugs-ltfd-c3h3g2s-07 (1) → drugs-ltfd-c3h3g2s-07g-03 (3); reported endpoint round 3, nine updates total.",
       "caveats": [
-        "The curriculum is documented; original goal-selection and candidate-level trace archives are not available in this export.",
-        "All candidate slots are placeholders. No molecule, positive/negative judgment, or rationale is asserted by these slots.",
-        "Docking and language-model judgments are computational evidence, not experimentally measured receptor binding or selectivity."
+        "Docking and language-model judgments are computational evidence, not experimentally measured receptor binding or selectivity.",
+        "Trace examples come from the development-child judgments at the end of each displayed stage and agree across both recorded passes. Later continuation rounds are excluded."
       ],
       "stages": [
         {
@@ -3124,40 +3123,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-045",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1nc([H])c([H])c(C(=O)N([H])C([H])([H])C([H])([H])N(C([H])([H])[H])C([H])([H])[H])c1[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2-08/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "0c770982841d9c88ae49b916d051ef14b68b4e6dd5b7351be6265b84d012e53b"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "193.25"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "3"
+                }
+              ],
+              "rationale": "Item-045 integrates an aromatic pyridine ring with an aliphatic dimethylaminoethyl chain, providing an archetypal foundational aminergic scaffold with good drug-like properties.",
+              "uncertainty": "DRD2 affinity and blood-brain barrier penetration profile of this minimalist fragment.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-045 integrates an aromatic pyridine ring with an aliphatic dimethylaminoethyl chain, providing an archetypal foundational aminergic scaffold with good drug-like properties.",
+                  "uncertainty": "DRD2 affinity and blood-brain barrier penetration profile of this minimalist fragment.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Item-045 presents an aromatic pyridine ring coupled to an aliphatic tertiary amine, satisfying the operational criteria of the current foundational goal.",
+                  "uncertainty": "Experimental DRD2 binding affinity and CNS penetration remain unknown.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "e16a672c817e501c938ef562c7749194514a4d80a61b76bf75a8b11f69f76c1a"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0045"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-031",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1nc(OC([H])([H])C([H])([H])OC([H])([H])[H])c([H])c([H])c1OC([H])([H])C([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2-08/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "0c770982841d9c88ae49b916d051ef14b68b4e6dd5b7351be6265b84d012e53b"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "197.234"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "The molecule contains no aliphatic nitrogen, failing the goal.",
+              "uncertainty": "No aminergic pharmacophore present.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "The molecule contains no aliphatic nitrogen, failing the goal.",
+                  "uncertainty": "No aminergic pharmacophore present.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Fails the current goal as it possesses no aliphatic amine or aliphatic nitrogen.",
+                  "uncertainty": "Relevance to aminergic GPCR binding.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "e16a672c817e501c938ef562c7749194514a4d80a61b76bf75a8b11f69f76c1a"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0031"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-172",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(OC([H])([H])C([H])([H])[H])c([H])c(-c2noc(C([H])([H])N3C([H])([H])C([H])([H])N(C([H])([H])c4c([H])c([H])c([H])c(OC([H])([H])[H])c4OC([H])([H])[H])C([H])([H])C3([H])[H])n2)c1[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2-08/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "0c770982841d9c88ae49b916d051ef14b68b4e6dd5b7351be6265b84d012e53b"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "438.528"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "8"
+                }
+              ],
+              "rationale": "The candidate matches the requirement of having aromatic rings combined with basic aliphatic amines suitable for aminergic recognition.",
+              "uncertainty": "Binding mode, DRD2 subtype selectivity, and metabolic stability.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "The candidate matches the requirement of having aromatic rings combined with basic aliphatic amines suitable for aminergic recognition.",
+                  "uncertainty": "Binding mode, DRD2 subtype selectivity, and metabolic stability.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "The presence of aromatic rings flanking an aliphatic piperazine core makes this a valid aminergic scaffold candidate.",
+                  "uncertainty": "Functional activity at DRD2 versus other aminergic GPCRs.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "e16a672c817e501c938ef562c7749194514a4d80a61b76bf75a8b11f69f76c1a"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0174"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-235",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(S(=O)(=O)N2C([H])([H])C([H])([H])N(C(=O)c3c([H])c([H])c4c([H])c([H])c([H])c([H])c4c3[H])C([H])([H])C2([H])[H])c([H])c(C([H])([H])[H])c1OC([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2-08/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "0c770982841d9c88ae49b916d051ef14b68b4e6dd5b7351be6265b84d012e53b"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "424.522"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "Lacks an aliphatic amine because both piperazine nitrogens are conjugated into electron-withdrawing amide and sulfonamide groups.",
+              "uncertainty": "None regarding functional group assignment; the nitrogens are definitively non-basic.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Lacks an aliphatic amine because both piperazine nitrogens are conjugated into electron-withdrawing amide and sulfonamide groups.",
+                  "uncertainty": "None regarding functional group assignment; the nitrogens are definitively non-basic.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Because the piperazine nitrogens are conjugated into amide and sulfonamide linkages, the candidate lacks an aliphatic amine and fails the goal.",
+                  "uncertainty": "Direct DRD2 binding poses and affinities remain undetermined.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "e16a672c817e501c938ef562c7749194514a4d80a61b76bf75a8b11f69f76c1a"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "426740629a867e2f51cef694d15f78ada57e3603b5424d97d9d96ddb52cf46f8",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0238"
             }
           ],
           "exactGoal": "Generate small molecules containing at least one aromatic ring and an aliphatic nitrogen (e.g., an aliphatic amine), serving as a foundational aminergic scaffold.",
@@ -3168,24 +3359,59 @@
             "kind": "llm-subgoal"
           },
           "selection": {
-            "status": "placeholder",
-            "rationale": null,
-            "uncertainty": null
+            "status": "recorded",
+            "rationaleField": "parsed.rationale",
+            "source": {
+              "file": "drugs-ltfd-c3/campaign/api/curriculum_controller/artifacts/a98dbf1d7cd8508318eda5748760b87f473c6cafa0a4a10b10ec965d6c58117a/response.json",
+              "sha256": "7ecc1ae737e4696d0e6b164e4c4195042dcbde2e0d308f468b34b26189464073"
+            },
+            "rationale": "To reach the final goal of binding the dopamine D2 receptor (DRD2), the generator must first reliably produce the foundational pharmacophore of aminergic GPCR ligands: a basic nitrogen (such as a secondary or tertiary amine) and an aromatic system. Rather than jumping directly to the narrow requirements of DRD2 binding, affinity, moderate lipophilicity, and specific 3D geometries, we step back to a much broader precursor capability. This initial goal defines a superset containing the final positives while remaining discriminative enough to filter out purely aliphatic chains, completely neutral aromatics, or molecules where all nitrogens are sequestered in amides or aromatic rings. This satisfies the requirement of forming a broad but chemically meaningful first rung in our nested positive sets.",
+            "bridge": "This goal establishes the minimal necessary structural features required for aminergic GPCR binding. In the final DRD2 binding pocket, the aliphatic amine forms a critical salt bridge with the conserved Asp114 residue, while the aromatic system engages in pi-stacking interactions with aromatic residues like Trp and Phe in the binding site. Once the generator is enriched for this broad aminergic scaffold, subsequent tightening steps can enforce specific distance constraints between these two features, introduce auxiliary hydrogen-bonding groups, and dial in the moderate lipophilicity constraints.",
+            "deferredRequirements": [
+              "Specific DRD2 receptor binding affinity and plausible receptor recognition",
+              "Precise 3D distance and vector constraints between the basic nitrogen and aromatic rings",
+              "Moderate lipophilicity (e.g., specific LogP thresholds)",
+              "Subtype selectivity against other dopamine, serotonin, or adrenergic receptors",
+              "Exclusion of toxic, reactive, or unstable chemical motifs",
+              "Targeted auxiliary hydrogen-bond donors/acceptors for specificity"
+            ]
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 193.250–197.234 Da",
+              "positiveId": "item-045",
+              "negativeId": "item-031",
+              "sizes": [
+                193.25,
+                197.234
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 424.522–438.528 Da",
+              "positiveId": "item-172",
+              "negativeId": "item-235",
+              "sizes": [
+                438.528,
+                424.522
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "drugs-ltfd-c3h3g2-08",
+            "round": 2,
+            "cumulativeUpdates": 5,
+            "judgment": "G02-child-development",
+            "stableSummary": {
+              "file": "drugs-ltfd-c3h3g2-08/campaign/judgments/G02-child-development/stable_summary.json",
+              "sha256": "1b291cb7cf431e5b9c6bde725c82ab90c4ff1aa47a3bc65027a356dfb7b85829"
+            }
+          }
         },
         {
           "id": "g1",
@@ -3197,40 +3423,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-018",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c(-c2noc(C([H])([H])N(C([H])([H])C([H])([H])[H])C([H])([H])C([H])([H])[H])n2)c([H])c1[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "66774f5132d7087e7aa70e84de680f21601b710055d59902d6197d6bf62c60ee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "231.299"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "Meets all criteria by combining two aromatic rings with a basic aliphatic tertiary amine in a drug-like small molecule.",
+              "uncertainty": "DRD2 affinity and orientation within the binding pocket.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Meets all criteria by combining two aromatic rings with a basic aliphatic tertiary amine in a drug-like small molecule.",
+                  "uncertainty": "DRD2 affinity and orientation within the binding pocket.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Candidate item-018 satisfies all goal criteria, combining two aromatic rings with a basic aliphatic tertiary amine in a clean, drug-like scaffold.",
+                  "uncertainty": "Binding mode within the transmembrane pocket and selectivity against other monoamine receptors.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "07c937e13b6f3f3b54cbd8e0ec20341a21f9fcb5dfa557433d5129475e4224c2"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0018"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-006",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]Oc1c([H])c(C([H])([H])[N+]2([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])C2([H])[H])c([H])c([H])c1OC([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "66774f5132d7087e7aa70e84de680f21601b710055d59902d6197d6bf62c60ee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "222.308"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "2"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "2"
+                }
+              ],
+              "rationale": "The candidate contains only one aromatic ring, failing the multi-aromatic requirement of the current goal.",
+              "uncertainty": "Whether this monocyclic fragment can be elaborated to a multi-aromatic GPCR scaffold.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "The candidate contains only one aromatic ring, failing the multi-aromatic requirement of the current goal.",
+                  "uncertainty": "Whether this monocyclic fragment can be elaborated to a multi-aromatic GPCR scaffold.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-006 has only one aromatic ring, missing the requirement for a multi-aromatic scaffold with at least two aromatic rings.",
+                  "uncertainty": "Ability to engage secondary binding pockets.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "07c937e13b6f3f3b54cbd8e0ec20341a21f9fcb5dfa557433d5129475e4224c2"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0006"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-159",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(OC([H])([H])[H])c([H])c(C([H])([H])N2C([H])([H])C([H])([H])N(S(=O)(=O)c3c([H])c([H])c(OC([H])([H])[H])c(OC([H])([H])[H])c3[H])C([H])([H])C2([H])[H])c1[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "66774f5132d7087e7aa70e84de680f21601b710055d59902d6197d6bf62c60ee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "406.504"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "6"
+                }
+              ],
+              "rationale": "Item-159 incorporates two aromatic rings and an aliphatic tertiary amine within a substituted piperazine core, consistent with aminergic GPCR ligand design.",
+              "uncertainty": "Selectivity profile across aminergic GPCRs.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-159 incorporates two aromatic rings and an aliphatic tertiary amine within a substituted piperazine core, consistent with aminergic GPCR ligand design.",
+                  "uncertainty": "Selectivity profile across aminergic GPCRs.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "The molecule successfully pairs two aromatic rings with an aliphatic piperazine nitrogen in a classic GPCR-like topology, accompanied by excellent physicochemical properties.",
+                  "uncertainty": "Specific DRD2 affinity, subtype selectivity, and pose stability are untested.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "07c937e13b6f3f3b54cbd8e0ec20341a21f9fcb5dfa557433d5129475e4224c2"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0160"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-134",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c(Br)c(C([H])([H])[H])c([H])c(N([H])S(=O)(=O)c2c([H])c([H])c3c(c2[H])n([H])c(=O)n3[H])c1OC([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "66774f5132d7087e7aa70e84de680f21601b710055d59902d6197d6bf62c60ee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "412.265"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "3"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "item-134 does not contain an aliphatic nitrogen, as its nitrogen atoms are restricted to sulfonamide and heteroaromatic/cyclic urea functionalities.",
+              "uncertainty": "GPCR recognition and affinity.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "item-134 does not contain an aliphatic nitrogen, as its nitrogen atoms are restricted to sulfonamide and heteroaromatic/cyclic urea functionalities.",
+                  "uncertainty": "GPCR recognition and affinity.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "The molecule is rejected because all nitrogen atoms belong to aromatic heterocycles or sulfonamide groups, lacking an aliphatic nitrogen.",
+                  "uncertainty": "Absence of basic centers precludes standard aminergic GPCR salt-bridge interactions.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "07c937e13b6f3f3b54cbd8e0ec20341a21f9fcb5dfa557433d5129475e4224c2"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "d0ef675b459aa0a84fd55508d65267b69b3e0919eb3ac4251d3cafbf4ed5b376",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0135"
             }
           ],
           "exactGoal": "Generate small molecules containing at least two aromatic rings and an aliphatic nitrogen, transitioning the foundational scaffold toward the multi-aromatic topology typical of aminergic GPCR ligands.",
@@ -3241,24 +3659,58 @@
             "kind": "llm-subgoal"
           },
           "selection": {
-            "status": "placeholder",
-            "rationale": null,
-            "uncertainty": null
+            "status": "recorded",
+            "rationaleField": "parsed.rationale",
+            "source": {
+              "file": "drugs-ltfd-c3h3g2-08/campaign/api/curriculum_controller/artifacts/e3f017028b68202bc3b7c1395f69169e3eeb8491bfe0dc7bf4316ca02c810d9f/response.json",
+              "sha256": "b09c388f9174e45ad67fdd3f92ba4064f3b6c344c326bddb138ae5d3859712a3"
+            },
+            "rationale": "The current goal successfully enriched a minimal aminergic scaffold. However, ligands capable of plausible DRD2 recognition characteristically require an extended topology with multiple aromatic or hydrophobic features to engage secondary binding pockets (e.g., TM5 and TM6 regions) beyond the primary Asp114 anchor. Tightening the structural constraint to require at least two aromatic rings restores a crucial element of receptor recognition geometry. This discrete structural requirement meaningfully splits the current positive cohort (filtering out mono-aromatic compounds) while preserving a robust subset of candidates for the next phase of fine-tuning.",
+            "bridge": "Requiring a multi-aromatic aminergic scaffold establishes the baseline topological extendedness necessary for DRD2 pocket-spanning, which is a prerequisite before optimizing the specific linker geometry and fine-tuning moderate lipophilicity.",
+            "deferredRequirements": [
+              "Moderate lipophilicity constraint",
+              "Specific basicity or pKa optimization of the amine",
+              "Proper distance and linker composition between the amine and aromatic rings",
+              "Confirmed DRD2 binding affinity and selectivity",
+              "Chemical viability and synthetic accessibility optimizations"
+            ]
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 222.308–231.299 Da",
+              "positiveId": "item-018",
+              "negativeId": "item-006",
+              "sizes": [
+                231.299,
+                222.308
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 406.504–412.265 Da",
+              "positiveId": "item-159",
+              "negativeId": "item-134",
+              "sizes": [
+                406.504,
+                412.265
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "drugs-ltfd-c3h3g2s-07",
+            "round": 1,
+            "cumulativeUpdates": 6,
+            "judgment": "G01-child-development",
+            "stableSummary": {
+              "file": "drugs-ltfd-c3h3g2s-07/campaign/judgments/G01-child-development/stable_summary.json",
+              "sha256": "ee2f0f68582a75cdb08b080abc5dbe16be643217eecb3907a4dd76d3e1f6e414"
+            }
+          }
         },
         {
           "id": "g",
@@ -3270,40 +3722,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-188",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c(C([H])([H])N2C([H])([H])C([H])([H])N(C([H])([H])C([H])([H])OC([H])([H])[H])C([H])([H])C2([H])[H])c([H])c1[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "22d5cfbd9a49f950fef224804e8e336cdcc683a9af859e8075fb7b6f78376250"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "234.343"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "3"
+                }
+              ],
+              "rationale": "The benzylpiperazine core provides a protonatable basic amine appropriately spaced from an aromatic ring, representing a classic, drug-like DRD2-compatible chemotype.",
+              "uncertainty": "Selectivity for DRD2 over the dopamine transporter (DAT) and sigma receptors, common for benzylpiperazines.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "The benzylpiperazine core provides a protonatable basic amine appropriately spaced from an aromatic ring, representing a classic, drug-like DRD2-compatible chemotype.",
+                  "uncertainty": "Selectivity for DRD2 over the dopamine transporter (DAT) and sigma receptors, common for benzylpiperazines.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+                    "sha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "The benzylpiperazine scaffold provides the essential protonatable basic amine for Asp114 recognition along with an aromatic moiety for pi-stacking. The favorable physicochemical profile and clean geometry make it a viable DRD2-directed precursor.",
+                  "uncertainty": "Subtype selectivity against other aminergic GPCRs and in vitro binding affinity.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-2.json",
+                    "sha256": "f3836af7c621bc4f0900650c6a25a3489d9fb4d189f500a112ee2335b314b92f"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+              "sourceSha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0194"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-005",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([N+](=O)[O-])c([H])c([H])c1N([H])C(=O)C([H])([H])[N+](C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "22d5cfbd9a49f950fef224804e8e336cdcc683a9af859e8075fb7b6f78376250"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "238.267"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "3"
+                }
+              ],
+              "rationale": "Permanent quaternary ammonium charge impedes CNS penetration and the aromatic nitro group is an undesirable structural alert.",
+              "uncertainty": "Blood-brain barrier penetration and cellular toxicity.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Permanent quaternary ammonium charge impedes CNS penetration and the aromatic nitro group is an undesirable structural alert.",
+                  "uncertainty": "Blood-brain barrier penetration and cellular toxicity.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+                    "sha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-005 contains an undesirable nitroarene toxicophore and a permanently charged quaternary ammonium unsuitable for CNS DRD2 drug development.",
+                  "uncertainty": "Membrane permeability and metabolic stability profile.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-2.json",
+                    "sha256": "f3836af7c621bc4f0900650c6a25a3489d9fb4d189f500a112ee2335b314b92f"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+              "sourceSha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0005"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-004",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(C([H])([H])[H])c([H])c([H])c1N([H])c1nnc(N2C([H])([H])C([H])([H])N(C([H])([H])[H])C([H])([H])C2([H])[H])s1",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "22d5cfbd9a49f950fef224804e8e336cdcc683a9af859e8075fb7b6f78376250"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "289.408"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "6"
+                }
+              ],
+              "rationale": "Combines an N-methylpiperazine basic center with an aromatic hydrophobic tail in a drug-like, balanced physicochemical framework suitable for DRD2 recognition.",
+              "uncertainty": "Receptor subtype selectivity (e.g. DRD2 vs DRD3/5-HT1A) and in vitro binding affinity.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Combines an N-methylpiperazine basic center with an aromatic hydrophobic tail in a drug-like, balanced physicochemical framework suitable for DRD2 recognition.",
+                  "uncertainty": "Receptor subtype selectivity (e.g. DRD2 vs DRD3/5-HT1A) and in vitro binding affinity.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+                    "sha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "The compound possesses a well-positioned basic nitrogen along with appropriate aromatic and hydrophobic motifs, fitting classical aminergic receptor pharmacophores with favorable drug-like properties.",
+                  "uncertainty": "Actual DRD2 affinity and off-target cross-reactivity with other monoaminergic receptors are not measured.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-2.json",
+                    "sha256": "f3836af7c621bc4f0900650c6a25a3489d9fb4d189f500a112ee2335b314b92f"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+              "sourceSha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0004"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-172",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(C2([H])C([H])([H])C([H])([H])N(S(=O)(=O)C([H])([H])[H])C([H])([H])C2([H])[H])c([H])c([H])c1OC([H])([H])C([H])([H])[H]",
+                "source": {
+                  "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "22d5cfbd9a49f950fef224804e8e336cdcc683a9af859e8075fb7b6f78376250"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "283.393"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "3"
+                }
+              ],
+              "rationale": "Capping the cyclic amine with a methanesulfonyl group abolishes the requisite basicity needed for the key orthosteric salt bridge with the conserved aspartate residue of DRD2.",
+              "uncertainty": "Whether neutral hydrophobic/aromatic interactions alone could confer any baseline affinity in the absence of a basic nitrogen.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Capping the cyclic amine with a methanesulfonyl group abolishes the requisite basicity needed for the key orthosteric salt bridge with the conserved aspartate residue of DRD2.",
+                  "uncertainty": "Whether neutral hydrophobic/aromatic interactions alone could confer any baseline affinity in the absence of a basic nitrogen.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+                    "sha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "The absence of a basic amine due to sulfonylation of the piperidine nitrogen prevents the essential ionic interaction with Asp114(3.32), making this molecule unsuited for DRD2 binding.",
+                  "uncertainty": "In vitro affinity at non-aminergic targets.",
+                  "source": {
+                    "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-2.json",
+                    "sha256": "f3836af7c621bc4f0900650c6a25a3489d9fb4d189f500a112ee2335b314b92f"
+                  }
+                }
+              ],
+              "source": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/repeat-1.json",
+              "sourceSha256": "75a2bdd9ca16c5de9965bb62c7b0ba7d3e1522fa16f65a30b626155b8b331326",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0178"
             }
           ],
           "exactGoal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
@@ -3314,31 +3958,61 @@
             "kind": "original-goal"
           },
           "selection": {
-            "status": "placeholder",
+            "status": "original-goal",
             "rationale": null,
-            "uncertainty": null
+            "uncertainty": null,
+            "source": {
+              "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/frozen_config.json",
+              "sha256": "25e24cebc8888b4bb168babe0d20764bcd3d14bc44c0f52d66a33db874fac796"
+            }
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 234.343–238.267 Da",
+              "positiveId": "item-188",
+              "negativeId": "item-005",
+              "sizes": [
+                234.343,
+                238.267
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 283.393–289.408 Da",
+              "positiveId": "item-004",
+              "negativeId": "item-172",
+              "sizes": [
+                289.408,
+                283.393
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "drugs-ltfd-c3h3g2s-07g-03",
+            "round": 3,
+            "cumulativeUpdates": 9,
+            "judgment": "G03-child-development",
+            "stableSummary": {
+              "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/judgments/G03-child-development/stable_summary.json",
+              "sha256": "980e8afeaf2472ce74473f562e0716aa83f541e08f18e6e5e44f63596b77a900"
+            }
+          }
         }
       ],
       "name": "Small molecule design for dopamine D2 binding",
       "generator": "FlowMol3",
       "category": "Small molecules",
       "goal": "Generate promising drug-like small molecules for binding the dopamine D2 receptor, balancing plausible receptor recognition with moderate lipophilicity and chemically viable structures.",
-      "shortCaveat": "Candidate-level source traces are pending. All example slots are explicitly marked placeholders."
+      "shortCaveat": "Recorded end-of-stage examples agree across both judge passes; later continuation rounds are excluded.",
+      "reportedCheckpoint": {
+        "file": "drugs-ltfd-c3h3g2s-07g-03/campaign/rounds/round-03/update/last.ckpt",
+        "sha256": "65c1d1b7bc28dac7be8f62a413948aa933f8af7bcda0051cb5a4da86ec40f37a"
+      }
     },
     {
       "id": "gsk3b",
@@ -4773,13 +5447,13 @@
     },
     {
       "id": "ood",
-      "lineage": "Paper-reported constrained molecular design campaign; rendered hit from the round-6 batch. Original campaign artifacts were not located in the inspected local archive.",
+      "lineage": "kinase-ltfd-linkrelaxed-p020-x20-05; six training updates through round 6, followed by a full-goal assessment of the same development cohort. Later campaign rounds are excluded.",
       "caveats": [
-        "The curriculum is documented; original goal-selection and candidate-level trace archives are not available in this export. All candidate slots are placeholders.",
         "The reported discovery example was assessed against the final goal, while generation at round 6 was still under the third intermediate goal.",
-        "The main text refers to the third rung as g2, while the appendix labels it g3. This explorer uses sequential g0/g1/g2 and records that numbering discrepancy.",
+        "The bundled 43-page paper refers to the third rung as g2 in the main text and g3 in the appendix. This explorer uses sequential g0/g1/g2, consistent with the separately documented 45-page verification version.",
         "The final-goal assessment is shown separately with zero training rounds; it is not an additional adaptation step.",
-        "The reported hit satisfies a structural specification; target activity and experimental properties remain unmeasured."
+        "The reported hit satisfies a structural specification; target activity and experimental properties remain unmeasured.",
+        "The round-6 final assessment contains one stable positive and 505 stable negatives among 506 judgeable candidates from 512 generation attempts; the displayed final pair includes the reported hit item-151."
       ],
       "stages": [
         {
@@ -4792,40 +5466,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-435",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c2c(nc([C@@]([H])(N([H])C([H])([H])[H])C([H])([H])[H])n2C([H])([H])[H])c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "791a72ac07562f963f2ecf16aff301f4cceec261bcb21f5ceccd092dc2548099"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "189.262"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "3"
+                }
+              ],
+              "rationale": "The molecule is neutral, connected, and contains a benzimidazole aromatic heterocycle, satisfying all operative clauses of the current goal.",
+              "uncertainty": "Kinase hinge-binding capacity of the benzimidazole core.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "The molecule is neutral, connected, and contains a benzimidazole aromatic heterocycle, satisfying all operative clauses of the current goal.",
+                  "uncertainty": "Kinase hinge-binding capacity of the benzimidazole core.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Item-435 contains a heteroaromatic benzimidazole system in a neutral, connected framework, fulfilling the current goal.",
+                  "uncertainty": "Target binding and kinase selectivity profiles are untested.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "5ddc7acda2943e4db271284e0a752c519eb965696b2456da987199187dc5bfef"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0435"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-296",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c(C(C([H])([H])[H])(C([H])([H])[H])C([H])([H])[H])c([H])c([H])c1N([H])C(=O)C([H])([H])[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "791a72ac07562f963f2ecf16aff301f4cceec261bcb21f5ceccd092dc2548099"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "191.274"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "1"
+                }
+              ],
+              "rationale": "Item-296 only contains a carbocyclic phenyl ring and an acyclic amide, failing to provide an aromatic heterocycle.",
+              "uncertainty": "None.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-296 only contains a carbocyclic phenyl ring and an acyclic amide, failing to provide an aromatic heterocycle.",
+                  "uncertainty": "None.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "The candidate lacks an aromatic heterocycle and fails the current goal.",
+                  "uncertainty": "None regarding the structural goal.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "5ddc7acda2943e4db271284e0a752c519eb965696b2456da987199187dc5bfef"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0296"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-226",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c(Cl)c(OC([H])([H])[H])c([H])c(N([H])C(=O)C([H])([H])Sc2nnc(C([H])([H])c3c([H])c([H])c(C([H])([H])[H])c([H])c3[H])o2)c1OC([H])([H])[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "791a72ac07562f963f2ecf16aff301f4cceec261bcb21f5ceccd092dc2548099"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "433.917"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "7"
+                }
+              ],
+              "rationale": "Item-226 is a neutral, connected small molecule containing a 1,3,4-oxadiazole aromatic heterocycle, satisfying the goal.",
+              "uncertainty": "Kinase inhibition potency and cellular permeability.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-226 is a neutral, connected small molecule containing a 1,3,4-oxadiazole aromatic heterocycle, satisfying the goal.",
+                  "uncertainty": "Kinase inhibition potency and cellular permeability.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Item-226 possesses a 1,3,4-oxadiazole aromatic heterocycle and is a neutral, connected small molecule.",
+                  "uncertainty": "Kinase inhibitory activity.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "5ddc7acda2943e4db271284e0a752c519eb965696b2456da987199187dc5bfef"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0226"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-509",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c([C@@]2([H])C([H])([H])N(C(=O)[C@@]([H])(N([H])c3c([H])c(OC([H])([H])[H])c(OC([H])([H])[H])c([H])c3C3=NC([H])([H])C([H])([H])O3)C([H])([H])[H])C([H])([H])C([H])([H])C2([H])[H])c([H])c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "791a72ac07562f963f2ecf16aff301f4cceec261bcb21f5ceccd092dc2548099"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "437.54"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "6"
+                }
+              ],
+              "rationale": "The candidate fails the current goal because it does not contain any aromatic heterocycle.",
+              "uncertainty": "None regarding the presence of aromatic heterocycles.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "The candidate fails the current goal because it does not contain any aromatic heterocycle.",
+                  "uncertainty": "None regarding the presence of aromatic heterocycles.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+                    "sha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Although heterocycles are present, none are aromatic heterocycles, leading to a negative evaluation.",
+                  "uncertainty": "None regarding aromaticity and heterocyclic categorization.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-2.json",
+                    "sha256": "5ddc7acda2943e4db271284e0a752c519eb965696b2456da987199187dc5bfef"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/repeat-1.json",
+              "sourceSha256": "29fc354761fd40eb14da72f8ed3485442ecdaa4651461d6ae8155f1e5ed66db5",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0509"
             }
           ],
           "exactGoal": "Generate neutral, connected small molecules that contain at least one aromatic heterocycle.",
@@ -4836,24 +5702,58 @@
             "kind": "llm-subgoal"
           },
           "selection": {
-            "status": "placeholder",
-            "rationale": null,
-            "uncertainty": null
+            "status": "recorded",
+            "rationaleField": "proposal.rationale",
+            "source": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-01/goal_selection/proposal-2.json",
+              "sha256": "09ae775aa588f8048319ec759ffc98686336b69604493ee73d2143c2615cffb1"
+            },
+            "rationale": "The previous proposal targeting a free secondary amine yielded only a single positive example, rendering the goal unlearnable due to extreme sparsity. To repair this, we defer the secondary amine requirement and instead shift our first rung to the other foundational motif of the final goal: the aromatic heterocycle. Teaching the generator to reliably incorporate aromatic heterocycles establishes the chemical foundation for the specific six-membered aza-aromatic hinge-binder. This broad capability provides a much healthier positive-to-negative split in the current working cohort, remains highly discriminative against purely aliphatic or carbocyclic structures, and is directly assessable using the registered functional group descriptors. Once mastered, subsequent TIGHTEN actions will progressively reintroduce the deferred constraints.",
+            "bridge": "Establishing the capability to generate aromatic heterocycles lays the structural groundwork for the final goal's specific aza-aromatic hinge-binding motif. After this broad baseline capability passes the threshold, subsequent TIGHTEN actions will restrict the aromatic heterocycle to a six-membered ring containing nitrogen, require the adjacent primary amine substitution, and reintroduce the disjoint fully saturated ring with its secondary amine, layering constraints step-by-step until the exact topology of the immutable final goal is reached.",
+            "deferredRequirements": [
+              "The aromatic heterocycle must specifically be a six-membered aza-aromatic ring.",
+              "The aza-aromatic ring must bear a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen.",
+              "The molecule must contain a distinct fully saturated ring.",
+              "The fully saturated ring must contain a free secondary amine as a ring atom.",
+              "Overall suitability for a kinase-focused discovery campaign (e.g., precise hinge-binding geometry, property cutoffs)."
+            ]
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 189.262–191.274 Da",
+              "positiveId": "item-435",
+              "negativeId": "item-296",
+              "sizes": [
+                189.262,
+                191.274
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 433.917–437.540 Da",
+              "positiveId": "item-226",
+              "negativeId": "item-509",
+              "sizes": [
+                433.917,
+                437.54
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "kinase-ltfd-linkrelaxed-p020-x20-05",
+            "round": 1,
+            "cumulativeUpdates": 1,
+            "judgment": "G01-child-development",
+            "stableSummary": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G01-child-development/stable_summary.json",
+              "sha256": "400e2a955cddcb9bd451b3b792ac35891098aa806a0f329ddb61029ca0f569f1"
+            }
+          }
         },
         {
           "id": "g1",
@@ -4865,40 +5765,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-348",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c2c(C([H])([H])[H])c([H])c(C([H])([H])C([H])([H])[H])nc2c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6c88b4ebddad00bd0e5648dd908a9594d00e7866b06611ead3cb27b2e3041fee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "171.243"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "1"
+                }
+              ],
+              "rationale": "Item-348 contains a quinoline core featuring a six-membered aza-aromatic ring.",
+              "uncertainty": "Screening and kinase activity are unknown, but current structural criteria are fulfilled.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-348 contains a quinoline core featuring a six-membered aza-aromatic ring.",
+                  "uncertainty": "Screening and kinase activity are unknown, but current structural criteria are fulfilled.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Candidate item-348 is positive because it is a neutral, connected molecule containing a six-membered aza-aromatic ring.",
+                  "uncertainty": "Downstream kinase pharmacophore elements are incomplete for the final goal, but the current goal is met.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "a6deab0bd298db844f78145d1fffe947c03e26ef91e6e2e403c3f512e6fec32d"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0349"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-476",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]C([H])([H])C([H])([H])C(=O)[C@]12C([H])([H])C([H])([H])C([H])([H])[C@]([H])(C([H])([H])C1([H])[H])C2([H])[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6c88b4ebddad00bd0e5648dd908a9594d00e7866b06611ead3cb27b2e3041fee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "166.264"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "1"
+                }
+              ],
+              "rationale": "Item-476 lacks aromaticity and nitrogen atoms, failing the current goal entirely.",
+              "uncertainty": "None.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-476 lacks aromaticity and nitrogen atoms, failing the current goal entirely.",
+                  "uncertainty": "None.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "The candidate lacks nitrogen atoms and aromatic rings entirely, failing the requirement for a six-membered aza-aromatic ring.",
+                  "uncertainty": "None relevant to the operative structural criteria.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "a6deab0bd298db844f78145d1fffe947c03e26ef91e6e2e403c3f512e6fec32d"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0478"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-193",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1nc([H])c([H])c(C([H])([H])[C@]([H])(C(=O)N([H])C([H])(C([H])([H])[H])C([H])([H])[H])N(c2c([H])c([H])c(OC([H])([H])[H])c([H])c2[H])S(=O)(=O)c2c([H])c([H])c([H])c([H])c2[H])c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6c88b4ebddad00bd0e5648dd908a9594d00e7866b06611ead3cb27b2e3041fee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "453.564"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "5"
+                }
+              ],
+              "rationale": "Item-193 meets all criteria of the current goal by being a neutral, connected small molecule possessing a six-membered aza-aromatic ring (pyridine).",
+              "uncertainty": "None regarding the operative structural requirements of the current goal.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-193 meets all criteria of the current goal by being a neutral, connected small molecule possessing a six-membered aza-aromatic ring (pyridine).",
+                  "uncertainty": "None regarding the operative structural requirements of the current goal.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Item-193 meets all requirements of the current goal by being a neutral, connected small molecule containing a six-membered aza-aromatic pyridine ring.",
+                  "uncertainty": "Experimental kinase binding or hinge interaction is unverified, but not required by the current goal.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "a6deab0bd298db844f78145d1fffe947c03e26ef91e6e2e403c3f512e6fec32d"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0194"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-218",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]C(=C1C(=O)N(C([H])([H])[H])C(=S)N1C([H])([H])C([H])([H])[H])c1nnc(C([H])([H])C([H])([H])Oc2c([H])c(OC([H])([H])[H])c(OC([H])([H])[H])c([H])c2OC([H])([H])[H])o1",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6c88b4ebddad00bd0e5648dd908a9594d00e7866b06611ead3cb27b2e3041fee"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "448.501"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "9"
+                }
+              ],
+              "rationale": "Does not contain a six-membered aza-aromatic ring.",
+              "uncertainty": "None.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Does not contain a six-membered aza-aromatic ring.",
+                  "uncertainty": "None.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+                    "sha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Fails to contain a six-membered aza-aromatic ring.",
+                  "uncertainty": "None regarding heterocyclic topology.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-2.json",
+                    "sha256": "a6deab0bd298db844f78145d1fffe947c03e26ef91e6e2e403c3f512e6fec32d"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/repeat-1.json",
+              "sourceSha256": "d2576af62a27fff51bf6063f5b9f79fa2afdbc64d64561a4e87b248d5286aabd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0219"
             }
           ],
           "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring.",
@@ -4909,24 +6001,57 @@
             "kind": "llm-subgoal"
           },
           "selection": {
-            "status": "placeholder",
-            "rationale": null,
-            "uncertainty": null
+            "status": "recorded",
+            "rationaleField": "proposal.rationale",
+            "source": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-02/goal_selection/proposal-1.json",
+              "sha256": "567b1bb8ea06a141d24e121af84f38e90276a9062e2e1e8d1f9f721c78c00f69"
+            },
+            "rationale": "The previous goal successfully established the broad presence of aromatic heterocycles in the generated molecules. To progress toward the immutable final goal—which requires a specific kinase hinge-binding motif based on a substituted pyridine-like ring—we must narrow the allowed class of heterocycles. By restricting the generated molecules to those containing at least one six-membered aza-aromatic ring, we filter out five-membered aza-heterocycles (like pyrazoles, imidazoles, or thiazoles) and non-nitrogen heterocycles (like furans or thiophenes). This represents a single semantic step toward the final scaffold, deliberately deferring the precise substitution pattern of the primary amine and the disjoint saturated amine ring.",
+            "bridge": "This goal refines the broad 'aromatic heterocycle' requirement down to the precise ring size and heteroatom class (six-membered aza-aromatic) needed to support the final goal's desired hinge-binding motif. It sets the structural foundation before enforcing the specific adjacency of a primary amine or the inclusion of the separate saturated secondary amine ring.",
+            "deferredRequirements": [
+              "A free primary amino group attached to a carbon of the aza-aromatic ring adjacent to a ring nitrogen",
+              "A distinct, fully saturated ring",
+              "A free secondary amine embedded as an atom within the fully saturated ring",
+              "Kinase target affinity, specific binding poses, and broader campaign safety profiles"
+            ]
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 166.264–171.243 Da",
+              "positiveId": "item-348",
+              "negativeId": "item-476",
+              "sizes": [
+                171.243,
+                166.264
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 448.501–453.564 Da",
+              "positiveId": "item-193",
+              "negativeId": "item-218",
+              "sizes": [
+                453.564,
+                448.501
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "kinase-ltfd-linkrelaxed-p020-x20-05",
+            "round": 2,
+            "cumulativeUpdates": 2,
+            "judgment": "G02-child-development",
+            "stableSummary": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G02-child-development/stable_summary.json",
+              "sha256": "049fd794bb65ed6f7e31bc903ee237694090051c8de29178eb181df4feb991a2"
+            }
+          }
         },
         {
           "id": "g2",
@@ -4938,40 +6063,232 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-194",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]N([H])c1nc(N([H])[H])nc(N([H])C([H])([H])C([H])([H])C([H])([H])C([H])([H])[H])n1",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "182.231"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "3"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "6"
+                }
+              ],
+              "rationale": "Item-194 fully satisfies every clause of the current goal: it is a neutral, single-component small molecule with a six-membered aza-aromatic 1,3,5-triazine ring and both free primary and secondary amines.",
+              "uncertainty": "Kinase binding affinity, target profile, and synthetic downstream elaboration to the final kinase goal remain unmeasured.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Item-194 fully satisfies every clause of the current goal: it is a neutral, single-component small molecule with a six-membered aza-aromatic 1,3,5-triazine ring and both free primary and secondary amines.",
+                  "uncertainty": "Kinase binding affinity, target profile, and synthetic downstream elaboration to the final kinase goal remain unmeasured.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+                    "sha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "The molecule fully meets all criteria of the current goal: it is neutral, connected, and contains a six-membered aza-aromatic ring with both free primary and secondary amine groups.",
+                  "uncertainty": "None regarding the current goal.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-2.json",
+                    "sha256": "b5d90a6ab5ad9b4da70d8c1f9f6ff2fc164d92485cb6e95455655e4f53bb41f5"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+              "sourceSha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0197"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "NEGATIVE",
+              "sampleId": "item-332",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1nc(SC([H])(C([H])([H])[H])C([H])([H])[H])n(C([H])([H])[H])c(=O)c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "184.264"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "0"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "Item-332 fails the requirement of having at least one free primary or secondary amine.",
+              "uncertainty": "None regarding the structural operative clauses of the current goal.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-332 fails the requirement of having at least one free primary or secondary amine.",
+                  "uncertainty": "None regarding the structural operative clauses of the current goal.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+                    "sha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-332 fails the current goal due to the absence of any free primary or secondary amine.",
+                  "uncertainty": "None regarding the current goal's structural criteria.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-2.json",
+                    "sha256": "b5d90a6ab5ad9b4da70d8c1f9f6ff2fc164d92485cb6e95455655e4f53bb41f5"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+              "sourceSha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0337"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "label": "POSITIVE",
+              "sampleId": "item-384",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]Oc1c([H])c([H])c(C([H])([H])C([H])([H])N([H])c2nc3c(OC([H])([H])[H])nc(=O)n(C([H])([H])[H])c3c(=O)n2C([H])([H])c2c([H])c([H])c([H])c([H])c2[H])c([H])c1OC([H])([H])[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "463.494"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "2"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "10"
+                }
+              ],
+              "rationale": "The candidate fulfills all requirements: neutral, connected, contains six-membered aza-aromatic rings, and bears a free secondary amine.",
+              "uncertainty": "Kinase inhibitory potency and hinge binding pose are unknown.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "The candidate fulfills all requirements: neutral, connected, contains six-membered aza-aromatic rings, and bears a free secondary amine.",
+                  "uncertainty": "Kinase inhibitory potency and hinge binding pose are unknown.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+                    "sha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "Item-384 satisfies the current goal by incorporating a six-membered aza-aromatic ring with an sp2 ring nitrogen and a free secondary amine moiety.",
+                  "uncertainty": "Selectivity profile across kinase hinge regions.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-2.json",
+                    "sha256": "b5d90a6ab5ad9b4da70d8c1f9f6ff2fc164d92485cb6e95455655e4f53bb41f5"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+              "sourceSha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0390"
+            },
+            {
+              "status": "recorded",
+              "pairId": "pair-2",
+              "label": "NEGATIVE",
+              "sampleId": "item-014",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]C(=NN([H])C(=O)c1oc(C(=O)N([H])c2c([H])c([H])c([H])c([H])c2OC([H])([H])[H])c([H])c1[H])c1on(-c2nc(C([H])([H])[H])c([H])c([H])c2[H])c(=O)c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "461.434"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "2"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "9"
+                }
+              ],
+              "rationale": "Item-014 contains a pyridine ring but fails the requirement for a free primary or secondary amine.",
+              "uncertainty": "None regarding graph-level functional group classes.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-014 contains a pyridine ring but fails the requirement for a free primary or secondary amine.",
+                  "uncertainty": "None regarding graph-level functional group classes.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+                    "sha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "Item-014 possesses a 6-membered aza-aromatic ring (2-methylpyridine) but fails the requirement for a free primary or secondary amine because all NH groups are conjugated into amides or hydrazides.",
+                  "uncertainty": "Exact synthetic feasibility and conformational preferences of the complex polyheterocyclic hydrazone scaffold.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-2.json",
+                    "sha256": "b5d90a6ab5ad9b4da70d8c1f9f6ff2fc164d92485cb6e95455655e4f53bb41f5"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/repeat-1.json",
+              "sourceSha256": "2de927f800a1762bae9fa62cc339dd47d29d72b89cd81e1e79301fb704c3ea5e",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0015"
             }
           ],
           "exactGoal": "Generate neutral, connected small molecules that contain at least one six-membered aza-aromatic ring and at least one free primary or secondary amine.",
@@ -4982,24 +6299,57 @@
             "kind": "llm-subgoal"
           },
           "selection": {
-            "status": "placeholder",
-            "rationale": null,
-            "uncertainty": null
+            "status": "recorded",
+            "rationaleField": "proposal.rationale",
+            "source": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-03/goal_selection/proposal-1.json",
+              "sha256": "76766a2409482cccae13e1b3d2e878cd709b254e3daf384cab71070753af3b2e"
+            },
+            "rationale": "The final goal requires both a six-membered aza-aromatic ring bearing an adjacent primary amine (the putative hinge-binding motif) and a distinct saturated ring containing a secondary amine. The current source goal successfully enriched for the six-membered aza-aromatic ring but allows molecules lacking any free primary or secondary amines. To incrementally approach the final goal, we tighten the requirements by demanding the presence of at least one free primary or secondary amine anywhere in the molecule. This shifts the generator toward producing molecules with essential basic or hydrogen-bond donating amine functionalities, setting the stage for later steps that will specify the exact regiochemistry (primary amine adjacent to the aza-aromatic nitrogen) and ring topology (secondary amine within a saturated ring). The visible cohort provides valid positive examples (e.g., items 035, 069, and 110) that satisfy this tightened goal while properly filtering out source-positive molecules that only contain amides or fully substituted nitrogens.",
+            "bridge": "This intermediate goal bridges to the immutable final goal by introducing the requirement for an explicitly identifiable primary or secondary amine functionality. It ensures the generator learns to incorporate these critical hydrogen-bond donors in tandem with the six-membered aza-aromatic system, without prematurely forcing the exact topological placement of the primary amine or the co-occurrence of the fully saturated nitrogen-containing ring.",
+            "deferredRequirements": [
+              "The primary amine must be specifically located on a ring carbon adjacent to a pyridine-like ring nitrogen of the aza-aromatic ring.",
+              "A distinct fully saturated ring must be present in the molecule.",
+              "The secondary amine must be an atom within the distinct fully saturated ring.",
+              "Kinase-targeted binding, affinity, selectivity, and safety profiles."
+            ]
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
+              "label": "Smaller molecules · 182.231–184.264 Da",
+              "positiveId": "item-194",
+              "negativeId": "item-332",
+              "sizes": [
+                182.231,
+                184.264
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             },
             {
               "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Larger molecules · 461.434–463.494 Da",
+              "positiveId": "item-384",
+              "negativeId": "item-014",
+              "sizes": [
+                463.494,
+                461.434
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "Approximately matched molecular weights and consistent goal-specific judgments in both recorded passes."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "kinase-ltfd-linkrelaxed-p020-x20-05",
+            "round": 6,
+            "cumulativeUpdates": 6,
+            "judgment": "G06-child-development",
+            "stableSummary": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/G06-child-development/stable_summary.json",
+              "sha256": "3f80125a980c5d409b721498e36a4fac00bcb717f788797d7b82420ab97b955b"
+            }
+          }
         },
         {
           "id": "g",
@@ -5013,40 +6363,118 @@
           ],
           "traces": [
             {
-              "status": "placeholder",
-              "label": "POSITIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-positive-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "POSITIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-positive-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-151",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]N([H])c1nc(SC([H])([H])C([H])([H])[H])nc(N2C([H])([H])N([H])C([H])([H])C([H])([H])C([H])([H])C2([H])[H])n1",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "254.363"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "2"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "7"
+                }
+              ],
+              "rationale": "Candidate item-151 satisfies all operative structural clauses by presenting a 2-amino-1,3,5-triazine aza-aromatic motif and a distinct fully saturated diazepane ring containing a free secondary amine ring nitrogen.",
+              "uncertainty": "Target kinase profile, cellular permeability, and metabolic stability remain unmeasured.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "POSITIVE",
+                  "rationale": "Candidate item-151 satisfies all operative structural clauses by presenting a 2-amino-1,3,5-triazine aza-aromatic motif and a distinct fully saturated diazepane ring containing a free secondary amine ring nitrogen.",
+                  "uncertainty": "Target kinase profile, cellular permeability, and metabolic stability remain unmeasured.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-1.json",
+                    "sha256": "7101aa87d79f1913bdc4bd7c0265addc642e61d15fb060748aa2a05a516996dd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "POSITIVE",
+                  "rationale": "item-151 strictly satisfies every operative structural requirement of the current goal, featuring a neutral small-molecule scaffold with a 2-amino aza-aromatic ring and a distinct saturated ring with a secondary amine.",
+                  "uncertainty": "Kinase target selectivity, cellular potency, and biochemical hinge-binding mode.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-2.json",
+                    "sha256": "bd720c5965f396e25b83b9a6380826db724c61a6d97c8be99aefbb6f508e6cda"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-1.json",
+              "sourceSha256": "7101aa87d79f1913bdc4bd7c0265addc642e61d15fb060748aa2a05a516996dd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0154"
             },
             {
-              "status": "placeholder",
-              "label": "NEGATIVE",
+              "status": "recorded",
               "pairId": "pair-1",
-              "sampleId": "placeholder-negative-1",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
-            },
-            {
-              "status": "placeholder",
               "label": "NEGATIVE",
-              "pairId": "pair-2",
-              "sampleId": "placeholder-negative-2",
-              "representation": null,
-              "rationale": null,
-              "uncertainty": null
+              "sampleId": "item-404",
+              "representation": {
+                "kind": "smiles",
+                "value": "[H]c1c([H])c([H])c(C([H])([H])C([H])([H])c2nn([H])c(=O)c3c([H])n(C([H])([H])[H])nc23)c([H])c1[H]",
+                "source": {
+                  "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/rounds/round-06/development/child/pool/candidate_pool.jsonl",
+                  "sha256": "6b5c9ddae759977d04a1e8c846c41db9c23ff3f88b165928171faa57a7fd2e1f"
+                }
+              },
+              "observables": [
+                {
+                  "label": "MW (Da)",
+                  "value": "254.293"
+                },
+                {
+                  "label": "H-bond donors",
+                  "value": "1"
+                },
+                {
+                  "label": "H-bond acceptors",
+                  "value": "4"
+                }
+              ],
+              "rationale": "Fails to meet the operative structural requirements.",
+              "uncertainty": "None regarding structural compliance.",
+              "passes": [
+                {
+                  "pass": 1,
+                  "label": "NEGATIVE",
+                  "rationale": "Fails to meet the operative structural requirements.",
+                  "uncertainty": "None regarding structural compliance.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-1.json",
+                    "sha256": "7101aa87d79f1913bdc4bd7c0265addc642e61d15fb060748aa2a05a516996dd"
+                  }
+                },
+                {
+                  "pass": 2,
+                  "label": "NEGATIVE",
+                  "rationale": "The candidate fails both major requirements of the goal: it has no 2-amino-substituted six-membered aza-aromatic ring and no saturated ring containing a secondary amine.",
+                  "uncertainty": "Experimental kinase binding or screening data are unavailable.",
+                  "source": {
+                    "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-2.json",
+                    "sha256": "bd720c5965f396e25b83b9a6380826db724c61a6d97c8be99aefbb6f508e6cda"
+                  }
+                }
+              ],
+              "source": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/repeat-1.json",
+              "sourceSha256": "7101aa87d79f1913bdc4bd7c0265addc642e61d15fb060748aa2a05a516996dd",
+              "paraphrased": false,
+              "agreement": "Same label in both recorded judge passes.",
+              "generationId": "development-attempt-0410"
             }
           ],
           "exactGoal": "Generate neutral, connected small molecules for a kinase-focused discovery campaign that contain a six-membered aza-aromatic ring bearing a free primary amino group on a ring carbon adjacent to a pyridine-like ring nitrogen, and a distinct fully saturated ring containing a free secondary amine. The saturated amine-containing ring need not be carbon-linked to the aza-aromatic ring.",
@@ -5057,24 +6485,48 @@
             "kind": "original-goal"
           },
           "selection": {
-            "status": "placeholder",
+            "status": "original-goal",
             "rationale": null,
-            "uncertainty": null
+            "uncertainty": null,
+            "source": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/frozen_config.json",
+              "sha256": "18ea91cca0be2967d62dda5bd88c1c288facc34815a9162bce6f4e342ae1c8ec"
+            }
           },
           "tracePairs": [
             {
               "id": "pair-1",
-              "label": "Example pair 1 · pending",
-              "positiveId": "placeholder-positive-1",
-              "negativeId": "placeholder-negative-1"
-            },
-            {
-              "id": "pair-2",
-              "label": "Example pair 2 · pending",
-              "positiveId": "placeholder-positive-2",
-              "negativeId": "placeholder-negative-2"
+              "label": "Final assessment · 254.293–254.363 Da",
+              "positiveId": "item-151",
+              "negativeId": "item-404",
+              "sizes": [
+                254.363,
+                254.293
+              ],
+              "sizeUnit": "Da",
+              "selectionReason": "The only stable full-goal positive, paired with a stable negative from the same round-6 cohort at nearly identical molecular weight."
             }
-          ]
+          ],
+          "traceProvenance": {
+            "run": "kinase-ltfd-linkrelaxed-p020-x20-05",
+            "round": 6,
+            "cumulativeUpdates": 6,
+            "judgment": "F06-child-development",
+            "stableSummary": {
+              "file": "kinase-ltfd-linkrelaxed-p020-x20-05/campaign/judgments/F06-child-development/stable_summary.json",
+              "sha256": "04a87f6ac270d4f4131517f53b8bb7d999f692f1f8f2918368531f4ea7a9a8b4"
+            }
+          },
+          "assessment": {
+            "generationAttempts": 512,
+            "judgeableCandidates": 506,
+            "stablePositive": 1,
+            "stableNegative": 505,
+            "unjudgeableAttempts": 6,
+            "unstableJudgments": 0,
+            "positiveItemId": "item-151",
+            "positiveGenerationSampleIndex": 154
+          }
         }
       ],
       "name": "Small molecule design with specified ring motifs",

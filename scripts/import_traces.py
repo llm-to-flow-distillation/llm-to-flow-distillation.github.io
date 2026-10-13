@@ -19,7 +19,9 @@ def main():
     archive = args.archive_root.resolve()
     data_path = ROOT / 'data/tasks.json'
     data = json.loads(data_path.read_text())
-    receipts = {}
+    # Retain the supplied D2/Goal 5 receipts when importing the legacy archive.
+    sources_path = ROOT / 'data/trace-sources.json'
+    receipts = {entry['file']: entry for entry in json.loads(sources_path.read_text())['sources']}
 
     def receipt(path):
         path = Path(path)
@@ -51,9 +53,11 @@ def main():
     for task in data['tasks']:
         for stage in task['stages']:
             if task['id'] in {'d2', 'ood'}:
-                stage['selection'] = {'status': 'placeholder', 'rationale': None, 'uncertainty': None}
-                stage['tracePairs'] = [{'id': f'pair-{i}', 'label': f'Example pair {i} · pending', 'positiveId': f'placeholder-positive-{i}', 'negativeId': f'placeholder-negative-{i}'} for i in (1, 2)]
-                stage['traces'] = [{'status': 'placeholder', 'label': label, 'pairId': f'pair-{i}', 'sampleId': f'placeholder-{label.lower()}-{i}', 'representation': None, 'rationale': None, 'uncertainty': None} for label in ('POSITIVE', 'NEGATIVE') for i in (1, 2)]
+                # These campaigns use a separate archive layout. Preserve their
+                # supplied verbatim records, including the one-pair assessment.
+                assert stage['selection']['status'] in {'recorded', 'original-goal'}
+                assert all(trace['status'] == 'recorded' for trace in stage['traces'])
+                assert stage['tracePairs'] == curation['tasks'][task['id']][stage['id']]
                 continue
             first_path = archive / stage['traces'][0]['source']
             first = read(first_path)
@@ -134,7 +138,7 @@ def main():
             stage['traces'] = picked
             print(task['id'], stage['id'], '4 recorded candidates')
     data['schemaVersion'] = 2
-    data['selectionNote'] = curation['selectionPolicy'] + ' Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. D2 and constrained-design slots are placeholders, not recorded judgments. Provider reasoning metadata is excluded.'
+    data['selectionNote'] = curation['selectionPolicy'] + ' Both explicit judge-output rationales and critical_unknowns fields are reproduced verbatim. Provider reasoning metadata is excluded.'
     data_path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n')
     (ROOT / 'data/trace-sources.json').write_text(json.dumps({'selection': data['selectionNote'], 'sources': sorted(receipts.values(), key=lambda r: r['file'])}, ensure_ascii=False, indent=2) + '\n')
 

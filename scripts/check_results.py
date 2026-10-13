@@ -2,6 +2,7 @@
 """Verify persistent case-study plots, source values, and independent trace views."""
 import argparse
 import json
+import os
 from pathlib import Path
 from playwright.sync_api import sync_playwright, expect
 
@@ -15,7 +16,9 @@ def main():
     out = Path(args.output_dir)
     out.mkdir(parents=True, exist_ok=True)
     results = json.loads((root / 'data/results.json').read_text())
-    novelty = json.loads((root / 'data/charts.json').read_text())['novelty']
+    charts = json.loads((root / 'data/charts.json').read_text())
+    novelty = {'d2':charts['d2']['novelty'], 'gsk3b':charts['novelty']}
+    novelty_ids = {'d2':'novelty-chart-d2', 'gsk3b':'novelty-chart'}
     panel_data = json.loads((root / 'data/result-panels.json').read_text())
     colors = {'LFD':'#8732ad','Pre-trained':'#33373f','DPO':'#d77b00',
               'DiffusionNFT':'#286565','Flow-GRPO':'#719adc','Guidance':'#c54b59'}
@@ -24,7 +27,7 @@ def main():
     errors, failures = [], []
     widths = [360,390,600,768,1024,1440,1920]
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--no-sandbox'])
+        browser = p.chromium.launch(args=['--no-sandbox'], executable_path=os.environ.get('PLAYWRIGHT_CHROMIUM_EXECUTABLE'))
         page = browser.new_page(viewport={'width':1440,'height':1000}, reduced_motion='reduce')
         page.on('pageerror', lambda e: errors.append(str(e)))
         page.on('response', lambda r: failures.append(r.url) if r.status >= 400 else None)
@@ -65,20 +68,33 @@ def main():
                 assert chart.locator('.errorbar path').evaluate_all('(els)=>els.length>0 && els.every(el=>getComputedStyle(el).stroke==="rgb(0, 0, 0)")')
         assert page.locator('#result-cards table').count()==0
         assert page.locator('.result-metrics').count()==2
+        def check_novelty(task):
+            chart=page.locator('#'+novelty_ids[task])
+            actual=chart.evaluate('(el)=>el.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],color:t.marker.color,symbol:t.marker.symbol,xc:t.error_x.color,yc:t.error_y.color}))')
+            assert actual==[dict(method=r['method'],x=r['noveltyMean'],y=r['negativeRDockMean'],dx=r['noveltyCI95'],dy=r['negativeRDockCI95'],color=colors[r['method']],symbol=symbols[r['method']],xc=colors[r['method']],yc=colors[r['method']]) for r in novelty[task]],task
+            return chart
         for task in ['d2','gsk3b']:
             details=page.locator(f'[data-result-metrics="{task}"]')
             expect(details.locator('summary')).to_contain_text('Scaffold novelty')
             details.locator('summary').focus();page.keyboard.press('Enter')
-            if task=='d2':
-                expect(details).to_contain_text('will be added here')
-                assert details.locator('.interactive-chart').count()==0
-            else:
-                page.wait_for_function('document.querySelector("#novelty-chart").data !== undefined')
-        chart=page.locator('#novelty-chart')
-        actual=chart.evaluate('(el)=>el.data.map(t=>({method:t.name,x:t.x[0],y:t.y[0],dx:t.error_x.array[0],dy:t.error_y.array[0],color:t.marker.color,xc:t.error_x.color,yc:t.error_y.color}))')
-        assert actual==[dict(method=r['method'],x=r['noveltyMean'],y=r['negativeRDockMean'],dx=r['noveltyCI95'],dy=r['negativeRDockCI95'],color=colors[r['method']],xc=colors[r['method']],yc=colors[r['method']]) for r in novelty]
-        page.locator('[data-result-metrics="d2"] summary').click()
-        page.locator('[data-result-metrics="gsk3b"] summary').click()
+            page.wait_for_function('(id)=>document.getElementById(id).data !== undefined',arg=novelty_ids[task])
+            chart=check_novelty(task)
+            expect(details.locator('.novelty-axis-help button')).to_have_text('Novel scaffolds in top 100 ↑')
+            expect(details.locator('.novelty-axis-help button')).to_have_attribute('data-metric','novelty-d2' if task=='d2' else 'novelty')
+            expect(chart.locator('.ytitle')).to_have_text('−rDock (top 5%) ↑')
+            expect(chart.locator('.ytitle')).to_have_attribute('data-metric','rdock-top-d2' if task=='d2' else 'rdock-top')
+            chart.locator('.scatterlayer .trace').nth(1).locator('.point').hover(force=True)
+            lfd=next(row for row in novelty[task] if row['method']=='LFD')
+            expect(chart.locator('.hoverlayer')).to_contain_text(f"{lfd['noveltyMean']:.2f} ± {lfd['noveltyCI95']:.2f}")
+            expect(chart.locator('.hoverlayer')).to_contain_text(f"{lfd['negativeRDockMean']:.3f} ± {lfd['negativeRDockCI95']:.3f}")
+        # Each disclosure retains its own data when the other is toggled.
+        page.evaluate('window.noveltyPlots=["novelty-chart-d2","novelty-chart"].map(id=>({node:document.getElementById(id),data:document.getElementById(id).data}))')
+        for task in ['d2','gsk3b']:
+            summary=page.locator(f'[data-result-metrics="{task}"] summary')
+            summary.click();summary.click()
+            for target in ['d2','gsk3b']:check_novelty(target)
+            assert page.evaluate('window.noveltyPlots.every(saved=>saved.node===document.getElementById(saved.node.id) && saved.data===saved.node.data)')
+            summary.click()
         for study in ['peptides','molecules']:
             intro=page.locator(f'#{study} .trace-introduction')
             expect(intro.locator('h4')).to_have_text('LLM traces')
@@ -108,7 +124,8 @@ def main():
             assert len(ids)==len(set(ids)),width
             for details in page.locator('.result-metrics').all():
                 details.locator('summary').click()
-                assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'),width
+                # Previously hidden Plotly figures resize asynchronously when reopened.
+                page.wait_for_function('document.documentElement.scrollWidth <= innerWidth')
                 details.locator('summary').click()
             if width in [390,1440]:
                 page.locator('#peptides .case-results-summary').screenshot(path=str(out/f'peptides-{width}.png'))
@@ -118,11 +135,11 @@ def main():
         touch=mobile.new_page();touch.on('pageerror',lambda e:errors.append(str(e)))
         touch.goto(args.url,wait_until='networkidle')
         touch.wait_for_function('document.querySelector("#result-cards").dataset.plotsReady === "true"')
-        for task,kind in [('anticancer','scatter'),('cpp','scatter'),('d2','bar'),('gsk3b','novelty')]:
-            selector='#novelty-chart' if kind=='novelty' else f'#docking-{task}' if kind=='bar' else f'#comparison-{task}'
+        for task,kind in [('anticancer','scatter'),('cpp','scatter'),('d2','bar'),('d2','novelty'),('gsk3b','novelty')]:
+            selector='#'+novelty_ids[task] if kind=='novelty' else f'#docking-{task}' if kind=='bar' else f'#comparison-{task}'
             if kind=='novelty':
-                touch.locator('[data-result-metrics="gsk3b"] summary').tap()
-                touch.wait_for_function('document.querySelector("#novelty-chart").data !== undefined')
+                touch.locator(f'[data-result-metrics="{task}"] summary').tap()
+                touch.wait_for_function('(id)=>document.getElementById(id).data !== undefined',arg=novelty_ids[task])
             chart=touch.locator(selector)
             point=chart.locator('.barlayer .trace').last.locator('.point path').first if kind=='bar' else chart.locator('.scatterlayer .trace').last.locator('.point')
             point.tap(force=True)
@@ -132,7 +149,7 @@ def main():
         mobile.close();browser.close()
     assert not errors,errors
     assert not failures,failures
-    report={'status':'passed','primary_plots':4,'expandable_scaffold_plot':1,'dopamine_placeholder':True,'rendered_tables':0,
+    report={'status':'passed','primary_plots':4,'expandable_scaffold_plots':2,'distinct_novelty_data':'passed','rendered_tables':0,
             'goal5_hit':'preserved','results_outside_traces':'passed','persistent_plot_nodes':'passed',
             'hover_touch':'passed','black_docking_intervals':'passed','colored_scaffold_intervals':'passed',
             'viewports':widths,'browser_errors':errors,'failed_http_requests':failures}

@@ -53,7 +53,7 @@
   ],
   "interactiveCharts": {
     "file": "data/charts.json",
-    "source": "Saved aggregate data for Figure 7(c,d), verified against the supplied figure. D2 panels remain available through the original paper because no verified numeric plot source was found.",
+    "source": "Saved aggregate data for Figure 7(c,d), verified against the supplied figure. Goal 3 Figure 7(b) data and source receipts were supplied in the author verification handoff; its top-100 training-SMILES reference is recorded separately from Goal 4.",
     "retrieved": "2026-10-01",
     "library": "Self-hosted Plotly.js basic v4.1.1 (MIT)"
   },
@@ -71,22 +71,52 @@
   "candidateTraces": {
     "file": "data/tasks.json",
     "sources": "data/trace-sources.json",
-    "recordedCandidates": 64,
-    "judgeOutputs": 128,
-    "placeholderSlots": 28,
+    "recordedCandidates": 90,
+    "judgeOutputs": 180,
+    "placeholderSlots": 0,
     "recordedTasks": [
       "anticancer",
       "cpp",
-      "gsk3b"
-    ],
-    "placeholderTasks": [
       "d2",
+      "gsk3b",
       "ood"
     ],
+    "placeholderTasks": [],
     "fields": "Only explicit structured goal explanations, final-output judgment rationales and critical_unknowns, candidate sequence/SMILES, and selected observed descriptors. Provider reasoning metadata is excluded.",
     "priorSummaries": "data/trace-summary-archive.json",
     "importer": "scripts/import_traces.py",
     "pairSelection": "data/trace-pairs.json",
-    "selectionPolicy": "Editorial illustrative selection for consistent goal-specific explanations and size diversity; not a random sample, causal control, or validated activity ranking."
-  }
+    "selectionPolicy": "Editorial illustrative selection for consistent goal-specific explanations and size diversity; not a random sample, causal control, or validated activity ranking.",
+    "additionalSources": "Goal 3 and Goal 5 verbatim records and archive SHA-256 receipts supplied in the author verification handoff; the original archives are not bundled with the website."
+  },
+  "verificationDocuments": [
+    {
+      "source_filename": "LFD_arxiv.pdf",
+      "sha256": "862475ddae2a05853423ad24eef9198fa0e544c562c9e23b8517d4342ce6fb54",
+      "pages": 45,
+      "tasks": [
+        "d2",
+        "ood"
+      ],
+      "source": "Author-provided verification handoff; the document is separate from the bundled assets/paper.pdf and is not included in this repository.",
+      "relevantPages": {
+        "d2": [
+          8,
+          9,
+          36,
+          38
+        ],
+        "gsk3b": [
+          9,
+          41
+        ],
+        "ood": [
+          9,
+          42,
+          44,
+          45
+        ]
+      }
+    }
+  ]
 }

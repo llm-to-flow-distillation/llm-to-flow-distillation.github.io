@@ -239,5 +239,176 @@
     "trajectory": "Descriptive, symmetrized 95% checkpoint intervals carried forward with the running maximum; not selection-adjusted or training-seed uncertainty.",
     "novelty": "Student-t 95% intervals across five sampling seeds conditional on one frozen checkpoint; consistency-filtered reference.",
     "paperTables": "Printed ± terms retained without relabeling their uncertainty type."
+  },
+  "d2": {
+    "target": "D2",
+    "paperFigure": 7,
+    "paperPanel": "b",
+    "samplingSeedIds": [
+      34601,
+      35601,
+      36601,
+      37601,
+      38601
+    ],
+    "samplingSeeds": 5,
+    "proposalsPerSeed": 256,
+    "referencePolicy": "geom_training_smiles",
+    "referenceEntries": 243480,
+    "referenceDistinctScaffolds": 79679,
+    "novelty": [
+      {
+        "method": "Pre-trained",
+        "noveltyMean": 39.0,
+        "noveltyCI95": 2.483327996407533,
+        "negativeRDockMean": 14.221039999999999,
+        "negativeRDockCI95": 0.1703927109006674,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      },
+      {
+        "method": "LFD",
+        "noveltyMean": 63.4,
+        "noveltyCI95": 4.856795354126119,
+        "negativeRDockMean": 16.1832,
+        "negativeRDockCI95": 0.5776547233218813,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      },
+      {
+        "method": "DPO",
+        "noveltyMean": 28.2,
+        "noveltyCI95": 6.108179231435157,
+        "negativeRDockMean": 13.98672,
+        "negativeRDockCI95": 0.38373378099425304,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      },
+      {
+        "method": "Flow-GRPO",
+        "noveltyMean": 40.8,
+        "noveltyCI95": 4.919873261135413,
+        "negativeRDockMean": 14.345098461538461,
+        "negativeRDockCI95": 0.7583819051203323,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      },
+      {
+        "method": "DiffusionNFT",
+        "noveltyMean": 48.6,
+        "noveltyCI95": 6.605372389920251,
+        "negativeRDockMean": 15.13471846153846,
+        "negativeRDockCI95": 0.8112282016587546,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      },
+      {
+        "method": "Guidance",
+        "noveltyMean": 43.0,
+        "noveltyCI95": 6.3312689561666415,
+        "negativeRDockMean": 13.995944615384616,
+        "negativeRDockCI95": 0.3301832199537165,
+        "samplingSeeds": 5,
+        "proposalsPerSeed": 256,
+        "referencePolicy": "geom_training_smiles",
+        "referenceEntries": 243480
+      }
+    ],
+    "definition": "Distinct Bemis–Murcko scaffolds among each sampling seed’s 100 best-rDock molecules that are absent from the recorded GEOM-Drugs training-SMILES reference. Duplicate scaffolds count once; atom and bond types are retained and stereochemistry is ignored. The reference contains 243,480 molecules and 79,679 distinct scaffolds.",
+    "uncertainty": "Two-sided 95% Student-t confidence intervals across five sampling seeds, with 256 generation proposals per seed, conditional on the selected checkpoints.",
+    "noveltyCountsBySeed": {
+      "Pre-trained": [
+        38,
+        40,
+        37,
+        38,
+        42
+      ],
+      "LFD": [
+        61,
+        60,
+        63,
+        70,
+        63
+      ],
+      "DPO": [
+        28,
+        30,
+        30,
+        20,
+        33
+      ],
+      "Flow-GRPO": [
+        41,
+        46,
+        35,
+        40,
+        42
+      ],
+      "DiffusionNFT": [
+        47,
+        52,
+        48,
+        41,
+        55
+      ],
+      "Guidance": [
+        42,
+        41,
+        40,
+        52,
+        40
+      ]
+    },
+    "sources": [
+      {
+        "file": "results/drugs/D2_pareto.tsv",
+        "sha256": "550e71606135a5d956f448cec05f8ade1b6d8534f00220523ff028c2af40a6dd"
+      },
+      {
+        "file": "results/drugs/plot_D2_pareto_icml.py",
+        "sha256": "eb881d58946a571575b34e8550077fabee5a4d6cacb6171545deef025413f6a6"
+      },
+      {
+        "file": "results/drugs/D2_pareto.png",
+        "sha256": "451a40e5851a630b3a44ea38aad4590ae532a23dcdf8bd4a8499ae66dd1cb18a"
+      },
+      {
+        "file": "results/drugs/geom_scaffold_novelty/report.json",
+        "sha256": "8e5ff56b3a22f7b91fe48d33b37a77e7ab495225045a38772df6ec5d8e3f9ec2"
+      },
+      {
+        "file": "results/drugs/geom_scaffold_novelty/geom_train_bemis_murcko_nochirality.pickle",
+        "sha256": "e0a506c748073683ca30618a6bfc6986bee5e2e0ad6a53024c0d3acd9c1e754a"
+      }
+    ],
+    "verificationDocument": {
+      "file": "LFD_arxiv.pdf",
+      "pages": 45,
+      "sha256": "862475ddae2a05853423ad24eef9198fa0e544c562c9e23b8517d4342ce6fb54",
+      "figurePage": 9
+    },
+    "computation": {
+      "novelty": "Count distinct Bemis–Murcko scaffolds among each seed’s best 100 molecules by rDock SCORE.INTER against the recorded GEOM-Drugs training-SMILES reference; retain atom and bond types and ignore stereochemistry.",
+      "negativeRDock": "Select the lowest ceil(0.05 × successfully docked count) rDock SCORE.INTER values separately within each seed, average them, then negate the five-seed mean for display.",
+      "selectedDockingMoleculesPerSeed": 13,
+      "methodSeedCohorts": 30,
+      "ci95Convention": "Scalar half-widths, not lower/upper endpoint arrays."
+    },
+    "sourceNotes": [
+      "The actual Figure 7(b) computation uses top 100 and the GEOM-Drugs training-SMILES reference; the verification document’s page 36 general protocol instead describes top 5% and a consistency-filtered reference.",
+      "The supplied source audit reports an exact pixel match between the 958 × 637 RGB paper panel and results/drugs/D2_pareto.png.",
+      "The single-cohort LFD summary in results/drugs/top5_docking_report.json is stale and is not used here."
+    ]
   }
 }

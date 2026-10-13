@@ -107,9 +107,11 @@
     const uncertainty=window.LFD_DATA.resultPanels.dockingDisplay;
     return `<div class="molecular-results"><figure class="task-docking"><div class="docking-chart-scroll" tabindex="0" role="region" aria-label="Docking improvements; scroll horizontally on small screens"><div id="docking-${result.id}" class="interactive-chart docking-bar-chart" role="region" aria-label="Interactive ${esc(result.name)} docking improvements: absolute method score minus absolute pretrained score"></div></div>${legend(result.rows.filter(row=>row.method!==uncertainty.baseline).map(row=>row.method),true)}</figure>${includeExample ? molecularExample(result) : ''}</div>`;
   }
-  function noveltyMarkup() {
-    const rows=window.LFD_DATA.charts.novelty;
-    return `<figure class="scaffold-novelty"><div class="novelty-chart-frame result-plot-frame"><div id="novelty-chart" class="interactive-chart" role="region" aria-label="Interactive GSK3 beta scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help">${metricLabel('novelty','Novel scaffolds in top 100 ↑','novelty-axis-label')}</div></div>${legend(rows.map(row=>row.method))}</figure>`;
+  function noveltyChartId(taskId) { return taskId==='d2' ? 'novelty-chart-d2' : 'novelty-chart'; }
+  function noveltyRows(taskId) { return (taskId==='d2' ? window.LFD_DATA.charts.d2 : window.LFD_DATA.charts).novelty; }
+  function noveltyMarkup(taskId) {
+    const d2=taskId==='d2', rows=noveltyRows(taskId);
+    return `<figure class="scaffold-novelty"><div class="novelty-chart-frame result-plot-frame"><div id="${noveltyChartId(taskId)}" class="interactive-chart" role="region" aria-label="Interactive ${d2 ? 'dopamine D2' : 'GSK3 beta'} scaffold novelty and docking quality comparison"></div><div class="novelty-axis-help">${metricLabel(d2 ? 'novelty-d2' : 'novelty','Novel scaffolds in top 100 ↑',d2 ? 'novelty-axis-label-d2' : 'novelty-axis-label')}</div></div>${legend(rows.map(row=>row.method))}</figure>`;
   }
   function molecularExample(task) {
     if (task.id !== 'd2' && task.id !== 'gsk3b') return '';
@@ -263,7 +265,7 @@
     const heading=`<h4>${names[id]} (Goal&nbsp;${goalNumber})</h4>`;
     if (!result) return `<article class="result-overview discovery-overview" data-result-overview="${id}">${heading}${discoveryMarkup()}</article>`;
     const mainPlot=result.table===1 ? scatterMarkup(result) : dockingMarkup(result);
-    const scaffold=id==='gsk3b' ? noveltyMarkup() : '<p class="scaffold-placeholder">Scaffold novelty results for dopamine D2 will be added here.</p>';
+    const scaffold=result.table===2 ? noveltyMarkup(id) : '';
     const more=result.table===2 ? `<details class="result-metrics" data-result-metrics="${id}"><summary><strong>Scaffold novelty</strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary><div class="result-metrics-content">${scaffold}</div></details>` : '';
     return `<article class="result-overview" data-result-overview="${id}">${heading}${mainPlot}${more}</article>`;
   }
@@ -293,8 +295,9 @@
         closeMetricHelp();
         if (!details.open) return;
         await fonts;
-        if (details.dataset.resultMetrics==='gsk3b' && !$('#novelty-chart').data) {
-          await renderNovelty();
+        const taskId=details.dataset.resultMetrics;
+        if (!$('#'+noveltyChartId(taskId)).data) {
+          await renderNovelty(taskId);
         }
         details.querySelectorAll('.js-plotly-plot').forEach(plot=>Plotly.Plots.resize(plot));
       });
@@ -407,8 +410,8 @@
       yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
     }),[['.xtick:nth-of-type(1) text','gnina'],['.xtick:nth-of-type(2) text','vina'],['.xtick:nth-of-type(3) text','rdock'],['.ytitle','docking-delta']]);
   }
-  function renderNovelty() {
-    const rows=window.LFD_DATA.charts.novelty;
+  function renderNovelty(taskId) {
+    const rows=noveltyRows(taskId);
     const traces=rows.map(row=>({
       type:'scatter',mode:'markers',name:row.method,x:[row.noveltyMean],y:[row.negativeRDockMean],
       marker:{color:style(row.method).color,symbol:style(row.method).symbol,size:row.method==='LFD' ? 12 : 10},
@@ -416,11 +419,11 @@
       error_y:{type:'data',array:[row.negativeRDockCI95],visible:true,color:style(row.method).color,thickness:1.3,width:4},
       hovertemplate:`<b>${esc(row.method)}</b><br>Novel scaffolds: ${interval(row.noveltyMean,row.noveltyCI95)}<br>−rDock (top 5%): ${interval(row.negativeRDockMean,row.negativeRDockCI95,3)}<br>95% CIs · ${row.samplingSeeds} sampling seeds<extra></extra>`
     }));
-    return draw('#novelty-chart',traces,layout({
+    return draw('#'+noveltyChartId(taskId),traces,layout({
       margin:{l:62,r:16,t:14,b:62},
       xaxis:{fixedrange:true,title:{text:''},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true},
       yaxis:{fixedrange:true,title:{text:'−rDock (top 5%) ↑',standoff:12},tickfont:{size:11},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),[['.ytitle','rdock-top']]);
+    }),[['.ytitle',taskId==='d2' ? 'rdock-top-d2' : 'rdock-top']]);
   }
   window.LFD_RESULTS = {init};
 })();
