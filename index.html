@@ -16,7 +16,7 @@
   <link rel="preload" href="assets/fonts/source-serif-4-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="assets/katex/katex.min.css?v=f76ac5391ddb">
-  <link rel="stylesheet" href="site.css?v=2a8027f82ad2">
+  <link rel="stylesheet" href="site.css?v=46c3e52e712e">
   <script src="assets/katex/katex.min.js?v=608ba6519084" defer></script>
   <script src="data/site-data.js?v=b6278963a942" defer></script>
   <script src="assets/plotly/plotly-basic.min.js?v=99784e3abfb0" defer></script>
@@ -90,7 +90,15 @@
     <section id="method" class="method-section wrap section-space" aria-labelledby="method-title">
       <h2 id="method-title" class="section-heading"><a class="section-anchor" href="#method" aria-label="Link to Method">#</a><span>Method: LLM-to-Flow Distillation</span></h2>
       <div class="method-content">
-        <div class="method-introduction"><p>LLM-to-Flow Distillation (LFD) <strong>iteratively</strong> aligns a pretrained scientific generator (the student) towards a <strong>natural-language goal</strong> <span class="math math-inline" data-tex="g">g</span> with Direct Preference Optimization (DPO) on preferences induced by an LLM teacher.</p></div>
+        <div class="method-opening">
+          <div class="method-opening-copy">
+            <div class="method-introduction"><p>LLM-to-Flow Distillation (LFD) <strong>iteratively</strong> aligns a pretrained scientific generator (the student) towards a <strong>natural-language goal</strong> <span class="math math-inline" data-tex="g">g</span> with Direct Preference Optimization (DPO) on preferences induced by an LLM teacher.</p></div>
+          <section class="method-step">
+            <h3><span class="method-step-number" aria-hidden="true">01</span>Choose an attainable subgoal</h3>
+            <p>Because the pretrained model may rarely generate samples aligned with the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher also proposes intermediate subgoals that are <button class="method-definition" type="button" data-function="learnable" aria-label="Learnable subgoals: definition" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details">learnable</button> from the currently generated samples.</p>
+            <p>At each round <span class="math math-inline" data-tex="t">t</span>, the teacher uses observables <span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> of the current sample batch <span class="math math-inline" data-tex="X_t">X<sub>t</sub></span> to propose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>.</p>
+          </section>
+          </div>
         <aside id="method-algorithm" class="method-algorithm" aria-labelledby="algorithm-title">
           <div class="algorithm-box" aria-labelledby="algorithm-title">
             <h3 id="algorithm-title"><span>Algorithm</span><span class="algorithm-name">LLM-to-Flow Distillation (LFD)</span></h3>
@@ -106,14 +114,9 @@
               <li class="algorithm-row"><span class="algorithm-line"><strong>return</strong> <span class="math math-inline" data-tex="v_{\theta_T}">v<sub>θ_T</sub></span></span></li>
             </ol>
           </div>
-          <p class="algorithm-hint">Hover or tap the highlighted operations for details.</p>
         </aside>
-        <ol class="method-steps" role="list">
-          <li class="method-step">
-            <h3><span class="method-step-number" aria-hidden="true">01</span>Choose an attainable subgoal</h3>
-            <p>Because the pretrained model may rarely generate samples aligned with the natural-language goal <span class="math math-inline" data-tex="g">g</span>, the teacher also proposes intermediate subgoals that are <button class="method-definition" type="button" data-function="learnable" aria-label="Learnable subgoals: definition" aria-haspopup="dialog" aria-expanded="false" aria-controls="algorithm-details">learnable</button> from the currently generated samples.</p>
-            <p>At each round <span class="math math-inline" data-tex="t">t</span>, the teacher uses observables <span class="math math-inline" data-tex="\mathcal O(X_t)">O(X<sub>t</sub>)</span> of the current sample batch <span class="math math-inline" data-tex="X_t">X<sub>t</sub></span> to propose an attainable subgoal <span class="math math-inline" data-tex="g_t">g<sub>t</sub></span>.</p>
-          </li>
+        </div>
+        <ol class="method-steps" role="list" start="2">
           <li class="method-step">
             <h3><span class="method-step-number" aria-hidden="true">02</span>Turn judgments into preferences</h3>
             <p>For each candidate, the teacher returns a <strong>positive, negative, or abstain</strong> judgment <span class="math math-inline" data-tex="\ell_t(x_i)\in\{+,-,\varnothing\}">ℓ<sub>t</sub>(x<sub>i</sub>) ∈ {+, −, ∅}</span>. Excluding abstentions, the positive and negative sets induce the dataset:</p>
