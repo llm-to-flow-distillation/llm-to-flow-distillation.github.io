@@ -84,31 +84,10 @@ def main():
                 else:
                     expect(page.locator('.discovery-overview')).to_be_visible()
                 if task in ['d2', 'gsk3b', 'ood']:
-                    figure = page.locator(f'[data-result-overview="{task}"] [data-zoom-figure]')
-                    assert figure.count() == 1
-                    figure.focus()
-                    if width == 390:
-                        figure.tap()
-                    else:
-                        page.keyboard.press('Enter')
-                    viewer = page.locator('#figure-viewer')
-                    expect(viewer).to_be_visible()
-                    image = viewer.locator('img')
-                    assert image.get_attribute('src').endswith(figure.get_attribute('href'))
-                    assert image.get_attribute('alt') == figure.locator('img').get_attribute('alt')
-                    page.wait_for_function('document.querySelector("#figure-viewer-image").naturalWidth > 0')
-                    expect(page.locator('#close-figure-viewer')).to_be_focused()
-                    bounds = viewer.bounding_box()
-                    assert bounds['x'] >= 0 and bounds['x'] + bounds['width'] <= width + 1
-                    if task == 'gsk3b':
-                        page.screenshot(path=str(out / f'figure-viewer-{width}.png'))
-                    if width == 390:
-                        page.locator('#close-figure-viewer').tap()
-                    else:
-                        page.keyboard.press('Escape')
-                    expect(viewer).to_be_hidden()
-                    expect(figure).to_be_focused()
-                    assert not page.locator('body').evaluate('(el)=>el.classList.contains("figure-viewer-open")')
+                    figure = page.locator(f'[data-result-overview="{task}"] figure')
+                    assert figure.locator('img').count() == 1
+                    assert figure.locator('a, button, figcaption').count() == 0
+                    assert page.locator('#figure-viewer, [data-zoom-figure]').count() == 0
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), (width, task)
             # Summary metric help is usable before opening any goal.
             page.goto(args.url, wait_until='networkidle')

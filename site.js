@@ -276,34 +276,6 @@
   window.addEventListener('hashchange', event => openLinkedTrace(readHash(new URL(event.newURL).hash)));
   openLinkedTrace(initialTrace);
 
-  // Keep the original scientific assets intact; open images at a readable scale.
-  const figureViewer = $('#figure-viewer');
-  let figureTrigger = null;
-  document.addEventListener('click', event => {
-    const link = event.target.closest('[data-zoom-figure]');
-    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    if (typeof figureViewer.showModal !== 'function') return;
-    event.preventDefault();
-    figureTrigger = link;
-    const source = $('img', link);
-    $('#figure-viewer-image').src = link.href;
-    $('#figure-viewer-image').alt = source.alt;
-    $('#figure-viewer-title').textContent = link.closest('figure').querySelector('figcaption')?.textContent || 'Scientific figure';
-    figureViewer.showModal();
-    document.body.classList.add('figure-viewer-open');
-    $('#close-figure-viewer').focus();
-  });
-  $('#close-figure-viewer').addEventListener('click', () => figureViewer.close());
-  figureViewer.addEventListener('click', event => {
-    if (event.target === figureViewer) {
-      const bounds = figureViewer.getBoundingClientRect();
-      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) figureViewer.close();
-    }
-  });
-  figureViewer.addEventListener('close', () => {
-    document.body.classList.remove('figure-viewer-open');
-    figureTrigger?.focus({preventScroll:true});
-  });
   const video = $('.hero-figure video');
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) video.pause();
 
