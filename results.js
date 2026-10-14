@@ -80,23 +80,23 @@
     const ordered = bars ? methods : ['LFD','DPO','DiffusionNFT','Flow-GRPO','Guidance','Pre-trained'].filter(method=>methods.includes(method));
     return `<div class="plot-key" aria-label="Methods and plot markers">${ordered.map(method=>`<span data-legend-method="${esc(method)}">${bars ? `<svg viewBox="0 0 16 16" width="15" height="15" data-marker-symbol="bar" style="color:${style(method).color};fill:currentColor" aria-hidden="true"><rect x="2" y="2" width="12" height="12" rx="1"/></svg>` : markerKey(method)}${esc(method)}</span>`).join('')}</div>`;
   }
-  function scatterMarkup(result) {
-    const peptide = result.table === 1;
-    return `<figure class="task-scatter"><div class="result-plot-frame"><div id="comparison-${result.id}" class="interactive-chart" role="region" aria-label="${peptide ? 'Interactive activity and toxicity scatterplot' : 'Interactive docking score scatterplot'}"></div></div>${legend(result.rows.map(row=>row.method))}</figure>`;
+  function peptideBarMarkup(result) {
+    return `<figure class="task-peptide-bars"><div class="result-plot-frame"><div id="comparison-${result.id}" class="interactive-chart" role="region" aria-label="Interactive ${esc(result.metrics[0].label)} bar chart by method"></div></div>${legend(result.rows.map(row=>row.method),true)}</figure>`;
   }
-  function renderScatter(result) {
-    const yIndex = result.table === 1 ? 1 : 2;
-    const traces = result.rows.map(row=>({
-      type:'scatter',mode:'markers',name:row.method,x:[row.values[0][0]],y:[row.values[yIndex][0]],
-      marker:{color:style(row.method).color,symbol:style(row.method).symbol,size:row.method === 'LFD' ? 13 : 11},
-      error_x:{type:'data',array:[row.values[0][1]],visible:true,color:style(row.method).color,thickness:1.5,width:5},
-      error_y:{type:'data',array:[row.values[yIndex][1]],visible:true,color:style(row.method).color,thickness:1.5,width:5},
-      hovertemplate:`<b>${esc(row.method)}</b><br>${result.metrics.map((m,i)=>`${esc(m.label)}: ${interval(...row.values[i])}`).join('<br>')}<extra></extra>`
+  function renderPeptideBars(result) {
+    const metric=result.metrics[0];
+    const traces=result.rows.map(row=>({
+      type:'bar',name:row.method,x:[metric.label],y:[row.values[0][0]],
+      marker:{color:style(row.method).color},
+      error_y:{type:'data',array:[row.values[0][1]],visible:true,color:'#000000',thickness:1.6,width:4},
+      hovertemplate:`<b>${esc(row.method)}</b><br>${esc(metric.label)}: ${interval(...row.values[0])}<extra></extra>`
     }));
+    const upper=Math.max(...result.rows.map(row=>row.values[0][0]+row.values[0][1]));
     return draw('#comparison-'+result.id,traces,layout({
-      xaxis:{fixedrange:true,title:{text:result.metrics[0].label+' ↑',standoff:18},gridcolor:'#eceef2',zeroline:false,automargin:true},
-      yaxis:{fixedrange:true,title:{text:result.metrics[yIndex].label+' ↓',standoff:16},gridcolor:'#eceef2',zeroline:false,automargin:true}
-    }),[['.xtitle',metricKeys(result)[0]],['.ytitle',metricKeys(result)[yIndex]]]);
+      barmode:'group',bargap:.26,bargroupgap:.12,
+      xaxis:{fixedrange:true,type:'category',showticklabels:false,title:{text:metric.label+' ↑',standoff:18},automargin:true},
+      yaxis:{fixedrange:true,range:[0,upper*1.12],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',automargin:true}
+    }),[['.xtitle',metricKeys(result)[0]]]);
   }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},
@@ -264,7 +264,7 @@
     const goalNumber=window.LFD_DATA.resultPanels.tasks.find(task=>task.id===id).number;
     const heading=`<h4>${names[id]} (Goal&nbsp;${goalNumber})</h4>`;
     if (!result) return `<article class="result-overview discovery-overview" data-result-overview="${id}">${heading}${discoveryMarkup()}</article>`;
-    const mainPlot=result.table===1 ? scatterMarkup(result) : dockingMarkup(result);
+    const mainPlot=result.table===1 ? peptideBarMarkup(result) : dockingMarkup(result);
     const scaffold=result.table===2 ? noveltyMarkup(id) : '';
     const more=result.table===2 ? `<details class="result-metrics" data-result-metrics="${id}"><summary><strong>Scaffold novelty</strong><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7.5 5 5 5-5"/></svg></summary><div class="result-metrics-content">${scaffold}</div></details>` : '';
     return `<article class="result-overview" data-result-overview="${id}">${heading}${mainPlot}${more}</article>`;
@@ -288,7 +288,7 @@
       return `<article class="goal-accordion" data-generator="${esc(goal.generator)}"><h3 class="goal-heading"><button type="button" id="result-card-${esc(goal.id)}" class="result-card" aria-expanded="false" aria-controls="goal-content-${esc(goal.id)}" aria-labelledby="result-number-${esc(goal.id)} result-name-${esc(goal.id)}" aria-describedby="goal-prompt-${esc(goal.id)}" data-result-task="${esc(goal.id)}" data-generator="${esc(goal.generator)}"><span class="goal-title-line"><span id="result-number-${esc(goal.id)}" class="goal-number">Goal ${goal.number}</span><span id="result-name-${esc(goal.id)}" class="result-task-name">${esc(goal.name)}</span></span><span id="goal-prompt-${esc(goal.id)}" class="goal-prompt goal-quotation"><strong>Discovery prompt:</strong> <q>${esc(prompt)}</q></span><span class="goal-card-state" aria-hidden="true"></span></button></h3><div id="goal-content-${esc(goal.id)}" class="goal-content" hidden></div></article>`;
     };
     cards.innerHTML=caseStudies.map(study=>`<section id="${study.id}" class="case-study" data-generator="${study.generator}" aria-labelledby="case-title-${study.id}"><header class="case-study-heading"><h3 id="case-title-${study.id}" class="section-heading"><a class="section-anchor" href="#${study.id}" aria-label="Link to ${study.domain.toLowerCase()} case study">#</a><span>Case study ${study.number}: ${study.title}</span></h3><p class="case-generator"><span>Generator:</span> <strong>${study.generator}</strong></p><p class="case-description">${study.description}</p></header><div class="case-results-summary">${study.tasks.map(id=>resultOverview(id,results)).join('')}</div><div class="trace-introduction"><h4>LLM traces</h4><p class="trace-verbatim-note">All the reported LLM traces below for goal-selection rationales and judgments are shown verbatim.</p></div><div class="goal-accordions">${goals.filter(goal=>study.tasks.includes(goal.id)).map(goalMarkup).join('')}</div></section>`).join('');
-    fonts.then(()=>Promise.all(results.map(result=>result.table===1 ? renderScatter(result) : renderDockingBars(result))))
+    fonts.then(()=>Promise.all(results.map(result=>result.table===1 ? renderPeptideBars(result) : renderDockingBars(result))))
       .then(()=>{cards.dataset.plotsReady='true';});
     cards.querySelectorAll('[data-result-metrics]').forEach(details=>{
       details.addEventListener('toggle',async()=>{

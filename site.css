@@ -514,7 +514,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 #task-results-plots:empty { display: none; }
 #task-results-plots:empty + .results-details { border-top: 0; }
 .interactive-chart { width: 100%; min-width: 0; height: 370px; -webkit-tap-highlight-color: transparent; }
-.task-scatter { margin: 0; }
+.task-peptide-bars { margin: 0; }
 .results-details { border-top: 1px solid var(--line); padding-top: 20px; }
 .results-values, #task-scaffold-novelty { min-width: 0; }
 #task-scaffold-novelty:empty { display: none; }
@@ -653,7 +653,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .has-comparison .results-values, .has-novelty .results-values { display: flex; flex-direction: column; }
   .has-comparison .table-scroll, .has-novelty .table-scroll { flex: 1; }
   .has-comparison .results-table, .has-novelty .results-table { height: 100%; }
-  .has-comparison .task-scatter, .scaffold-novelty { display: flex; flex-direction: column; height: 100%; }
+  .has-comparison .task-peptide-bars, .scaffold-novelty { display: flex; flex-direction: column; height: 100%; }
   .has-comparison .result-plot-frame, .has-novelty .result-plot-frame { position: relative; flex: 1; min-height: 240px; }
   .has-comparison .interactive-chart, .has-novelty .scaffold-novelty .interactive-chart { position: absolute; inset: 0; height: 100%; }
 }
@@ -934,7 +934,7 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 .bibtex-section { padding-block: 28px; border-top: 1px solid #b9c8c4; }
 .citation-box { position: relative; padding: 22px 52px 22px 22px; border: 1px solid #8b9d95; background: #fafbfa; }
 .citation-box pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; }
-.citation-box code { font: inherit; }
+.citation-box code { font: inherit; color: #666; }
 #copy-bibtex { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 36px; height: 36px; padding: 8px; border: 0; background: transparent; color: #285f55; cursor: pointer; }
 #copy-bibtex:hover { background: #eaf1ee; }
 #copy-bibtex svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; }
