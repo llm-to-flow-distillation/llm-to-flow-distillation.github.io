@@ -405,9 +405,9 @@
     const upper=Math.max(0,...methods.flatMap(row=>row.values.map(([mean,spread],index)=>delta(mean,index)+spread)));
     const padding=(upper-lower)*.1;
     return draw('#docking-'+result.id,traces,layout({
-      barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:75},
+      barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:54,r:18,t:25,b:43},
       xaxis:{fixedrange:true,type:'category',categoryorder:'array',categoryarray:dockingMetrics.map(metric=>metric.tick),tickfont:{size:12},automargin:true},
-      yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained (metric-specific units)',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
+      yaxis:{fixedrange:true,title:{text:'Δ vs. pretrained',standoff:12},range:[lower-padding,upper+padding],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',zerolinewidth:1.5,automargin:true}
     }),[['.xtick:nth-of-type(1) text','gnina'],['.xtick:nth-of-type(2) text','vina'],['.xtick:nth-of-type(3) text','rdock'],['.ytitle','docking-delta']]);
   }
   function renderNovelty(taskId) {
