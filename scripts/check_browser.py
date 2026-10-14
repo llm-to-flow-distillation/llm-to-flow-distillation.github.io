@@ -29,8 +29,8 @@ def main():
         assert ' '.join(page.locator('h1').inner_text().split()) == 'LLM-to-Flow Distillation: Teaching Natural Language Goals to Scientific Generators'
         assert page.locator('[data-result-task]').count() == 5
         assert page.locator('a[href*="paper.pdf"], #citation').count() == 0
-        expect(page.locator('button.paper-button')).to_be_disabled()
-        assert page.locator('.paper-button').get_attribute('href') is None
+        expect(page.locator('a.paper-button')).to_be_enabled()
+        expect(page.locator('.paper-button')).to_have_attribute('href', 'https://arxiv.org/abs/2610.17246')
         expect(page.locator('.paper-button')).to_have_text('[arXiv]')
         expect(page.locator('.hero-figure video source')).to_have_attribute('src', 'assets/flow_adaptation_smooth.mp4')
         expect(page.locator('.hero-figure video')).to_have_js_property('videoWidth', 2154)
