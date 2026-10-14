@@ -93,10 +93,10 @@
     }));
     const upper=Math.max(...result.rows.map(row=>row.values[0][0]+row.values[0][1]));
     return draw('#comparison-'+result.id,traces,layout({
-      barmode:'group',bargap:.26,bargroupgap:.12,
-      xaxis:{fixedrange:true,type:'category',showticklabels:false,title:{text:metric.label+' ↑',standoff:18},automargin:true},
-      yaxis:{fixedrange:true,range:[0,upper*1.12],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',automargin:true}
-    }),[['.xtitle',metricKeys(result)[0]]]);
+      barmode:'group',bargap:.26,bargroupgap:.12,margin:{l:65,r:24,t:24,b:10},
+      xaxis:{fixedrange:true,type:'category',showticklabels:false,automargin:true},
+      yaxis:{fixedrange:true,title:{text:metric.label+' ↑',standoff:14},range:[0,upper*1.12],gridcolor:'#eceef2',zeroline:true,zerolinecolor:'#85909b',automargin:true}
+    }),[['.ytitle',metricKeys(result)[0]]]);
   }
   const dockingMetrics = [
     {label:'GNINA', tick:'GNINA<br>(pK)', unit:' pK'},

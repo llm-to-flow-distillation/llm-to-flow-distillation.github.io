@@ -943,3 +943,8 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
   .citation-box { padding: 48px 16px 16px; }
   .citation-box pre { font-size: 12px; }
 }
+
+/* Keep peptide method keys directly below the bar baseline. */
+.result-overview .task-peptide-bars .interactive-chart { height: 280px; }
+.result-overview .task-peptide-bars .plot-key { margin-top: 0; min-height: 28px; font-size: 12px; gap: 6px 10px; }
+.result-overview .task-peptide-bars .plot-key svg { width: 12px; height: 12px; flex-basis: 12px; }
