@@ -158,6 +158,7 @@
       toast(copied ? confirmation : 'Clipboard unavailable. Select and copy the text or address.');
     }
   }
+  $('#copy-bibtex').addEventListener('click', () => copy($('#bibtex-code').textContent, 'BibTeX copied'));
   function currentTask() { return tasks.find(t => t.id === state.task); }
   function currentStage() { return currentTask().stages.find(s => s.id === state.stage); }
   let traceDisclosure;
