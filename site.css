@@ -932,9 +932,9 @@ footer { padding-block: 26px; border-top: 1px solid var(--line); display: flex; 
 
 /* Citation follows the case studies and shares their heading and spacing. */
 .bibtex-section { padding-block: 28px; border-top: 1px solid #b9c8c4; }
-.citation-box { position: relative; padding: 22px 52px 22px 22px; border: 1px solid #8b9d95; background: #fafbfa; }
+.citation-box { position: relative; padding: 22px 52px 22px 22px; border: 1px solid #b8b8b8; background: #f2f2f2; }
 .citation-box pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; font: 13px/1.65 ui-monospace, SFMono-Regular, Consolas, monospace; }
-.citation-box code { font: inherit; color: #666; }
+.citation-box code { font: inherit; color: #000; }
 #copy-bibtex { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 36px; height: 36px; padding: 8px; border: 0; background: transparent; color: #285f55; cursor: pointer; }
 #copy-bibtex:hover { background: #eaf1ee; }
 #copy-bibtex svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.6; }
